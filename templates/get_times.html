@@ -1,0 +1,15 @@
+<form action="{{url_for('get_times', user_id=user_id, category_id=category_id)}}" method="GET">
+    <label for="any%">any%</label>
+    <input name="any%" type="submit">
+
+    <label for="ARB">ARB</label>
+    <input name="ARB" type="submit">
+
+</form>
+
+<form action="{{url_for('update_times', user_id=user_id, category_id=category_id')}}" method="POST">
+    {{% for i in range(current_count) %}}
+    <input type="text" name="checkpoints[]" placeholder="Enter Checkpoint Time:">
+    {{% endfor %}}
+    <button type="submit" name="submit_button">Submit</button>
+</form>
