@@ -34,6 +34,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             print('hi')
             print('hi')
             print('hi')
+            print('hi')
             if check_password_hash(hash, password):
                 return redirect(url_for('get_times',user_id=user_id, category_id=1))
 
