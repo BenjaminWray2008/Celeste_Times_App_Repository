@@ -42,11 +42,16 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def input_times(user_id,category_id):
-        db.execute('SELECT time FROM Runs WHERE id = ? AND category_id = ?', (user_id, category_id))
+        checkpoints = []
+        db.execute('SELECT time, run_number FROM Runs WHERE id = ? AND category_id = ?', (user_id, category_id))
         times = [row[0] for row in db.fetchall()]
-        return render_template('get_times.html', user_id=user_id, category_id=category_id, times=times)
+        checkpoint_id = [row[1] for row in db.fetchall()]
+        for checkpoint in checkpoint_id:
+            db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
+            checkpoints.append(db.fetchall())
+        return render_template('get_times.html', user_id=user_id, category_id=category_id, times=times, checkpoints=checkpoints)
 
-
+    print('hi')
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id,category_id):
          
