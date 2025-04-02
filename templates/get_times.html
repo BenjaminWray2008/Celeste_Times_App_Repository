@@ -1,9 +1,10 @@
-
 <a href="/get_times/{{user_id}}/1">any%</a>
+<a href="/get_times/{{user_id}}/2">ARB</a>
+<a href="/get_times/{{user_id}}/3">100%</a>
 
 <form action="{{url_for('update_times', user_id=user_id, category_id=category_id')}}" method="POST">
-    {{% for i in range(current_count) %}}
-    <input type="text" name="checkpoints[]" placeholder="Enter Checkpoint Time:">
+    {{% for i in range(count) %}}
+    <input type="text" name="checkpoints[]" placeholder="Enter {{checkpoints[i]}} Time:">
     <input type="hidden" name="any%" id="any%">
     {{% endfor %}}
     <button type="submit" name="submit_button">Submit</button>

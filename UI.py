@@ -26,15 +26,12 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         username = request.form.get('username')
         password = request.form.get('password')
 
-        db.execute(f'SELECT id, hash FROM user WHERE name = {username};')
+        db.execute(f'SELECT id, hash FROM User WHERE name = "{username}";')
         results=db.fetchone()
         if results:
 
             user_id, hash = results
-            print('hi')
-            print('hi')
-            print('hi')
-            print('hi')
+           
             if check_password_hash(hash, password):
                 return redirect(url_for('get_times',user_id=user_id, category_id=1))
 
@@ -52,13 +49,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         for checkpoint in checkpoint_id:
             db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
             checkpoints.append(db.fetchall())
-        return render_template('get_times.html', user_id=user_id, category_id=category_id, times=times, checkpoints=checkpoints)
+        db.execute('SELECT name, count FROM categoty WHERE id = ?', (category_id,))
+        name, count = db.fetchall()
+        return render_template('get_times.html', user_id = user_id, category_id = category_id, times = times, checkpoints = checkpoints, count = count, name = name)
 
-    print('hi')
+    
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id,category_id):
          
-        if 'submit_button' in request.form and request.method == 'POST':
+        if request.method == 'POST':
             checkpoint_times=request.form.getlist('checkpoints[]')
         #get the times from the url
         #update the database
@@ -66,10 +65,16 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     
     @app.route('/profile/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def profile(user_id, category_id):
-        #If user selects a category change run this return statement:
-        return redirect(url_for('profile', user_id=user_id, category_id=category_id))
-        #If above condition is not true; render the template profile.html
-        return render_template('profile.html',user_id=user_id,category_id=category_id)
+        checkpoints = []
+        db.execute('SELECT time, run_number FROM Runs WHERE id = ? AND category_id = ?', (user_id, category_id))
+        times = [row[0] for row in db.fetchall()]
+        checkpoint_id = [row[1] for row in db.fetchall()]
+        for checkpoint in checkpoint_id:
+            db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
+            checkpoints.append(db.fetchall())
+        db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
+        name, count = db.fetchall()
+        return render_template('profile.html', user_id = user_id, category_id = category_id, times = times, checkpoints = checkpoints, count = count, name = name)
 
 if __name__ == '__main__':
     app.run(debug=True)
