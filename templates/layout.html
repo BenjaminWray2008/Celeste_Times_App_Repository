@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
-    <title>PIZZALAND</title>
+    <title>Celester</title>
 </head>
 <body>
     <main>
+        <form action="{{url_for('search')}}" method='POST'>
+            <label for="username">Enter Username:</label>
+            <input type="text" name="username" required>
+        
+            <label for="password">Enter Password:</label>
+            <input type="text" name="password">
+        
+            <button type="submit">Submit!</button>
+        </form>
+        <a href="/signup">Sign Up!</a>
+        <a href="/">Home</a>
         {% block content %}
         {% endblock %}
     </main>
