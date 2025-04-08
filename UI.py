@@ -3,6 +3,13 @@ import sqlite3
 from werkzeug.security import check_password_hash
 from hashlib import sha256
 
+#Globals
+any = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 92, 48, 49, 50, 51, 18, 19, 20, 21, 22, 26, 27, 28, 29, 30, 31, 32, 33]
+arb = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 27, 28, 29, 30, 31, 32, 33, 93, 95, 97, 99, 62, 53, 54, 55, 71, 72, 73, 74]
+hundred = [i for i in range(102)]
+true = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 27, 28, 29, 30, 31, 32, 33, 71, 72, 73, 74, 95, 97, 99, 52, 53, 54, 55]
+bny = []
+
 with sqlite3.connect("times.db",check_same_thread=False) as database: #Connecting the database
     db=database.cursor()
     app=Flask(__name__)
@@ -25,8 +32,9 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         h.update(password.encode())
         hash = h.hexdigest()
         db.execute('INSERT INTO User (name, hash) VALUES (?, ?)', (username, hash))
-        # db.execute('INSERT INTO Run ()')
-        # Make all the empty entries in Run table
+        #Any%
+
+        db.execute('INSERT INTO Runs ()')
         database.commit()
         
         return render_template('home.html')
