@@ -4,12 +4,12 @@ from werkzeug.security import check_password_hash
 from hashlib import sha256
 
 #Globals
-any = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 92, 48, 49, 50, 51, 18, 19, 20, 21, 22, 26, 27, 28, 29, 30, 31, 32, 33]
-arb = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 27, 28, 29, 30, 31, 32, 33, 93, 95, 97, 99, 62, 53, 54, 55, 71, 72, 73, 74]
-hundred = [i for i in range(102)]
-true = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 27, 28, 29, 30, 31, 32, 33, 71, 72, 73, 74, 95, 97, 99, 52, 53, 54, 55]
-bny = []
-
+any = [102, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 92, 48, 49, 50, 51, 18, 19, 20, 21, 22, 26, 27, 28, 29, 30, 31, 32, 33]
+arb = [102, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 27, 28, 29, 30, 31, 32, 33, 93, 95, 97, 99, 62, 53, 54, 55, 71, 72, 73, 74]
+hundred = [i for i in range(103)]
+true = [102,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,92,48,49,50,51,18,19,93,52,53,54,55,27,28,29,30,31,32,33,99,71,72,73,74,79,80,81,82,83,84,85,86,87]
+bny = [102,1,88,34,35,36,89,37,38,39,7,8,90,40,41,42,43,11,91,44,45,46,47,15,92,48,49,50,51,18,19,93,52,53,54,55,27,28,29,94,56,57,58,59,60,61,62]
+cny = [103,63,64,65,66,67,68,69,70]
 with sqlite3.connect("times.db",check_same_thread=False) as database: #Connecting the database
     db=database.cursor()
     app=Flask(__name__)
@@ -33,8 +33,21 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         hash = h.hexdigest()
         db.execute('INSERT INTO User (name, hash) VALUES (?, ?)', (username, hash))
         #Any%
-
-        db.execute('INSERT INTO Runs ()')
+        database.commit()
+        db.execute('SELECT id FROM User WHERE name == ?', (username,))
+        results = db.fetchone()
+        id = results[0]
+        print(id)
+        for checkpoint in any:
+            db.execute('SELECT name FROM Checkpoint WHERE id = ?', (checkpoint,))
+            results = db.fetchone()
+            name = results[0]
+            chapter_name = (name.split(' '))[-1]
+            print(chapter_name)
+            db.execute('SELECT id FROM Chapter WHERE name == ?', (chapter_name,))
+            results = db.fetchone()
+            chapter_id = results[0]
+            db.execute('INSERT INTO Run (run_number, type, chapter_id, user_id, category_id) VALUES (?, ?, ?, ?, ?)', (checkpoint, 'checkpoint', chapter_id, id, 1))
         database.commit()
         
         return render_template('home.html')
