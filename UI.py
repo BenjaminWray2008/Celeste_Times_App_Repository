@@ -6,8 +6,8 @@ from hashlib import sha256
 #Globals
 listy = ['any', 'arb', 'hundred', 'true', 'bny', 'cny']
 category_dictionary = {'Any%':[102, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 92, 48, 49, 50, 51, 18, 19, 20, 21, 22, 26, 27, 28, 29, 30, 31, 32, 33],
-                        'ARB':[102, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 27, 28, 29, 30, 31, 32, 33, 93, 95, 97, 99, 62, 53, 54, 55, 71, 72, 73, 74], 
-                        '100%':[i for i in range(1,103)], 
+                        'ARB':[102, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 23, 25, 27, 28, 29, 30, 31, 32, 33, 93, 95, 97, 99, 62, 53, 54, 55, 71, 72, 73, 74], 
+                        '100%':[1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 26, 27, 28, 29, 30,31, 32, 33, 34, 35, 36, 37, 38, 39, 40,41, 42, 43, 44, 45, 46, 47, 48, 49, 50,51, 52, 53, 54, 55, 56, 57, 58, 59, 60,61, 62, 63, 64, 65, 66, 67, 68, 69, 70,71, 72, 73, 74, 75, 76, 77, 78, 79, 80,81, 82, 83, 84, 85, 86, 87, 88, 89, 90,91, 92, 93, 94, 95, 96, 97, 98, 99, 100,101, 102, 103], 
                         'True Ending': [102,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,92,48,49,50,51,18,19,93,52,53,54,55,27,28,29,30,31,32,33,99,71,72,73,74,79,80,81,82,83,84,85,86,87], 
                         'Bny%': [102,1,88,34,35,36,89,37,38,39,7,8,90,40,41,42,43,11,91,44,45,46,47,15,92,48,49,50,51,18,19,93,52,53,54,55,27,28,29,94,56,57,58,59,60,61,62], 
                         'Cny%': [103,63,64,65,66,67,68,69,70]}
@@ -90,15 +90,31 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def get_times(user_id,category_id):
+        data_dictionary = {}
         checkpoints = []
-        db.execute('SELECT time, run_number FROM Run WHERE id = ? AND category_id = ?', (user_id, category_id))
-        times = [row[0] for row in db.fetchall()]
-        checkpoint_id = [row[1] for row in db.fetchall()]
+        db.execute('SELECT time, run_number FROM Run WHERE user_id = ? AND category_id = ?', (user_id, category_id))
+        results = db.fetchall()
+
+        times = [i[0] for i in results]
+        checkpoint_id = [j[1] for j in results]
         for checkpoint in checkpoint_id:
+            db.execute('SELECT name FROM Chapter WHERE id IN (SELECT chapter_id FROM Run WHERE run_number = ? AND user_id = ? AND category_id = ?);', (checkpoint, user_id, category_id))
+            results = db.fetchone()
+            print(results)
+            
+            data_dictionary[results[0]] = []
+            
+
             db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
-            checkpoints.append(db.fetchall())
+            checkpoint_name = db.fetchone()
+            data_dictionary[results[0]].append(checkpoint_name[0])
+                
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name, count = db.fetchall()[0]
+        print(data_dictionary)
+
+       
+        print(times, checkpoint_id, checkpoints, name)
         return render_template('get_times.html', user_id = user_id, category_id = category_id, times = times, checkpoints = checkpoints, count = count, name = name)
 
     
