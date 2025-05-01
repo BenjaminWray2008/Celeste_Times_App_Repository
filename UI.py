@@ -39,6 +39,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         db.execute('SELECT time, run_number FROM Run WHERE user_id = ? AND category_id = ?', (user_id, category_id))
         results = db.fetchall()
         checkpoint_id = [j[1] for j in results]
+        print(checkpoint_id)
         for checkpoint in checkpoint_id:
             db.execute('SELECT name FROM Chapter WHERE id IN (SELECT chapter_id FROM Run WHERE run_number = ? AND user_id = ? AND category_id = ?);', (checkpoint, user_id, category_id))
             results = db.fetchone()
@@ -49,7 +50,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             checkpoint_name = db.fetchone()
             db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
             time = db.fetchone()
-            data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
+            
+            data_dictionary[results[0]].append((' '.join(checkpoint_name[0].split(' ')[:-1]), time[0]))
         return data_dictionary
 
 
@@ -137,20 +139,16 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                     checkpoint_id = results[0]
                     db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;', (time, user_id, category_id, checkpoint_id))
                     database.commit()
-        return render_template('profile.html',user_id=user_id,category_id=category_id)
+        
+        return redirect(url_for('profile',user_id=user_id,category_id=category_id))
     
     @app.route('/profile/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def profile(user_id, category_id):
-        checkpoints = []
-        db.execute('SELECT time, run_number FROM Run WHERE id = ? AND category_id = ?', (user_id, category_id))
-        times = [row[0] for row in db.fetchall()]
-        checkpoint_id = [row[1] for row in db.fetchall()]
-        for checkpoint in checkpoint_id:
-            db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
-            checkpoints.append(db.fetchall())
+        data_dictionary = data_dictionary_creation(user_id, category_id)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
-        name, count = db.fetchall()
-        return render_template('profile.html', user_id = user_id, category_id = category_id, times = times, checkpoints = checkpoints, count = count, name = name)
+        name = db.fetchall()[0]
+       
+        return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -9,6 +9,7 @@
 
 <form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST">
     {% for chapter in data_dictionary %}
+    <h1>{{chapter}}</h1>
     {% for checkpoint in data_dictionary[chapter] %}
     <input type="text" name="checkpoints[]" placeholder="{{checkpoint[0]}} {{checkpoint[1]}}">
     
