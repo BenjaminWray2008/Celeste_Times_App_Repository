@@ -34,11 +34,11 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 db.execute('INSERT INTO Run (run_number, type, chapter_id, user_id, category_id) VALUES (?, ?, ?, ?, ?)', (checkpoint[0], 'checkpoint', chapter_id, id, category_id))
         database.commit()
 
-    def data_dictionary_creation(user_id, category_id):
+    def data_dictionary_creation(user_id, category_id, variable):
         data_dictionary = {}
-        db.execute('SELECT time, run_number FROM Run WHERE user_id = ? AND category_id = ?', (user_id, category_id))
+        db.execute('SELECT checkpoint_id, orderer FROM CategoryCheckpoint WHERE category_id = ? ORDER BY orderer ASC', (category_id,))
         results = db.fetchall()
-        checkpoint_id = [j[1] for j in results]
+        checkpoint_id = [j[0] for j in results]
         print(checkpoint_id)
         for checkpoint in checkpoint_id:
             db.execute('SELECT name FROM Chapter WHERE id IN (SELECT chapter_id FROM Run WHERE run_number = ? AND user_id = ? AND category_id = ?);', (checkpoint, user_id, category_id))
@@ -50,8 +50,10 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             checkpoint_name = db.fetchone()
             db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
             time = db.fetchone()
-            
-            data_dictionary[results[0]].append((' '.join(checkpoint_name[0].split(' ')[:-1]), time[0]))
+            if variable:
+                data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
+            else:
+                data_dictionary[results[0]].append((' '.join(checkpoint_name[0].split(' ')[:-1]), time[0]))
         return data_dictionary
 
 
@@ -105,7 +107,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def get_times(user_id,category_id):
-        data_dictionary = data_dictionary_creation(user_id, category_id)
+        data_dictionary = data_dictionary_creation(user_id, category_id, False)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
         for i in data_dictionary:
@@ -122,7 +124,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
 
 
-            data_dictionary = data_dictionary_creation(user_id, category_id)
+            data_dictionary = data_dictionary_creation(user_id, category_id, True)
         
             list_of_checkpoints = []
             for chapter in data_dictionary:
@@ -134,6 +136,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 if time != '':
                     print('HI')
                     print(checkpoint, time)
+                    
                     db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
                     results = db.fetchone()
                     checkpoint_id = results[0]
@@ -144,10 +147,10 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     
     @app.route('/profile/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def profile(user_id, category_id):
-        data_dictionary = data_dictionary_creation(user_id, category_id)
+        data_dictionary = data_dictionary_creation(user_id, category_id, False)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
-        print('hi')
+  
         return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name)
 
 if __name__ == '__main__':
