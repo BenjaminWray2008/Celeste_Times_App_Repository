@@ -34,6 +34,24 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 db.execute('INSERT INTO Run (run_number, type, chapter_id, user_id, category_id) VALUES (?, ?, ?, ?, ?)', (checkpoint[0], 'checkpoint', chapter_id, id, category_id))
         database.commit()
 
+    def data_dictionary_creation(user_id, category_id):
+        data_dictionary = {}
+        db.execute('SELECT time, run_number FROM Run WHERE user_id = ? AND category_id = ?', (user_id, category_id))
+        results = db.fetchall()
+        checkpoint_id = [j[1] for j in results]
+        for checkpoint in checkpoint_id:
+            db.execute('SELECT name FROM Chapter WHERE id IN (SELECT chapter_id FROM Run WHERE run_number = ? AND user_id = ? AND category_id = ?);', (checkpoint, user_id, category_id))
+            results = db.fetchone()
+            print(results)
+            if results[0] not in data_dictionary:
+                data_dictionary[results[0]] = []
+            db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
+            checkpoint_name = db.fetchone()
+            db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
+            time = db.fetchone()
+            data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
+        return data_dictionary
+
 
     @app.route('/')
     def home():
@@ -85,29 +103,9 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def get_times(user_id,category_id):
-        data_dictionary = {}
-        checkpoints = []
-        db.execute('SELECT time, run_number FROM Run WHERE user_id = ? AND category_id = ?', (user_id, category_id))
-        results = db.fetchall()
-
-        times = [i[0] for i in results]
-        checkpoint_id = [j[1] for j in results]
-        for checkpoint in checkpoint_id:
-            db.execute('SELECT name FROM Chapter WHERE id IN (SELECT chapter_id FROM Run WHERE run_number = ? AND user_id = ? AND category_id = ?);', (checkpoint, user_id, category_id))
-            results = db.fetchone()
-            print(results)
-            if results[0] not in data_dictionary:
-                data_dictionary[results[0]] = []
-            
-
-            db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
-            checkpoint_name = db.fetchone()
-            db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
-            time = db.fetchone()
-            data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
-    
+        data_dictionary = data_dictionary_creation(user_id, category_id)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
-        name, count = db.fetchall()[0]
+        name = db.fetchall()[0]
         for i in data_dictionary:
             print(i)
         return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name)
@@ -119,10 +117,25 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         if request.method == 'POST':
             checkpoint_times=request.form.getlist('checkpoints[]')
             print(checkpoint_times)
-            for time, checkpoint in zip(checkpoint_times):
+
+
+
+            data_dictionary = data_dictionary_creation(user_id, category_id)
+        
+            list_of_checkpoints = []
+            for chapter in data_dictionary:
+                for checkpoint_tuple in data_dictionary[chapter]:
+                    print(checkpoint_tuple[0])
+                    list_of_checkpoints.append(checkpoint_tuple[0])
+
+            for time, checkpoint in zip(checkpoint_times, list_of_checkpoints):
                 if time != '':
+                    print('HI')
                     print(checkpoint, time)
-                    db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;', (time, user_id, category_id, checkpoint))
+                    db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
+                    results = db.fetchone()
+                    checkpoint_id = results[0]
+                    db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;', (time, user_id, category_id, checkpoint_id))
                     database.commit()
         return render_template('profile.html',user_id=user_id,category_id=category_id)
     
