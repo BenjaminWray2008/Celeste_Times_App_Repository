@@ -147,7 +147,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         data_dictionary = data_dictionary_creation(user_id, category_id)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
-       
+        print('hi')
         return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name)
 
 if __name__ == '__main__':
