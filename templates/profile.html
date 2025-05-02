@@ -1,18 +1,21 @@
 {% extends 'layout.html' %}  
 {% block content %}
+<h1>Profile for {{user_name[0]}}</h1>
 <a href="/profile/{{user_id}}/1">any%</a>
 <a href="/profile/{{user_id}}/2">ARB</a>
 <a href="/profile/{{user_id}}/3">100%</a>
 <a href="/profile/{{user_id}}/4">True Ending</a>
 <a href="/profile/{{user_id}}/5">Bny%</a>
 <a href="/profile/{{user_id}}/6">Cny%</a>
-{% for chapter in data_dictionary %}
-{% for checkpoint in data_dictionary[chapter] %}
-<p>{{checkpoint[0]}} {{checkpoint[1]}}</p>
-
-{% endfor %}
-{% endfor %}
-
-
+<div class="display-grid">
+    {% for chapter in data_dictionary %}
+      <div class="grid-item">
+        <h2>{{chapter}}</h2>
+        {% for checkpoint in data_dictionary[chapter] %}
+          <p class="profile-checkpoint-chapter">{{checkpoint[0]}}: {{checkpoint[1]}}</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
 
 {% endblock %}

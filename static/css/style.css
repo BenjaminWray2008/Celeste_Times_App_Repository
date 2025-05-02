@@ -1,0 +1,22 @@
+p{
+    color:red
+}
+.profile-checkpoint-chapter{
+    border:1px black solid;
+    display:block;
+    width:fit-content;
+    line-height: .8;
+    padding:10px;
+}
+
+.display-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* responsive columns */
+    gap: 1rem;
+    padding-top: 2rem; /* ensures all headings start at the same vertical position */
+  }
+  
+  .grid-item {
+    display: flex;
+    flex-direction: column;
+  }

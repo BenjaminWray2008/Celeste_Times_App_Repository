@@ -150,8 +150,9 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         data_dictionary = data_dictionary_creation(user_id, category_id, False)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
-  
-        return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name)
+        db.execute('SELECT name FROM user WHERE id = ?', (user_id,))
+        user_name = db.fetchall()[0]
+        return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name)
 
 if __name__ == '__main__':
     app.run(debug=True)
