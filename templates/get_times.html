@@ -8,13 +8,16 @@
 <a href="/get_times/{{user_id}}/6">Cny%</a>
 
 <form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST">
+  <div class="display-grid">
     {% for chapter in data_dictionary %}
-    <h1>{{chapter}}</h1>
-    {% for checkpoint in data_dictionary[chapter] %}
-    <input type="text" name="checkpoints[]" placeholder="{{checkpoint[0]}} {{checkpoint[1]}}">
-    
+      <div class="grid-item">
+        <h2>{{chapter}}</h2>
+        {% for checkpoint in data_dictionary[chapter] %}
+        <input type="text" name="checkpoints[]" placeholder="{{checkpoint[0]}} {{checkpoint[1]}}">
+        {% endfor %}
+      </div>
     {% endfor %}
-    {% endfor %}
+  </div>
     <button type="submit" name="submit_button">Submit</button>
 </form>
 

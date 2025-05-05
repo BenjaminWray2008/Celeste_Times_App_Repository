@@ -9,11 +9,17 @@
 <a href="/profile/{{user_id}}/6">Cny%</a>
 <div class="display-grid">
     {% for chapter in data_dictionary %}
-      <div class="grid-item">
+      <div class="display-grid-item">
         <h2>{{chapter}}</h2>
+        <div class="checkpoint-grid">
         {% for checkpoint in data_dictionary[chapter] %}
-          <p class="profile-checkpoint-chapter">{{checkpoint[0]}}: {{checkpoint[1]}}</p>
+        <div class="checkpoint-box">
+          <p class="profile-checkpoint-chapter">{{checkpoint[0]}}</p> 
+          <p>{{checkpoint[1]}}</p>
+        </div>
         {% endfor %}
+        
+        </div>
       </div>
     {% endfor %}
   </div>

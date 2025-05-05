@@ -54,6 +54,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
             else:
                 data_dictionary[results[0]].append((' '.join(checkpoint_name[0].split(' ')[:-1]), time[0]))
+        if not variable:
+            
+            for chapter in data_dictionary:
+                total = 0
+                for time_tuple in data_dictionary[chapter]:
+               
+                    if time_tuple[1] is not None:
+                        total += float(time_tuple[1])
+                data_dictionary[chapter].append(('Total', total))
         return data_dictionary
 
 
@@ -110,8 +119,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         data_dictionary = data_dictionary_creation(user_id, category_id, False)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
-        for i in data_dictionary:
-            print(i)
+     
         return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name)
 
     
@@ -127,10 +135,13 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             data_dictionary = data_dictionary_creation(user_id, category_id, True)
         
             list_of_checkpoints = []
+            print(data_dictionary)
             for chapter in data_dictionary:
+                
                 for checkpoint_tuple in data_dictionary[chapter]:
                     print(checkpoint_tuple[0])
-                    list_of_checkpoints.append(checkpoint_tuple[0])
+                    if checkpoint_tuple[0] != 'Total':
+                        list_of_checkpoints.append(checkpoint_tuple[0])
 
             for time, checkpoint in zip(checkpoint_times, list_of_checkpoints):
                 if time != '':
