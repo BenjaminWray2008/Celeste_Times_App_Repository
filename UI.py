@@ -32,7 +32,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 db.execute('SELECT id FROM Chapter WHERE name == ?', (chapter_name,))
                 results = db.fetchone()
                 chapter_id = results[0]
-                db.execute('INSERT INTO Run (run_number, type, chapter_id, user_id, category_id) VALUES (?, ?, ?, ?, ?)', (checkpoint[0], 'checkpoint', chapter_id, id, category_id))
+                db.execute('INSERT INTO Run (time, run_number, type, chapter_id, user_id, category_id) VALUES (0, ?, ?, ?, ?, ?)', (checkpoint[0], 'checkpoint', chapter_id, id, category_id))
         database.commit()
 
     def data_dictionary_creation(user_id, category_id, variable):

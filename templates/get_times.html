@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}  
+{% extends 'layout.html' %}
 {% block content %}
 <a href="/get_times/{{user_id}}/1">any%</a>
 <a href="/get_times/{{user_id}}/2">ARB</a>
@@ -8,25 +8,25 @@
 <a href="/get_times/{{user_id}}/6">Cny%</a>
 
 <form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST">
- 
-<h1 class="category-name">{{name[0]}}</h1>
-<div class="display-grid">
+
+  <h1 class="category-name">{{name[0]}}</h1>
+  <div class="display-grid">
     {% for chapter in data_dictionary %}
-      <div class="display-grid-item">
+    <div class="display-grid-item">
       <h2 class="chapter-header">{{chapter}}</h2>
       <table>
-  
-      
+
+
         {% for checkpoint in data_dictionary[chapter] %}
-          <tr class="checkpoint-box">
-          <td>{{' '.join(checkpoint[0].split(' ')[:-1])}}</td>
-          <td> <input type="text" name="checkpoints[]" placeholder="{{checkpoint[1]}}"></td>
-          </tr>
+        <tr class="checkpoint-box">
+          <td class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</td>
+          <td> <input class='checkpoint-time' type="text" name="checkpoints[]" placeholder="{{checkpoint[1]}}"></td>
+        </tr>
         {% endfor %}
-        
-     
+
+
       </table>
-      </div>
+    </div>
     {% endfor %}
   </div>
   <button type="submit" name="submit_button">Submit</button>

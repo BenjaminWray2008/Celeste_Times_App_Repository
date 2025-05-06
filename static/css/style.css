@@ -1,36 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-.checkpoint-box{
-  display: flex;
-  gap: 0.5rem; /* optional spacing between the two p tags */
-  align-items: center; /* vertically align text if heights differ */
-  border:1px black solid;
-  width:fit-content;
-  
+
+
+/* Fix for checkpoint box alignment */
+.checkpoint-box {
+  display: grid;
+  gap: 0.5rem;
+  border: 1px black solid;
+  /* Remove fit-content to ensure consistent width */
+  width: 100%;
+  /* Standardize the grid columns */
+  grid-template-columns: 1fr 1fr;
+
+  /* Set a fixed height if needed */
+
 }
 
-
-.display-grid-item{
-  border-collapse: collapse;
-  margin-bottom: 40px;
-  
+/* Table styling for consistency */
+table {
+  table-layout: fixed;
+  width: 100%;
 }
+
+/* Make all td elements consistent */
 td {
   padding: 8px 12px;
-  padding-left: 10px;
-  min-width: 150px; /* keep widths consistent */
+  padding-left: 20px;
+  min-width: 150px;
+  font-family: 'Poppins';
+  /* Add these to ensure consistent sizing */
+  box-sizing: border-box;
+  height: 40px;
+  vertical-align: middle;
 
 }
-.display-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* responsive columns */
-    gap: 0.5rem;  
-  }
 
+/* Ensure all input fields have the same width */
+input.checkpoint-time {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Poppins';
+  
+}
+
+/* Make all display grid items consistent */
+.display-grid-item {
+  border-collapse: collapse;
+ 
+  /* Add consistent width and padding */
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Make all display grids consistent */
+.display-grid {
+  display: grid;
+  /* Use a more consistent grid template */
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+  align-items: start center;
+  width: 100%;
+}
+
+
+/* Make checkpoint names consistent width */
+.checkpoint-name {
+  width: 100%;
+  text-align: center left;
+}
+
+/* Make checkpoint times consistent width */
 
 .chapter-header{
   text-align: center;
+
+  
 }
 
 .category-name{
   text-align: center;
+}
+body{
+  background: linear-gradient(135deg, #C3ECF1, #ffffff);
 }
