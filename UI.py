@@ -2,10 +2,11 @@ from flask import Flask, render_template, redirect, url_for, request, session
 import sqlite3
 from werkzeug.security import check_password_hash
 from hashlib import sha256
+import re
 
 #Globals
 listy = ['hi', 'Any%', 'ARB', '100%', 'True Ending', 'Bny%', 'Cny%']
-
+another_listy = [0.001, 1, 60, 3600]
 
 with sqlite3.connect("times.db",check_same_thread=False) as database: #Connecting the database
     db=database.cursor()
@@ -39,30 +40,38 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         db.execute('SELECT checkpoint_id, orderer FROM CategoryCheckpoint WHERE category_id = ? ORDER BY orderer ASC', (category_id,))
         results = db.fetchall()
         checkpoint_id = [j[0] for j in results]
-        print(checkpoint_id)
+        
         for checkpoint in checkpoint_id:
             db.execute('SELECT name FROM Chapter WHERE id IN (SELECT chapter_id FROM Run WHERE run_number = ? AND user_id = ? AND category_id = ?);', (checkpoint, user_id, category_id))
             results = db.fetchone()
-            print(results)
+           
             if results[0] not in data_dictionary:
                 data_dictionary[results[0]] = []
             db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
             checkpoint_name = db.fetchone()
             db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
             time = db.fetchone()
-            if variable:
-                data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
-            else:
-                data_dictionary[results[0]].append((' '.join(checkpoint_name[0].split(' ')[:-1]), time[0]))
-        if not variable:
+            data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
+    #   if variable:
+    #             data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
+    #         else:
+    #             data_dictionary[results[0]].append((' '.join(checkpoint_name[0].split(' ')[:-1]), time[0]))
+        if variable:
             
             for chapter in data_dictionary:
                 total = 0
                 for time_tuple in data_dictionary[chapter]:
+                    total_individual_time = 0
                
                     if time_tuple[1] is not None:
-                        total += float(time_tuple[1])
-                data_dictionary[chapter].append(('Total', total))
+                        print(time_tuple[1])
+                        time_list = re.split('[.:]', time_tuple[1])
+                        backwards_time_list = reversed(time_list)
+                        for index, time_segment in enumerate(backwards_time_list):
+                            total_individual_time += (float(time_segment)*float(another_listy[index]))
+
+                        total += round(total_individual_time,3)
+                data_dictionary[chapter].append(('Total Total', round(total,3)))
         return data_dictionary
 
 
@@ -132,22 +141,20 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
 
 
-            data_dictionary = data_dictionary_creation(user_id, category_id, True)
+            data_dictionary = data_dictionary_creation(user_id, category_id, False)
         
             list_of_checkpoints = []
             print(data_dictionary)
             for chapter in data_dictionary:
                 
                 for checkpoint_tuple in data_dictionary[chapter]:
-                    print(checkpoint_tuple[0])
-                    if checkpoint_tuple[0] != 'Total':
+                 
+                    if checkpoint_tuple[0] != 'Total Total':
                         list_of_checkpoints.append(checkpoint_tuple[0])
-
+  
             for time, checkpoint in zip(checkpoint_times, list_of_checkpoints):
                 if time != '':
-                    print('HI')
-                    print(checkpoint, time)
-                    
+                 
                     db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
                     results = db.fetchone()
                     checkpoint_id = results[0]
@@ -158,7 +165,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     
     @app.route('/profile/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def profile(user_id, category_id):
-        data_dictionary = data_dictionary_creation(user_id, category_id, False)
+        data_dictionary = data_dictionary_creation(user_id, category_id, True)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
         db.execute('SELECT name FROM user WHERE id = ?', (user_id,))

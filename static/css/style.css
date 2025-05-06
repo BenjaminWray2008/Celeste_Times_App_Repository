@@ -1,37 +1,36 @@
 
-.profile-checkpoint-chapter{
-  border-right:1px black solid;
-  padding-right: 4px;
-
-}
 .checkpoint-box{
   display: flex;
   gap: 0.5rem; /* optional spacing between the two p tags */
   align-items: center; /* vertically align text if heights differ */
   border:1px black solid;
   width:fit-content;
- 
-  padding:1.5px;
-  padding-right:4px;
+  
 }
 
-.checkpoint-box p {
-  margin: 0;
- 
-}
 
+.display-grid-item{
+  border-collapse: collapse;
+  margin-bottom: 40px;
+  
+}
+td {
+  padding: 8px 12px;
+  padding-left: 10px;
+  min-width: 150px; /* keep widths consistent */
+
+}
 .display-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* responsive columns */
-    gap: 1rem;
-    
-  }
-  
-  .grid-item {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* responsive columns */
+    gap: 0.5rem;  
   }
 
-  .display-grid p{
-    margin:2px;
-  }
+
+.chapter-header{
+  text-align: center;
+}
+
+.category-name{
+  text-align: center;
+}

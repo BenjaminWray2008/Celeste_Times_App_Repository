@@ -1,25 +1,30 @@
 {% extends 'layout.html' %}  
 {% block content %}
-<h1>Profile for {{user_name[0]}}</h1>
+
 <a href="/profile/{{user_id}}/1">any%</a>
 <a href="/profile/{{user_id}}/2">ARB</a>
 <a href="/profile/{{user_id}}/3">100%</a>
 <a href="/profile/{{user_id}}/4">True Ending</a>
 <a href="/profile/{{user_id}}/5">Bny%</a>
 <a href="/profile/{{user_id}}/6">Cny%</a>
+<h1 class="category-name">Profile for {{user_name[0]}}</h1>
+<h1 class="category-name">{{name[0]}}</h1>
 <div class="display-grid">
     {% for chapter in data_dictionary %}
       <div class="display-grid-item">
-        <h2>{{chapter}}</h2>
-        <div class="checkpoint-grid">
+      <h2 class="chapter-header">{{chapter}}</h2>
+      <table>
+  
+      
         {% for checkpoint in data_dictionary[chapter] %}
-        <div class="checkpoint-box">
-          <p class="profile-checkpoint-chapter">{{checkpoint[0]}}</p> 
-          <p>{{checkpoint[1]}}</p>
-        </div>
+          <tr class="checkpoint-box">
+          <td>{{' '.join(checkpoint[0].split(' ')[:-1])}}</td>
+          <td>{{checkpoint[1]}}</td>
+          </tr>
         {% endfor %}
         
-        </div>
+     
+      </table>
       </div>
     {% endfor %}
   </div>
