@@ -3,6 +3,7 @@ import sqlite3
 from werkzeug.security import check_password_hash
 from hashlib import sha256
 import re
+from math import trunc
 
 #Globals
 listy = ['hi', 'Any%', 'ARB', '100%', 'True Ending', 'Bny%', 'Cny%']
@@ -71,7 +72,26 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                             total_individual_time += (float(time_segment)*float(another_listy[index]))
 
                         total += round(total_individual_time,3)
-                data_dictionary[chapter].append(('Total Total', round(total,3)))
+                if total != None and total != 0:
+                    print(total)
+                    total_list = str(round(total,3)).split('.')
+                    print(total_list)
+                    ms = total_list[1]
+                    if len(ms) != 3:
+                        length = len(ms)
+                        ms += f'{str(0)*(3-length)}'
+                    m_s = str((float(total_list[0])/60)).split('.')
+                    m = m_s[0]
+                    s = trunc(float(total_list[0])-(int(m)*60))   
+                    if len(str(s)) != 2:
+                        length = len(str(s))
+                        s = str(s)
+                        s += f'{str(0)*(2-length)}'
+                    print(ms, m, s)
+                    final_time = f'{m}:{s}.{ms}'
+                else:
+                    final_time = 0
+                data_dictionary[chapter].append(('Total Total', final_time))
         return data_dictionary
 
 
@@ -154,12 +174,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
   
             for time, checkpoint in zip(checkpoint_times, list_of_checkpoints):
                 if time != '':
+                    for char in time:
+                        if char in '0123456789.:':
                  
-                    db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
-                    results = db.fetchone()
-                    checkpoint_id = results[0]
-                    db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;', (time, user_id, category_id, checkpoint_id))
-                    database.commit()
+                            db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
+                            results = db.fetchone()
+                            checkpoint_id = results[0]
+                            db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;', (time, user_id, category_id, checkpoint_id))
+                            database.commit()
+                    
         
         return redirect(url_for('profile',user_id=user_id,category_id=category_id))
     
