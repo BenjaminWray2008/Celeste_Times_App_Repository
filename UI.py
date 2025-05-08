@@ -15,6 +15,63 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     app.secret_key = 'password'
     
 
+    def valid_time_checker(time):
+        has_colon = False
+        for char in time:
+            if str(char) not in '0123456789.:':
+                print('invalid chars')
+                return False
+                
+            if char == ':':
+                has_colon = True
+            if ':' in time:
+                if char == '.' and has_colon == False:
+                    print('period before colon')
+                    return False
+        if time.count('.') > 1 or time.count('.') < 1:
+            print('more or less than 1 period')
+            return False
+        if time.count(':') > 1:
+            print('more than 1 colon')
+            return False
+        
+
+        try:
+            time_list = time.split('.')
+            before_period = time_list[0]; after_period = time_list[1]
+            if (len(str(after_period)) < 4 and len(str(after_period)) > 0) and (str(after_period).isdigit()):
+                pass
+            else:
+                print('more than 3 ms or none')
+                return False
+            if ':' in time:
+                time_segments = re.split('[.:]', time)
+                minutes = time_segments[0]
+                if (len(str(minutes)) < 3 and len(str(minutes)) > 0) and (str(minutes).isdigit()):
+                    pass
+                else:
+                    print('more than 2 minutes or none')
+                    return False
+                seconds = time_segments[1]
+                if (len(str(seconds)) < 3 and len(str(seconds)) > 0) and (str(seconds).isdigit()):
+                    pass
+                else:
+                    print('more than 2 seconds or none')
+                    return False
+            else:
+                if (len(str(before_period)) < 3 and len(str(before_period)) > 0) and (str(before_period).isdigit()):
+                    pass
+                else:
+                    print('seconds with no minutes more than 2 or none')
+                    return False
+                
+            return True
+        except:
+            return False
+
+       
+    
+
     def new_user_data(id):
         db.execute('SELECT id FROM Category;')
         results = db.fetchall()
@@ -23,13 +80,13 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             db.execute('SELECT checkpoint_id FROM CategoryCheckpoint WHERE category_id = ?', (category_id,))
             checkpoints_list = db.fetchall()
             for checkpoint in checkpoints_list:
-                print(checkpoint)
+             
                 db.execute('SELECT name FROM Checkpoint WHERE id = ?', (checkpoint[0],))
                 results = db.fetchone()
                 name = results[0]
-                print(name)
+            
                 chapter_name = (name.split(' '))[-1]
-                print(chapter_name)
+       
                 db.execute('SELECT id FROM Chapter WHERE name == ?', (chapter_name,))
                 results = db.fetchone()
                 chapter_id = results[0]
@@ -53,10 +110,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
             time = db.fetchone()
             data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
-    #   if variable:
-    #             data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
-    #         else:
-    #             data_dictionary[results[0]].append((' '.join(checkpoint_name[0].split(' ')[:-1]), time[0]))
+  
         if variable:
             
             for chapter in data_dictionary:
@@ -65,7 +119,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                     total_individual_time = 0
                
                     if time_tuple[1] is not None:
-                        print(time_tuple[1])
+                  
                         time_list = re.split('[.:]', time_tuple[1])
                         backwards_time_list = reversed(time_list)
                         for index, time_segment in enumerate(backwards_time_list):
@@ -82,11 +136,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                         ms += f'{str(0)*(3-length)}'
                     m_s = str((float(total_list[0])/60)).split('.')
                     m = m_s[0]
-                    s = trunc(float(total_list[0])-(int(m)*60))   
-                    if len(str(s)) != 2:
+                    s = trunc(float(total_list[0])-(int(m)*60)) 
+
+                    if len(str(s)) != 2 and m != 0:
                         length = len(str(s))
                         s = str(s)
-                        s += f'{str(0)*(2-length)}'
+                        seconds = ''
+                        seconds += f'{str(0)*(2-length)}{s}'
+                        s = seconds
+                      
                     print(ms, m, s)
                     final_time = f'{m}:{s}.{ms}'
                 else:
@@ -157,7 +215,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
          
         if request.method == 'POST':
             checkpoint_times=request.form.getlist('checkpoints[]')
-            print(checkpoint_times)
+            print(checkpoint_times, 'hi')
 
 
 
@@ -174,14 +232,14 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
   
             for time, checkpoint in zip(checkpoint_times, list_of_checkpoints):
                 if time != '':
-                    for char in time:
-                        if char in '0123456789.:':
-                 
-                            db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
-                            results = db.fetchone()
-                            checkpoint_id = results[0]
-                            db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;', (time, user_id, category_id, checkpoint_id))
-                            database.commit()
+                   
+                    
+                    if valid_time_checker(time):
+                        db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
+                        results = db.fetchone()
+                        checkpoint_id = results[0]
+                        db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;', (time, user_id, category_id, checkpoint_id))
+                        database.commit()
                     
         
         return redirect(url_for('profile',user_id=user_id,category_id=category_id))
