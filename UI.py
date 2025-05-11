@@ -46,20 +46,20 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 return False
             if ':' in time:
                 time_segments = re.split('[.:]', time)
-                minutes = time_segments[0]
-                if (len(str(minutes)) < 3 and len(str(minutes)) > 0) and (str(minutes).isdigit()):
+                minutes = time_segments[0] 
+                if (len(str(minutes)) < 3 and len(str(minutes)) > 0) and (str(minutes).isdigit()) and (int(minutes) < 60):
                     pass
                 else:
                     print('more than 2 minutes or none')
                     return False
                 seconds = time_segments[1]
-                if (len(str(seconds)) < 3 and len(str(seconds)) > 0) and (str(seconds).isdigit()):
+                if (len(str(seconds)) < 3 and len(str(seconds)) > 0) and (str(seconds).isdigit() and (int(seconds) < 60)):
                     pass
                 else:
                     print('more than 2 seconds or none')
                     return False
             else:
-                if (len(str(before_period)) < 3 and len(str(before_period)) > 0) and (str(before_period).isdigit()):
+                if (len(str(before_period)) < 3 and len(str(before_period)) > 0) and (str(before_period).isdigit() and (int(before_period < 60))):
                     pass
                 else:
                     print('seconds with no minutes more than 2 or none')

@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
     <title>Celester</title>
 </head>
+
 <body>
     <main>
+        
         <div class="top-header">
-        <form action="{{url_for('search')}}" method='POST'>
-            <a class='sign-up-link' href="/signup">Sign Up!</a>
-            <div class="input-boxes">
-            <input type="text" name="username" placeholder="Search Users..." required>
-            <input type="text" name="password" placeholder="Enter Pin">
-            <button type="submit">Submit!</button>
+            <div class="header-name-box">
+                <h1 class="header-name">Celeste Splits</h1>
             </div>
-        </form>
-       
+            <form action="{{url_for('search')}}" method='POST'>
+                <div class="input-boxes">
+                    <a class='sign-up-link' href="/signup">Sign Up!</a>
+
+                    <input class='username' type="text" name="username" placeholder="Search Users..." required>
+                    <input class='password' type="text" name="password" placeholder="Enter Pin">
+                    <button class='submit-button-main' type="submit">Submit!</button>
+                </div>
+            </form>
+
         </div>
         <div class="nav-bar">
-        <a href="/">Home</a>
+            <a href="/">Home</a>
         </div>
         {% block content %}
         {% endblock %}
     </main>
     <footer>its a footer!!</footer>
 </body>
+
 </html>
