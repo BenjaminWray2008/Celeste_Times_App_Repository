@@ -24,7 +24,8 @@
 
 .username, .password, .submit-button-main, .sign-up-link{
   font-family:'Nunito';
-  border:#0000 2px;
+  padding:10px;
+  margin-right:10px;
 }
 
 .input-boxes{

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify
 import sqlite3
 from werkzeug.security import check_password_hash
 from hashlib import sha256
@@ -7,13 +7,35 @@ from math import trunc
 
 #Globals
 listy = ['hi', 'Any%', 'ARB', '100%', 'True Ending', 'Bny%', 'Cny%']
-another_listy = [0.001, 1, 60, 3600]
+another_listy = [1, 60, 3600]
 
 with sqlite3.connect("times.db",check_same_thread=False) as database: #Connecting the database
     db=database.cursor()
     app=Flask(__name__)
     app.secret_key = 'password'
     
+
+    def format_time(time):
+        total=0
+        total_individual_time=0
+        time_list = re.split('[.:]', time)
+        print(time_list)
+        backwards_time_list = reversed(time_list[:-1])
+        print(backwards_time_list)
+        for index, time_segment in enumerate(backwards_time_list):
+            total_individual_time = 0
+            print(index, time_segment)
+            total_individual_time += (float(time_segment)*float(another_listy[index]))
+            print(total_individual_time, 'tottal indiv time')
+
+            total += total_individual_time
+            print(total)
+        total = int(total)
+        total = str(total)
+   
+        total += '.' 
+        total += time_list[-1]
+        return total
 
     def valid_time_checker(time):
         has_colon = False
@@ -44,8 +66,10 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             else:
                 print('more than 3 ms or none')
                 return False
+            print('did this')
             if ':' in time:
                 time_segments = re.split('[.:]', time)
+                print('splited')
                 minutes = time_segments[0] 
                 if (len(str(minutes)) < 3 and len(str(minutes)) > 0) and (str(minutes).isdigit()) and (int(minutes) < 60):
                     pass
@@ -59,7 +83,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                     print('more than 2 seconds or none')
                     return False
             else:
-                if (len(str(before_period)) < 3 and len(str(before_period)) > 0) and (str(before_period).isdigit() and (int(before_period < 60))):
+                if (len(str(before_period)) < 3 and len(str(before_period)) > 0) and (str(before_period).isdigit() and (int(before_period) < 60)):
                     pass
                 else:
                     print('seconds with no minutes more than 2 or none')
@@ -112,51 +136,50 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
   
         if variable:
-            
+         
             for chapter in data_dictionary:
+                final_time = 0
+
                 total = 0
                 for time_tuple in data_dictionary[chapter]:
-                    total_individual_time = 0
+                    
                
                     if time_tuple[1] is not None:
+                        final_time += float(time_tuple[1])
+
                   
-                        time_list = re.split('[.:]', time_tuple[1])
-                        backwards_time_list = reversed(time_list)
-                        for index, time_segment in enumerate(backwards_time_list):
-                            total_individual_time += (float(time_segment)*float(another_listy[index]))
-
-                        total += round(total_individual_time,3)
-                if total != None and total != 0:
-                    print(total)
-                    total_list = str(round(total,3)).split('.')
-                    print(total_list)
-                    ms = total_list[1]
-                    if len(ms) != 3:
-                        length = len(ms)
-                        ms += f'{str(0)*(3-length)}'
-                    m_s = str((float(total_list[0])/60)).split('.')
-                    m = m_s[0]
-                    s = trunc(float(total_list[0])-(int(m)*60)) 
-
-                    if len(str(s)) != 2 and m != 0:
-                        length = len(str(s))
-                        s = str(s)
-                        seconds = ''
-                        seconds += f'{str(0)*(2-length)}{s}'
-                        s = seconds
-                      
-                    print(ms, m, s)
-                    final_time = f'{m}:{s}.{ms}'
-                else:
-                    final_time = 0
                 data_dictionary[chapter].append(('Total Total', final_time))
         return data_dictionary
 
 
     @app.route('/')
     def home():
+        
         return render_template('home.html', title='Home')
     
+
+    @app.route('/get_leaderboard')
+    def get_leaderboard():
+        category = request.args.get('category', 'any%')
+        print(category)
+        print('hi')
+
+        query = """
+        SELECT user_id, SUM(time) as sum_of_bests
+        FROM Run
+        WHERE category_id = ?
+       
+        ORDER BY sum_of_bests ASC
+    
+        """
+        db.execute(query, (category,))
+        rows = db.fetchall()
+        print(rows)
+        database.commit()
+
+        leaderboard = [{'username': row[0], 'sum_of_bests': row[1]} for row in rows]
+        return jsonify(leaderboard)
+
     @app.route('/signup')
     def signup():
         return render_template('signup.html')
@@ -235,6 +258,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                    
                     
                     if valid_time_checker(time):
+                        print(time)
+                        time = format_time(time)
                         db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
                         results = db.fetchone()
                         checkpoint_id = results[0]

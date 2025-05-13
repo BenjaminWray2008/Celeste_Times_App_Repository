@@ -1,4 +1,31 @@
 {% extends 'layout.html' %}  
 {% block content %}
+<select name="" id="categorySelect">
+    <option value="1">Any%</option>
+    <option value="2">ARB</option>
+    <option value="3">100%</option>
+    <option value="5">Bny%</option>
+    <option value="6">Cny%</option>
+    <option value="4">True Ending</option>
+</select>
 
+<div id='leaderboard' class="leaderboard">
+    
+</div>
+<script>
+  document.getElementById('categorySelect').addEventListener('change', function () {
+    const category = this.value;
+    fetch(`/get_leaderboard?category=${encodeURIComponent(category)}`)
+      .then(response => response.json())
+      .then(data => {
+        const leaderboardDiv = document.getElementById('leaderboard');
+        leaderboardDiv.innerHTML = data.map((entry, i) => `
+          <p>${i + 1}. ${entry.username}: ${entry.sum_of_bests}</p>
+        `).join('');
+      });
+  });
+
+  // Trigger initial load
+  document.getElementById('categorySelect').dispatchEvent(new Event('change'));
+</script>
 {% endblock %}
