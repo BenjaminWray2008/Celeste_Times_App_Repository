@@ -14,29 +14,60 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     app=Flask(__name__)
     app.secret_key = 'password'
     
+    def format_time_normal_form(time):
+       
+        if float(time) != 0:
+            minutes = float(time)//60
+            seconds = float(time)%60
+            milliseconds = (str(time).split('.'))[1]
+            time = f"{int(minutes)}:{int(seconds)}.{int(milliseconds)}"
+        else:
+            time = 0
+        return time
+    
+    def format_time_readable_form(time):
+        if time != 0:
+            time = str(time)
+            time_list = re.split('[.:]', time)
+            minutes = time_list[0]
+            seconds = time_list[1]
+            ms = time_list[2]
 
-    def format_time(time):
+            if len(str(minutes)) == 1:
+                minutes = f'0{minutes}'
+            
+            if len(str(seconds)) == 1:
+                seconds = f'0{seconds}'
+            
+            if len(str(ms)) < 3:
+                length = len(str(ms))
+                ms = f'{ms}{"0"*(3-length)}'
+            time = f'{minutes}:{seconds}.{ms}'
+            
+        return time  
+    
+    def format_time_second_form(time):
         total=0
         total_individual_time=0
-        time_list = re.split('[.:]', time)
-        print(time_list)
+        time_list = re.split('[.:]', str(time))
+    
         backwards_time_list = reversed(time_list[:-1])
-        print(backwards_time_list)
+    
         for index, time_segment in enumerate(backwards_time_list):
             total_individual_time = 0
-            print(index, time_segment)
+    
             total_individual_time += (float(time_segment)*float(another_listy[index]))
-            print(total_individual_time, 'tottal indiv time')
+ 
 
             total += total_individual_time
-            print(total)
+      
         total = int(total)
         total = str(total)
    
         total += '.' 
         total += time_list[-1]
-        return total
-
+        return total    
+       
     def valid_time_checker(time):
         has_colon = False
         for char in time:
@@ -92,10 +123,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             return True
         except:
             return False
-
-       
-    
-
+        
     def new_user_data(id):
         db.execute('SELECT id FROM Category;')
         results = db.fetchall()
@@ -133,7 +161,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             checkpoint_name = db.fetchone()
             db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
             time = db.fetchone()
-            data_dictionary[results[0]].append((checkpoint_name[0], time[0]))
+            new_time = format_time_normal_form(time[0])
+            data_dictionary[results[0]].append((checkpoint_name[0], format_time_readable_form(new_time)))
   
         if variable:
          
@@ -145,40 +174,50 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                     
                
                     if time_tuple[1] is not None:
-                        final_time += float(time_tuple[1])
+                        final_time += float(format_time_second_form(time_tuple[1]))
 
                   
-                data_dictionary[chapter].append(('Total Total', final_time))
+                data_dictionary[chapter].append(('Total Total', format_time_readable_form(format_time_normal_form(final_time))))
         return data_dictionary
-
-
+   
+   
     @app.route('/')
     def home():
         
         return render_template('home.html', title='Home')
     
-
     @app.route('/get_leaderboard')
     def get_leaderboard():
         category = request.args.get('category', 'any%')
-        print(category)
-        print('hi')
-
-        query = """
-        SELECT user_id, SUM(time) as sum_of_bests
-        FROM Run
-        WHERE category_id = ?
-       
-        ORDER BY sum_of_bests ASC
+ 
     
-        """
+
+        query = '''
+        SELECT user_id, SUM(time) AS sum_of_bests
+        FROM Run r1
+        WHERE category_id = ?
+        AND NOT EXISTS (
+        SELECT 1
+        FROM Run r2
+        WHERE r2.user_id = r1.user_id
+        AND r2.category_id = r1.category_id
+        AND (r2.time = 0 OR r2.time IS NULL)
+        )
+        GROUP BY user_id
+        ORDER BY sum_of_bests ASC'''
         db.execute(query, (category,))
         rows = db.fetchall()
-        print(rows)
-        database.commit()
+        leaderboard = []
+        for row in rows:
+            db.execute('SELECT name FROM user WHERE id = ?', (row[0],))
 
-        leaderboard = [{'username': row[0], 'sum_of_bests': row[1]} for row in rows]
-        return jsonify(leaderboard)
+            leaderboard.append({'username': db.fetchone()[0], 'sum_of_bests': row[1]})
+        if leaderboard:
+            return jsonify(leaderboard)
+        else:
+            leaderboard = [{'no results':'no results'}]
+            return jsonify(leaderboard)
+        
 
     @app.route('/signup')
     def signup():
@@ -232,14 +271,12 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
      
         return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name)
 
-    
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id,category_id):
          
         if request.method == 'POST':
             checkpoint_times=request.form.getlist('checkpoints[]')
-            print(checkpoint_times, 'hi')
-
+         
 
 
             data_dictionary = data_dictionary_creation(user_id, category_id, False)
@@ -258,8 +295,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                    
                     
                     if valid_time_checker(time):
-                        print(time)
-                        time = format_time(time)
+           
+                        time = format_time_second_form(time)
                         db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
                         results = db.fetchone()
                         checkpoint_id = results[0]
