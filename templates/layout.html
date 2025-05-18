@@ -10,26 +10,28 @@
 
 <body>
     <main>
-        
+
         <div class="top-header">
             <div class="header-name-box">
                 <h1 class="header-name">Celeste Splits</h1>
             </div>
-            <form action="{{url_for('search')}}" method='POST'>
-                <div class="input-boxes">
-                  
 
+            <form action="{{url_for('search')}}" method='POST'>
+
+
+                <div class="input-boxes">
                     <input class='username' type="text" name="username" placeholder="Search Users..." required>
                     <input class='password' type="text" name="password" placeholder="Enter Pin">
-                    <button class='submit-button-main' type="submit">Submit!</button>
-                    <a class='sign-up-link' href="/signup">Sign Up!</a>
                 </div>
+                <div class="submit-button-main-container">
+                    <button class='submit-button-main' type="submit">Submit!</button>
+                </div>
+
             </form>
 
+            <a class='sign-up-link' href="/signup">Sign Up!</a>
         </div>
-        <div class="nav-bar">
-            <a href="/">Home</a>
-        </div>
+    
         {% block content %}
         {% endblock %}
     </main>

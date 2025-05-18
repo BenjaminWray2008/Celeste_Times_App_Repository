@@ -1,11 +1,14 @@
 {% extends 'layout.html' %}
 {% block content %}
-<a href="/get_times/{{user_id}}/1">any%</a>
-<a href="/get_times/{{user_id}}/2">ARB</a>
-<a href="/get_times/{{user_id}}/3">100%</a>
-<a href="/get_times/{{user_id}}/4">True Ending</a>
-<a href="/get_times/{{user_id}}/5">Bny%</a>
-<a href="/get_times/{{user_id}}/6">Cny%</a>
+<ul class="nav-list-categories">
+  <li><a href="/">Home</a></li>
+  <li><a href="/get_times/{{user_id}}/1">any%</a></li>
+  <li><a href="/get_times/{{user_id}}/2">ARB</a></li>
+  <li><a href="/get_times/{{user_id}}/3">100%</a></li>
+  <li><a href="/get_times/{{user_id}}/4">True Ending</a></li>
+  <li><a href="/get_times/{{user_id}}/5">Bny%</a></li>
+  <li><a href="/get_times/{{user_id}}/6">Cny%</a></li>
+</ul>
 
 <form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST">
 

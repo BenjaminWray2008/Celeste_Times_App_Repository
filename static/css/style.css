@@ -3,70 +3,115 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Press+Start+2P&family=Signika:wght@300..700&display=swap');
 
 .top-header{
-  height:30vh;
-  background-color: #BB86FC;
-  width:100%;
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  
+  background-color: #c084fc;
+  padding: 20px;
 }
 
 .header-name{
   font-family: 'Press Start 2P';
+  font-size: 1.4rem;
  
 }
 
 
-.header-name-box, .input-boxes{
+.header-name-box{
   display: flex;
   justify-content: center;
-  width:50vw;    
-}
- 
+  padding-left: 10px;
 
-.username, .password, .submit-button-main, .sign-up-link{
-  font-family:'Nunito';
-  padding:10px;
-  margin-right:10px;
 }
 
 .input-boxes{
-  border: 2px #0000;
-  border-radius: 2px;
-  padding:5px;
-  margin-top:10px;
-  margin-right:10px;
+  display: flex;
+  gap: 8px; /* space between inputs */
+  flex-wrap: wrap;
+  padding-right: 10px;
+  justify-content: center;
 }
+
+
+.submit-button-main-container{
+  display: flex;
+  justify-content: center;
+  margin-top:10px;
+}
+.sign-up-link{
+  float:right;
+}
+
+.username, .password, .submit-button-main, .sign-up-link{
+  font-family:'Nunito';
+
+}
+
+
 
 
 /*Section Below for all styles related to time display */
 
-/* Fix for checkpoint box alignment */
+
+.nav-list-categories{
+  
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+
+}
+
+li {
+  float:left;
+}
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
 .checkpoint-box {
   display: grid;
-  gap: 0.5rem;
-  border: 1px black solid;
-  /* Remove fit-content to ensure consistent width */
+  gap: 0.2rem;
+  
+
   width: 100%;
-  /* Standardize the grid columns */
+
   grid-template-columns: 1fr 1fr;
+}
 
-  /* Set a fixed height if needed */
-
+table tr:not(:last-child){
+  border-bottom: 1.5px solid #000;
 }
 
 /* Table styling for consistency */
 table {
   table-layout: fixed;
   width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1.5px solid #000;
+  border-radius: 10px;
+  overflow: hidden; /* Helps clip child elements if needed */
 }
 
 /* Make all td elements consistent */
 td {
   padding: 8px 12px;
-  padding-left: 20px;
-  
+
+  border:none;
   font-family: 'Poppins';
   /* Add these to ensure consistent sizing */
-  box-sizing: border-box;
+ 
   
   vertical-align: middle;
 
@@ -75,7 +120,7 @@ td {
 /* Ensure all input fields have the same width */
 input.checkpoint-time {
   width: 100%;
-  box-sizing: border-box;
+
   font-family: 'Poppins';
   
 }
@@ -87,15 +132,16 @@ input.checkpoint-time {
   /* Add consistent width and padding */
   width: 100%;
 
-  box-sizing: border-box;
+ 
 }
 
 /* Make all display grids consistent */
 .display-grid {
   display: grid;
+  padding:50px;
   /* Use a more consistent grid template */
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 0.5rem;
+  gap: 2rem;
   align-items: start center;
   width: 100%;
 }
@@ -111,6 +157,7 @@ input.checkpoint-time {
 
 .chapter-header{
   text-align: center;
+  font-family: 'Press Start 2P'
 
   
 }
@@ -122,4 +169,9 @@ body{
   background: linear-gradient(135deg, #C3ECF1, #ffffff);
   margin:0;
   padding:0;
+  width:100%
+}
+
+* {
+  box-sizing: border-box;
 }

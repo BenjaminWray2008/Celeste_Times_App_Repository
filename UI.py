@@ -215,7 +215,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         if leaderboard:
             return jsonify(leaderboard)
         else:
-            leaderboard = [{'no results':'no results'}]
+            leaderboard = [{'username':'no results', 'sum_of_bests':''}]
             return jsonify(leaderboard)
         
 
