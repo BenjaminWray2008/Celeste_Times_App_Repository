@@ -26,6 +26,9 @@
         {% endfor %}
       </div>
     </div>
+    {% if loop.index % 3 == 0 %}
+    <div class="row-marker"></div>
+    {% endif %}
     {% endfor %}
   </div>
   <button type="submit" name="submit_button">Submit</button>

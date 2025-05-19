@@ -7,7 +7,7 @@ from math import trunc
 
 #Globals
 listy = ['hi', 'Any%', 'ARB', '100%', 'True Ending', 'Bny%', 'Cny%']
-another_listy = [1, 60, 3600]
+another_listy = [0.001, 1, 60, 3600]
 
 with sqlite3.connect("times.db",check_same_thread=False) as database: #Connecting the database
     db=database.cursor()
@@ -19,7 +19,14 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         if float(time) != 0:
             minutes = float(time)//60
             seconds = float(time)%60
-            milliseconds = (str(time).split('.'))[1]
+            
+           
+            milliseconds = float(time)-trunc(float(time))
+            print(milliseconds, '2')
+            milliseconds = round(milliseconds, 3)
+            print(milliseconds, '3')
+            milliseconds = str(milliseconds)[2:]
+            print(milliseconds, '4')
             time = f"{int(minutes)}:{int(seconds)}.{int(milliseconds)}"
         else:
             time = 0
@@ -47,25 +54,28 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         return time  
     
     def format_time_second_form(time):
+    
         total=0
         total_individual_time=0
         time_list = re.split('[.:]', str(time))
-    
-        backwards_time_list = reversed(time_list[:-1])
+ 
+        backwards_time_list = reversed(time_list)
     
         for index, time_segment in enumerate(backwards_time_list):
+           
             total_individual_time = 0
     
             total_individual_time += (float(time_segment)*float(another_listy[index]))
  
 
             total += total_individual_time
-      
+    
         total = int(total)
         total = str(total)
    
         total += '.' 
         total += time_list[-1]
+       
         return total    
        
     def valid_time_checker(time):
@@ -161,6 +171,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             checkpoint_name = db.fetchone()
             db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
             time = db.fetchone()
+            print(time)
             new_time = format_time_normal_form(time[0])
             data_dictionary[results[0]].append((checkpoint_name[0], format_time_readable_form(new_time)))
   
@@ -174,7 +185,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                     
                
                     if time_tuple[1] is not None:
-                        final_time += float(format_time_second_form(time_tuple[1]))
+                        final_time += round(float(format_time_second_form(time_tuple[1])), 3)
 
                   
                 data_dictionary[chapter].append(('Total Total', format_time_readable_form(format_time_normal_form(final_time))))
@@ -257,8 +268,12 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
            
             
                 return redirect(url_for('get_times',user_id=user_id, category_id=1))
-
-            return render_template('profile.html', user_id = user_id, category_id = 1)
+            data_dictionary = data_dictionary_creation(user_id, 1, True)
+            db.execute('SELECT name FROM category WHERE id = 1')
+            name = db.fetchall()[0]
+            db.execute('SELECT name FROM user WHERE id = ?', (user_id,))
+            user_name = db.fetchall()[0]
+            return render_template('profile.html', user_id = user_id, category_id = 1, user_name = user_name, name = name, data_dictionary = data_dictionary)
         
         print('No user found.')
         return render_template('home.html')
@@ -295,7 +310,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                    
                     
                     if valid_time_checker(time):
-           
+                        print(time)
                         time = format_time_second_form(time)
                         db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
                         results = db.fetchone()
