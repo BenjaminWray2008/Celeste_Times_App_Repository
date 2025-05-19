@@ -17,18 +17,14 @@
     {% for chapter in data_dictionary %}
     <div class="display-grid-item">
       <h2 class="chapter-header">{{chapter}}</h2>
-      <table>
-
-
+      <div class="checkpoints">
         {% for checkpoint in data_dictionary[chapter] %}
-        <tr class="checkpoint-box">
-          <td class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</td>
-          <td> <input class='checkpoint-time' type="text" name="checkpoints[]" placeholder="{{checkpoint[1]}}"></td>
-        </tr>
+        <div class="checkpoint-box">
+          <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
+          <input class='checkpoint-time' type="text" name="checkpoints[]" placeholder="{{checkpoint[1]}}">
+        </div>
         {% endfor %}
-
-
-      </table>
+      </div>
     </div>
     {% endfor %}
   </div>
