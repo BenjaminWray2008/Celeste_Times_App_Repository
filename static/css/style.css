@@ -60,7 +60,7 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: #1A1A2E;
 
 }
 
@@ -72,11 +72,21 @@ li a {
   color: white;
   text-align: center;
   padding: 14px 16px;
+  padding-left:5.2267vw;
+  padding-right:5.2267vw;
   text-decoration: none;
+  border-right:2px white solid;
+  border-top:2px white solid;
+
+  
 }
 
 li a:hover {
   background-color: #111;
+}
+
+.nav-list-categories li:last-child a{
+  border-right: none;      /* remove border on last item */
 }
 
 .checkpoint-box {
@@ -131,12 +141,11 @@ li a:hover {
 .row-marker {
 
   grid-column: 1 / -1; /* span full row */
-  text-align: center;
-  font-weight: bold;
-  color: #ae21b0;
+
+
   padding: 5px;
   background-color: #e347e5;
-  border-top: 1px solid #ddd;
+
 }
 
 
@@ -167,30 +176,46 @@ li a:hover {
   font-family: 'Press Start 2P';
 }
 
-
+.right-half{
+  flex:1.2;
+  background-color: rgb(58, 65, 101);
+}
+.left-half{
+  flex:1;
+  background-color: #afe3ea;
+}
 
 .profile-headers{
-  text-align:center;
-  margin-bottom:50px;
+
+  border-top: 10px solid black;
+  display: flex;
+ 
+
+  background-color: #afe3ea;
+  height:140px;
 }
 
 .profile-name {
-  font-family: 'Georgia', serif;
-  font-size: 3.5rem;
-  margin: 0;
+  font-family: 'Poppings';
+  font-size: 2rem;
+  margin:10px;
+  padding:10px;
+  border:white solid 2px;
+  border-radius: 5px;
+  width:fit-content;
   color: #222;
 }
 
 .category-name {
 
   font-size: 2.5rem;
-  margin-top: 0.5rem;
+
   color: #444;
-  letter-spacing: 1px;
+
 }
 
 body{
-  background: linear-gradient(135deg, #C3ECF1, #ffffff);
+  background: linear-gradient(135deg, #C3ECF1, #89a1bf);
   margin:0;
   padding:0;
   width:100%
