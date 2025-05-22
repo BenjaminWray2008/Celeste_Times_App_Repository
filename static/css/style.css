@@ -6,8 +6,8 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
   
-  background-color: #c084fc;
   padding: 20px;
 }
 
@@ -64,10 +64,10 @@
 
 }
 
-li {
+ul.nav-list-categories li {
   float:left;
 }
-li a {
+ul.nav-list-categories li a {
   display: block;
   color: white;
   text-align: center;
@@ -81,7 +81,7 @@ li a {
   
 }
 
-li a:hover {
+ul.nav-list-categories li a:hover {
   background-color: #111;
 }
 
@@ -178,28 +178,27 @@ li a:hover {
 
 .right-half{
   flex:1.2;
-  background-color: rgb(58, 65, 101);
+  background: linear-gradient(to left, #7822ce 40%, #a3e1e3 100%);
+  place-items: center;
 }
 .left-half{
   flex:1;
-  background-color: #afe3ea;
+  background: linear-gradient(to right, #c084fc 0%, #a3e1e3 100%);
 }
 
 .profile-headers{
-
-  border-top: 10px solid black;
+  box-shadow: inset 0 5px 10px -5px rgba(0,0,0,0.2);
+  border-top: 3px solid black;
   display: flex;
- 
-
   background-color: #afe3ea;
-  height:140px;
+  height:fit-content;
 }
 
 .profile-name {
   font-family: 'Poppings';
   font-size: 2rem;
-  margin:10px;
-  padding:10px;
+  margin:1rem;
+  padding:1rem;
   border:white solid 2px;
   border-radius: 5px;
   width:fit-content;
@@ -207,12 +206,11 @@ li a:hover {
 }
 
 .category-name {
-
   font-size: 2.5rem;
-
   color: #444;
-
 }
+
+
 
 body{
   background: linear-gradient(135deg, #C3ECF1, #89a1bf);

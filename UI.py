@@ -14,6 +14,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     app=Flask(__name__)
     app.secret_key = 'password'
     
+    def sob_adder(user_id):
+        sob_dict = {'Any%': '', 'ARB': '', '100%': '', 'True Ending': '', 'Bny%': '', 'Cny%': ''}
+        for category in sob_dict:
+            db.execute('SELECT SUM(time) AS sob FROM Run WHERE user_id = ? AND category_id = (SELECT id FROM Category WHERE name = ?);', (user_id, category))
+            sob = db.fetchone()[0]
+            sob_dict[category] = sob
+     
+        return sob_dict
+    
     def format_time_normal_form(time):
        
         if float(time) != 0:
@@ -22,11 +31,11 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             
            
             milliseconds = float(time)-trunc(float(time))
-            print(milliseconds, '2')
+         
             milliseconds = round(milliseconds, 3)
-            print(milliseconds, '3')
+     
             milliseconds = str(milliseconds)[2:]
-            print(milliseconds, '4')
+     
             time = f"{int(minutes)}:{int(seconds)}.{int(milliseconds)}"
         else:
             time = 0
@@ -268,12 +277,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
            
             
                 return redirect(url_for('get_times',user_id=user_id, category_id=1))
-            data_dictionary = data_dictionary_creation(user_id, 1, True)
-            db.execute('SELECT name FROM category WHERE id = 1')
-            name = db.fetchall()[0]
-            db.execute('SELECT name FROM user WHERE id = ?', (user_id,))
-            user_name = db.fetchall()[0]
-            return render_template('profile.html', user_id = user_id, category_id = 1, user_name = user_name, name = name, data_dictionary = data_dictionary)
+        
+            return redirect(url_for('profile',user_id=user_id,category_id=1))
         
         print('No user found.')
         return render_template('home.html')
@@ -283,8 +288,10 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         data_dictionary = data_dictionary_creation(user_id, category_id, False)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
+        db.execute('SELECT name FROM user WHERE id = ?', (user_id,))
+        user_name = db.fetchall()[0]
      
-        return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name)
+        return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name)
 
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id,category_id):
@@ -310,7 +317,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                    
                     
                     if valid_time_checker(time):
-                        print(time)
+              
                         time = format_time_second_form(time)
                         db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
                         results = db.fetchone()
@@ -328,7 +335,9 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         name = db.fetchall()[0]
         db.execute('SELECT name FROM user WHERE id = ?', (user_id,))
         user_name = db.fetchall()[0]
-        return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name)
+        print('hiiiiiiiiiii')
+        sob_dict = sob_adder(user_id)
+        return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict)
 
 if __name__ == '__main__':
     app.run(debug=True)
