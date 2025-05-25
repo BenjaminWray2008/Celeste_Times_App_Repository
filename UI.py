@@ -144,59 +144,61 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             return False
         
     def new_user_data(id):
-        db.execute('SELECT id FROM Category;')
+        
+        db.execute('SELECT id FROM Category;') #Getting all available categories
         results = db.fetchall()
+        
         for category in results:
             category_id = category[0]
             db.execute('SELECT checkpoint_id FROM CategoryCheckpoint WHERE category_id = ?', (category_id,))
-            checkpoints_list = db.fetchall()
+            checkpoints_list = db.fetchall() #For each category, getting a list of all checkpoints in that category
+            
             for checkpoint in checkpoints_list:
-             
-                db.execute('SELECT name FROM Checkpoint WHERE id = ?', (checkpoint[0],))
+                db.execute('SELECT name FROM Checkpoint WHERE id = ?', (checkpoint[0],)) #Formatting results
                 results = db.fetchone()
                 name = results[0]
-            
                 chapter_name = (name.split(' '))[-1]
-       
                 db.execute('SELECT id FROM Chapter WHERE name == ?', (chapter_name,))
                 results = db.fetchone()
                 chapter_id = results[0]
-                db.execute('INSERT INTO Run (time, run_number, type, chapter_id, user_id, category_id) VALUES (0, ?, ?, ?, ?, ?)', (checkpoint[0], 'checkpoint', chapter_id, id, category_id))
+                
+                db.execute('''INSERT INTO Run 
+                           (time, run_number, type, chapter_id, user_id, category_id)
+                           VALUES (0, ?, ?, ?, ?, ?)''',
+                           (checkpoint[0], 'checkpoint', chapter_id, id, category_id)) #For every checkpoint for every category, inserting a run entry for the new user.
         database.commit()
 
     def data_dictionary_creation(user_id, category_id, variable):
         data_dictionary = {}
-        db.execute('SELECT checkpoint_id, orderer FROM CategoryCheckpoint WHERE category_id = ? ORDER BY orderer ASC', (category_id,))
+        db.execute('''SELECT checkpoint_id, orderer FROM CategoryCheckpoint 
+                   WHERE category_id = ? ORDER BY orderer ASC''', (category_id,)) #Gets all checkpoints of a specific category in order of display
         results = db.fetchall()
         checkpoint_id = [j[0] for j in results]
         
         for checkpoint in checkpoint_id:
-            db.execute('SELECT name FROM Chapter WHERE id IN (SELECT chapter_id FROM Run WHERE run_number = ? AND user_id = ? AND category_id = ?);', (checkpoint, user_id, category_id))
+            db.execute('''SELECT name FROM Chapter WHERE id IN 
+                       (SELECT chapter_id FROM Run 
+                       WHERE run_number = ? AND user_id = ? AND category_id = ?);''', (checkpoint, user_id, category_id)) #For every checkpoint get the name of the chapter that it is in
             results = db.fetchone()
            
-            if results[0] not in data_dictionary:
+            if results[0] not in data_dictionary: #If the chapter is not already in the dictionary add it as an empty list
                 data_dictionary[results[0]] = []
-            db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,))
+            db.execute('SELECT name FROM checkpoint WHERE id = ?', (checkpoint,)) #Get the name of the checkpoint and the time the user has for it
             checkpoint_name = db.fetchone()
             db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ?;', (user_id, category_id, checkpoint))
             time = db.fetchone()
             print(time)
-            new_time = format_time_normal_form(time[0])
-            data_dictionary[results[0]].append((checkpoint_name[0], format_time_readable_form(new_time)))
+            new_time = format_time_normal_form(time[0]) #Turn time into mm:ss.msmsms form
+            data_dictionary[results[0]].append((checkpoint_name[0], format_time_readable_form(new_time))) 
+            #Add to the dictionary under the key of the chapter that is in, the checkpoint name and the time it corrresponds to
   
-        if variable:
-         
+        if variable: 
             for chapter in data_dictionary:
                 final_time = 0
-
                 total = 0
                 for time_tuple in data_dictionary[chapter]:
-                    
-               
                     if time_tuple[1] is not None:
                         final_time += round(float(format_time_second_form(time_tuple[1])), 3)
-
-                  
                 data_dictionary[chapter].append(('Total Total', format_time_readable_form(format_time_normal_form(final_time))))
         return data_dictionary
    
@@ -245,45 +247,48 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     
     @app.route('/new_user', methods=['POST'])
     def new_user():
-        username = request.form.get('username')
+        username = request.form.get('username') #Get the items from the form
         password = request.form.get('password')
        
+        #Hashing the users password for security
         h = sha256()
         h.update(password.encode())
         hash = h.hexdigest()
         db.execute('INSERT INTO User (name, hash) VALUES (?, ?)', (username, hash))
-        #Any%
         database.commit()
+        
         db.execute('SELECT id FROM User WHERE name == ?', (username,))
         results = db.fetchone()
         id = results[0]
       
-        new_user_data(id)
+        new_user_data(id) #Running function to add all empty time entries for new user
         return render_template('home.html')
     
     @app.route('/search', methods=['POST'])
     def search():
-        username = request.form.get('username')
+        username = request.form.get('username') #Get items from form
         password = request.form.get('password')
 
-        db.execute(f'SELECT id, hash FROM User WHERE name = "{username}";')
+        db.execute(f'SELECT id, hash FROM User WHERE name = "{username}";') #Get the actual hash of the username entered
         results=db.fetchone()
-        if results:
+        
+        if results: #If the user exists
             h = sha256()
             h.update(password.encode())
             hashed = h.hexdigest()
-            user_id, hash = results
-            if hash == hashed:
+            user_id, hash = results #Work out the hash of the password entered
+            if hash == hashed: #If the hashes are the same
            
             
-                return redirect(url_for('get_times',user_id=user_id, category_id=1))
+                return redirect(url_for('get_times',user_id=user_id, category_id=1)) #Run page that lets user change times
         
-            return redirect(url_for('profile',user_id=user_id,category_id=1))
+            return redirect(url_for('profile',user_id=user_id,category_id=1)) #Else, run page that lets user view times
         
-        print('No user found.')
+        print('No user found.') #If the username entered doesn't exist, reload home page.
         return render_template('home.html')
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
+    
     def get_times(user_id,category_id):
         data_dictionary = data_dictionary_creation(user_id, category_id, False)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))

@@ -7,45 +7,40 @@
   display: flex;
   flex-direction: column;
   background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
-  
   padding: 20px;
 }
 
 .header-name{
   font-family: 'Press Start 2P';
   font-size: 1.4rem;
- 
 }
-
 
 .header-name-box{
   display: flex;
   justify-content: center;
   padding-left: 10px;
-
 }
 
 .input-boxes{
   display: flex;
-  gap: 8px; /* space between inputs */
+  gap: 8px; 
   flex-wrap: wrap;
   padding-right: 10px;
   justify-content: center;
 }
-
 
 .submit-button-main-container{
   display: flex;
   justify-content: center;
   margin-top:10px;
 }
+
 .sign-up-link{
   float:right;
 }
 
 .username, .password, .submit-button-main, .sign-up-link{
   font-family:'Nunito';
-
 }
 
 
