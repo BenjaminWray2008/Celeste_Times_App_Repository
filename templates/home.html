@@ -19,13 +19,20 @@
       .then(response => response.json())
       .then(data => {
         const leaderboardDiv = document.getElementById('leaderboard');
+
+        if (data.length === 0) {
+   
+        leaderboardDiv.innerHTML = '<p>No results found for this category.</p>';
+        }
+        else{
         leaderboardDiv.innerHTML = data.map((entry, i) => `
           <p>${i + 1}. ${entry.username}: ${entry.sum_of_bests}</p>
         `).join('');
+        }
       });
   });
 
-  // Trigger initial load
+
   document.getElementById('categorySelect').dispatchEvent(new Event('change'));
 </script>
 {% endblock %}

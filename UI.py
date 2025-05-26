@@ -212,9 +212,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def get_leaderboard():
         category = request.args.get('category', 'any%')
  
-    
-
-        query = '''
+        db.execute('''
         SELECT user_id, SUM(time) AS sum_of_bests
         FROM Run r1
         WHERE category_id = ?
@@ -226,21 +224,19 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         AND (r2.time = 0 OR r2.time IS NULL)
         )
         GROUP BY user_id
-        ORDER BY sum_of_bests ASC'''
-        db.execute(query, (category,))
+        ORDER BY sum_of_bests ASC''', (category,))
+     
         rows = db.fetchall()
+        print(rows)
         leaderboard = []
         for row in rows:
             db.execute('SELECT name FROM user WHERE id = ?', (row[0],))
-
-            leaderboard.append({'username': db.fetchone()[0], 'sum_of_bests': row[1]})
-        if leaderboard:
-            return jsonify(leaderboard)
-        else:
-            leaderboard = [{'username':'no results', 'sum_of_bests':''}]
-            return jsonify(leaderboard)
+            name = db.fetchone()[0]
+            leaderboard.append({'username': name, 'sum_of_bests': row[1]})
         
-
+        return jsonify(leaderboard)
+     
+        
     @app.route('/signup')
     def signup():
         return render_template('signup.html')
@@ -300,13 +296,9 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id,category_id):
-         
         if request.method == 'POST':
-            checkpoint_times=request.form.getlist('checkpoints[]')
-         
-
-
-            data_dictionary = data_dictionary_creation(user_id, category_id, False)
+            checkpoint_times=request.form.getlist('checkpoints[]') #Getting Form data
+            data_dictionary = data_dictionary_creation(user_id, category_id, False) #Creating the dictionary of checkpoints
         
             list_of_checkpoints = []
             print(data_dictionary)
@@ -314,22 +306,21 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 
                 for checkpoint_tuple in data_dictionary[chapter]:
                  
-                    if checkpoint_tuple[0] != 'Total Total':
+                    if checkpoint_tuple[0] != 'Total Total': #This tuple is created for total times for sections. This is not needed here
                         list_of_checkpoints.append(checkpoint_tuple[0])
   
-            for time, checkpoint in zip(checkpoint_times, list_of_checkpoints):
-                if time != '':
+            for time, checkpoint in zip(checkpoint_times, list_of_checkpoints): #Comparing the list of form data to the list of checkpoint names
+                if time != '': #time is equal to '' if no time has been submitted
                    
-                    
-                    if valid_time_checker(time):
-              
-                        time = format_time_second_form(time)
+                    if valid_time_checker(time): #If the time is valid
+                        time = format_time_second_form(time) #Turns time into ss.msmsmsms
                         db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
                         results = db.fetchone()
                         checkpoint_id = results[0]
-                        db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;', (time, user_id, category_id, checkpoint_id))
+                        db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;',
+                                   (time, user_id, category_id, checkpoint_id)) #Update the database with the new time
+                        
                         database.commit()
-                    
         
         return redirect(url_for('profile',user_id=user_id,category_id=category_id))
     
@@ -340,7 +331,6 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         name = db.fetchall()[0]
         db.execute('SELECT name FROM user WHERE id = ?', (user_id,))
         user_name = db.fetchall()[0]
-        print('hiiiiiiiiiii')
         sob_dict = sob_adder(user_id)
         return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict)
 

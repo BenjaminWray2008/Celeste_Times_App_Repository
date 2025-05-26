@@ -19,17 +19,20 @@
   <li><a href="/get_times/{{user_id}}/5">Bny%</a></li>
   <li><a href="/get_times/{{user_id}}/6">Cny%</a></li>
 </ul>
-
+<!-- Run route update_times on submit -->
 <form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST">
 
   <h1 class="category-name">{{name[0]}}</h1>
-  <div class="display-grid">
+  <div class="display-grid"> 
+    <!-- Grid of every chapter -->
     {% for chapter in data_dictionary %}
     <div class="display-grid-item">
       <h2 class="chapter-header">{{chapter}}</h2>
       <div class="checkpoints">
+        <!-- Grid of every checkpoint within every chapter -->
         {% for checkpoint in data_dictionary[chapter] %}
         <div class="checkpoint-box">
+          <!-- Name of checkpoint and time that corresponds to that checkpoint-->
           <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
           <input class='checkpoint-time' type="text" name="checkpoints[]" placeholder="{{checkpoint[1]}}">
         </div>
