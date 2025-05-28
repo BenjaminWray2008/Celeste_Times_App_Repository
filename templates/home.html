@@ -13,19 +13,17 @@
     
 </div>
 <script>
-  document.getElementById('categorySelect').addEventListener('change', function () {
+    document.getElementById('categorySelect').addEventListener('change', function () { // Get the value selected when something is selected
     const category = this.value;
-    fetch(`/get_leaderboard?category=${encodeURIComponent(category)}`)
+    fetch(`/get_leaderboard?category=${encodeURIComponent(category)}`) // Run get_leaderboard route with parameter of category selected
       .then(response => response.json())
-      .then(data => {
-        const leaderboardDiv = document.getElementById('leaderboard');
-
-        if (data.length === 0) {
-   
+      .then(data => { // Data contains the results
+        const leaderboardDiv = document.getElementById('leaderboard'); // Select the leaderboard div
+        if (data.length === 0) { // If no results
         leaderboardDiv.innerHTML = '<p>No results found for this category.</p>';
         }
-        else{
-        leaderboardDiv.innerHTML = data.map((entry, i) => `
+        else{ // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
+        leaderboardDiv.innerHTML = data.map((entry, i) => ` 
           <p>${i + 1}. ${entry.username}: ${entry.sum_of_bests}</p>
         `).join('');
         }
@@ -33,6 +31,6 @@
   });
 
 
-  document.getElementById('categorySelect').dispatchEvent(new Event('change'));
+  document.getElementById('categorySelect').dispatchEvent(new Event('change')); // On initial load, run the function. This will default to the first category
 </script>
 {% endblock %}

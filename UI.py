@@ -158,7 +158,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 results = db.fetchone()
                 name = results[0]
                 chapter_name = (name.split(' '))[-1]
-                db.execute('SELECT id FROM Chapter WHERE name == ?', (chapter_name,))
+                db.execute('SELECT id FROM Chapter WHERE name = ?', (chapter_name,))
                 results = db.fetchone()
                 chapter_id = results[0]
                 
@@ -210,7 +210,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     
     @app.route('/get_leaderboard')
     def get_leaderboard():
-        category = request.args.get('category', 'any%')
+        category = request.args.get('category', 'any%') #Get the category selected on the dropdown. Default is any%
  
         db.execute('''
         SELECT user_id, SUM(time) AS sum_of_bests
@@ -225,6 +225,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         )
         GROUP BY user_id
         ORDER BY sum_of_bests ASC''', (category,))
+        #Query selects the sum of best for all user where they have filled in all their run entries for the category entered.
+        #Grouped by users, and ordered by the smallest sum of best for the leaderboard.
      
         rows = db.fetchall()
         print(rows)
@@ -232,9 +234,10 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         for row in rows:
             db.execute('SELECT name FROM user WHERE id = ?', (row[0],))
             name = db.fetchone()[0]
-            leaderboard.append({'username': name, 'sum_of_bests': row[1]})
+            leaderboard.append({'username': name, 'sum_of_bests': row[1]}) 
+            #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
         
-        return jsonify(leaderboard)
+        return jsonify(leaderboard) #Return the created leaderboard to the js
      
         
     @app.route('/signup')
@@ -265,7 +268,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         username = request.form.get('username') #Get items from form
         password = request.form.get('password')
 
-        db.execute(f'SELECT id, hash FROM User WHERE name = "{username}";') #Get the actual hash of the username entered
+        db.execute(f'SELECT id, hash FROM User WHERE name = ?;', (username,)) #Get the actual hash of the username entered
         results=db.fetchone()
         
         if results: #If the user exists
