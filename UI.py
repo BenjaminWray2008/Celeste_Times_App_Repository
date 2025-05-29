@@ -1,9 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify, abort
 import sqlite3
 from werkzeug.security import check_password_hash
 from hashlib import sha256
 import re
 from math import trunc
+
 
 #Globals
 listy = ['hi', 'Any%', 'ARB', '100%', 'True Ending', 'Bny%', 'Cny%']
@@ -203,6 +204,11 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         return data_dictionary
    
    
+    @app.errorhandler(404)
+    def stoptryingtohack(i):
+        return render_template('404.html')
+        
+   
     @app.route('/')
     def home():
         
@@ -248,7 +254,11 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def new_user():
         username = request.form.get('username') #Get the items from the form
         password = request.form.get('password')
-       
+        if len(password) < 4 or len(password) > 20:
+            abort(404)
+        db.execute('SELECT id FROM user WHERE name = ?', (username,))
+        if db.fetchall():
+            abort(404)
         #Hashing the users password for security
         h = sha256()
         h.update(password.encode())
