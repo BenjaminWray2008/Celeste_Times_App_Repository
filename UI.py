@@ -1,9 +1,10 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify, abort
 import sqlite3
 from werkzeug.security import check_password_hash
 from hashlib import sha256
 import re
 from math import trunc
+
 
 #Globals
 listy = ['hi', 'Any%', 'ARB', '100%', 'True Ending', 'Bny%', 'Cny%']
@@ -158,7 +159,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 results = db.fetchone()
                 name = results[0]
                 chapter_name = (name.split(' '))[-1]
-                db.execute('SELECT id FROM Chapter WHERE name == ?', (chapter_name,))
+                db.execute('SELECT id FROM Chapter WHERE name = ?', (chapter_name,))
                 results = db.fetchone()
                 chapter_id = results[0]
                 
@@ -203,6 +204,11 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         return data_dictionary
    
    
+    @app.errorhandler(404)
+    def stoptryingtohack(i):
+        return render_template('404.html')
+        
+   
     @app.route('/')
     def home():
         
@@ -210,7 +216,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     
     @app.route('/get_leaderboard')
     def get_leaderboard():
-        category = request.args.get('category', 'any%')
+        category = request.args.get('category', 'any%') #Get the category selected on the dropdown. Default is any%
  
         db.execute('''
         SELECT user_id, SUM(time) AS sum_of_bests
@@ -225,6 +231,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         )
         GROUP BY user_id
         ORDER BY sum_of_bests ASC''', (category,))
+        #Query selects the sum of best for all user where they have filled in all their run entries for the category entered.
+        #Grouped by users, and ordered by the smallest sum of best for the leaderboard.
      
         rows = db.fetchall()
         print(rows)
@@ -232,9 +240,10 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         for row in rows:
             db.execute('SELECT name FROM user WHERE id = ?', (row[0],))
             name = db.fetchone()[0]
-            leaderboard.append({'username': name, 'sum_of_bests': row[1]})
+            leaderboard.append({'username': name, 'sum_of_bests': row[1]}) 
+            #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
         
-        return jsonify(leaderboard)
+        return jsonify(leaderboard) #Return the created leaderboard to the js
      
         
     @app.route('/signup')
@@ -245,7 +254,11 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def new_user():
         username = request.form.get('username') #Get the items from the form
         password = request.form.get('password')
-       
+        if len(password) < 4 or len(password) > 20:
+            abort(404)
+        db.execute('SELECT id FROM user WHERE name = ?', (username,))
+        if db.fetchall():
+            abort(404)
         #Hashing the users password for security
         h = sha256()
         h.update(password.encode())
@@ -265,7 +278,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         username = request.form.get('username') #Get items from form
         password = request.form.get('password')
 
-        db.execute(f'SELECT id, hash FROM User WHERE name = "{username}";') #Get the actual hash of the username entered
+        db.execute(f'SELECT id, hash FROM User WHERE name = ?;', (username,)) #Get the actual hash of the username entered
         results=db.fetchone()
         
         if results: #If the user exists
