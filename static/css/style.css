@@ -50,37 +50,37 @@
 
 
 .nav-list-categories{
-  
+    
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  place-items:center;
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
   background-color: #1A1A2E;
-
+  
+  
 }
 
-ul.nav-list-categories li {
-  float:left;
-}
-ul.nav-list-categories li a {
+.nav-list-categories a {
   display: block;
   color: white;
   text-align: center;
   padding: 14px 16px;
-  padding-left:5.2267vw;
-  padding-right:5.2267vw;
+  
   text-decoration: none;
-  border-right:2px white solid;
-  border-top:2px white solid;
+  width:100%;
 
+  white-space: 'nowrap';
   
 }
 
-ul.nav-list-categories li a:hover {
+.nav-list-categories a:hover {
   background-color: #111;
 }
 
-.nav-list-categories li:last-child a{
+.nav-list-categories .last-child a{
   border-right: none;      /* remove border on last item */
 }
 
@@ -182,11 +182,14 @@ ul.nav-list-categories li a:hover {
 }
 
 .profile-headers{
-  box-shadow: inset 0 5px 10px -5px rgba(0,0,0,0.2);
-  border-top: 3px solid black;
+  
   display: flex;
   background-color: #afe3ea;
   height:fit-content;
+  margin:2vw 5vw 0vw 5vw;
+  border: #000 solid 3px;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .profile-name {
