@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Signika:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Press+Start+2P&family=Signika:wght@300..700&display=swap');
 
+
 .top-header{
   width: 100%;
   display: flex;
@@ -10,10 +11,12 @@
   padding: 20px;
 }
 
+
 .header-name{
   font-family: 'Press Start 2P';
   font-size: 1.4rem;
 }
+
 
 .header-name-box{
   display: flex;
@@ -21,13 +24,15 @@
   padding-left: 10px;
 }
 
+
 .input-boxes{
   display: flex;
-  gap: 8px; 
+  gap: 8px;
   flex-wrap: wrap;
   padding-right: 10px;
   justify-content: center;
 }
+
 
 .submit-button-main-container{
   display: flex;
@@ -35,9 +40,11 @@
   margin-top:10px;
 }
 
+
 .sign-up-link{
   float:right;
 }
+
 
 .username, .password, .submit-button-main, .sign-up-link{
   font-family:'Nunito';
@@ -46,11 +53,17 @@
 
 
 
+
+
+
+
 /*Section Below for all styles related to time display */
 
 
+
+
 .nav-list-categories{
-    
+   
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   place-items:center;
@@ -59,30 +72,35 @@
   padding: 0;
   overflow: hidden;
   background-color: #1A1A2E;
-  
-  
+ 
+ 
 }
+
 
 .nav-list-categories a {
   display: block;
   color: white;
   text-align: center;
   padding: 14px 16px;
-  
+ 
   text-decoration: none;
   width:100%;
 
+
   white-space: 'nowrap';
-  
+ 
 }
+
 
 .nav-list-categories a:hover {
   background-color: #111;
 }
 
+
 .nav-list-categories .last-child a{
   border-right: none;      /* remove border on last item */
 }
+
 
 .checkpoint-box {
   display: grid;
@@ -95,7 +113,11 @@
   padding-left: 5px;
 
 
+
+
 }
+
+
 
 
 /* Ensure all input fields have the same width */
@@ -107,11 +129,16 @@
 
 
 
+
+
+
 .checkpoints .checkpoint-box:not(:last-child){
   border-bottom: 1.5px solid #000;
   padding-bottom: 5px;
 
+
 }
+
 
 .checkpoints {
   display: grid;
@@ -121,6 +148,8 @@
   padding-bottom: 5px;
   border: 1.5px solid black;
   row-gap: 5px;
+
+
 
 
 }
@@ -133,15 +162,22 @@
  
 }
 
+
 .row-marker {
 
+
   grid-column: 1 / -1; /* span full row */
+
+
 
 
   padding: 5px;
   background-color: #e347e5;
 
+
 }
+
+
 
 
 /* Make all display grids consistent */
@@ -156,6 +192,8 @@
 }
 
 
+
+
 /* Make checkpoint names consistent width */
 .checkpoint-name {
   width: 100%;
@@ -164,12 +202,15 @@
   font-family: 'Poppins';
 }
 
+
 /* Make checkpoint times consistent width */
+
 
 .chapter-header{
   text-align: center;
   font-family: 'Press Start 2P';
 }
+
 
 .right-half{
   flex:1.2;
@@ -181,8 +222,9 @@
   background: linear-gradient(to right, #c084fc 0%, #a3e1e3 100%);
 }
 
+
 .profile-headers{
-  
+ 
   display: flex;
   background-color: #afe3ea;
   height:fit-content;
@@ -191,6 +233,7 @@
   border-radius: 20px;
   overflow: hidden;
 }
+
 
 .profile-name {
   font-family: 'Poppings';
@@ -203,10 +246,14 @@
   color: #222;
 }
 
+
 .category-name {
   font-size: 2.5rem;
   color: #444;
 }
+
+
+
 
 
 
@@ -217,6 +264,8 @@ body{
   width:100%
 }
 
+
 * {
   box-sizing: border-box;
 }
+
