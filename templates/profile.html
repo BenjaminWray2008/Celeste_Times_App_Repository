@@ -16,9 +16,9 @@
     </div>
     <div class="right-half">
         <ul class="sob-list">
-        <h3>SOB Categories:</h3>
+        <h3 class="sob-stats-header">SOB Categories:</h3>
         {% for category in sob_dict %}
-            <li>{{category}}:{{sob_dict[category]}}</li>
+            <li class="sob-stats">{{category}}: {{sob_dict[category]}}</li>
         {% endfor %}
         </ul>
     </div>

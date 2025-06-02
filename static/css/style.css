@@ -11,10 +11,13 @@
   padding: 20px;
 }
 
+footer{
+  bottom:100%;
+}
 
 .header-name{
   font-family: 'Press Start 2P';
-  font-size: 1.4rem;
+  font-size: 1.4vw;
 }
 
 
@@ -104,7 +107,7 @@
 
 .checkpoint-box {
   display: grid;
-  gap: 0.2rem;
+  gap: 0.2vw;
   width: 100%;
   grid-template-columns: 1fr 1fr;
   border: 1.5px black;
@@ -125,6 +128,7 @@
   width: 100%;
   font-family: 'Poppins';
   margin: 0;
+  font-size: 1vw;
 }
 
 
@@ -183,10 +187,10 @@
 /* Make all display grids consistent */
 .display-grid {
   display: grid;
-  padding:50px;
+  padding:5vw;
   /* Use a more consistent grid template */
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 50px;
+  gap: 5vw;
   align-items: start center;
   width: 100%;
 }
@@ -200,6 +204,7 @@
   text-align: center left;
   margin: 0;
   font-family: 'Poppins';
+  font-size:1vw;
 }
 
 
@@ -209,6 +214,7 @@
 .chapter-header{
   text-align: center;
   font-family: 'Press Start 2P';
+  font-size:2vw;
 }
 
 
@@ -237,7 +243,7 @@
 
 .profile-name {
   font-family: 'Poppings';
-  font-size: 2rem;
+  font-size: 2vw;
   margin:1rem;
   padding:1rem;
   border:white solid 2px;
@@ -248,14 +254,19 @@
 
 
 .category-name {
-  font-size: 2.5rem;
-  color: #444;
+  font-size: 2.5vw;
+  color: #000;
+  text-align: center  ;
 }
 
 
+.sob-stats{
+  font-size:1vw;
+}
 
-
-
+.sob-stats-header{
+  font-size: 2vw;
+}
 
 body{
   background: linear-gradient(135deg, #C3ECF1, #89a1bf);
