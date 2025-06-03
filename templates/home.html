@@ -1,30 +1,35 @@
 {% extends 'layout.html' %}  
 {% block content %}
-<select name="" id="categorySelect">
-    <option value="1">Any%</option>
-    <option value="2">ARB</option>
-    <option value="3">100%</option>
-    <option value="5">Bny%</option>
-    <option value="6">Cny%</option>
-    <option value="4">True Ending</option>
-</select>
-
-<div id='leaderboard' class="leaderboard">
+<form id="categorySelect" class="category-form">
+  <label><input type="radio" name="category" value="1" checked>Any%</label><br>
+  <label><input type="radio" name="category" value="2">ARB</label><br>
+  <label><input type="radio" name="category" value="3">100%</label><br>
+  <label><input type="radio" name="category" value="4">Bny%</label><br>
+  <label><input type="radio" name="category" value="5">Cny%</label>
+  <label><input type="radio" name="category" value="6">True Ending</label>
+</form>
+<div id="leaderboardname" class="leaderboardname"></div>
+<div id='leaderboard' class="leaderboard">  
     
 </div>
 <script>
     document.getElementById('categorySelect').addEventListener('change', function () { // Get the value selected when something is selected
-    const category = this.value;
+    const checked = document.querySelector('input[name="category"]:checked');
+    if (!checked) return;
+    const category = checked.value;
     fetch(`/get_leaderboard?category=${encodeURIComponent(category)}`) // Run get_leaderboard route with parameter of category selected
       .then(response => response.json())
       .then(data => { // Data contains the results
         const leaderboardDiv = document.getElementById('leaderboard'); // Select the leaderboard div
+        const leaderboardnameDiv = document.getElementById('leaderboardname')
         if (data.length === 0) { // If no results
-        leaderboardDiv.innerHTML = '<p>No results found for this category.</p>';
+        leaderboardDiv.innerHTML = '<p>No results found for this category.</p>'
+        leaderboardnameDiv.innerHTML = '<p></p>'
         }
         else{ // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
+        leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Leaderboard</h3>'
         leaderboardDiv.innerHTML = data.map((entry, i) => ` 
-          <p>${i + 1}. ${entry.username}: ${entry.sum_of_bests}</p>
+          <p class='sum-of-best-values'>${i + 1}. ${entry.username}: ${entry.sum_of_bests}</p>
         `).join('');
         }
       });

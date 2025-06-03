@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Signika:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Press+Start+2P&family=Signika:wght@300..700&display=swap');
 
+/* Stuff Below is for the header section */
 
 .top-header{
   width: 100%;
@@ -55,10 +56,24 @@ footer{
 
 
 
+/* Stuff Below is for the home page */
+
+.sum-of-best-values{
+  text-align: center;
+}
+
+.sum-of-best-header{
+  font-size: 2.5vw;
+  text-align:center;
+}
 
 
-
-
+.category-form{
+  display:flex;
+  justify-content: center;
+  padding:10px;
+  margin-right:20px;
+}
 
 /*Section Below for all styles related to time display */
 

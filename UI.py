@@ -235,12 +235,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         #Grouped by users, and ordered by the smallest sum of best for the leaderboard.
      
         rows = db.fetchall()
+        
         print(rows)
         leaderboard = []
         for row in rows:
+            print(row[1])
+            time = format_time_readable_form(format_time_normal_form(row[1]))
             db.execute('SELECT name FROM user WHERE id = ?', (row[0],))
             name = db.fetchone()[0]
-            leaderboard.append({'username': name, 'sum_of_bests': row[1]}) 
+            leaderboard.append({'username': name, 'sum_of_bests': time}) 
             #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
         
         return jsonify(leaderboard) #Return the created leaderboard to the js
@@ -259,10 +262,14 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         db.execute('SELECT id FROM user WHERE name = ?', (username,))
         if db.fetchall():
             abort(404)
+        
         #Hashing the users password for security
         h = sha256()
         h.update(password.encode())
         hash = h.hexdigest()
+        db.execute('SELECT id FROM user WHERE hash = ?', (hash,))
+        if db.fetchall():
+            abort(404)
         db.execute('INSERT INTO User (name, hash) VALUES (?, ?)', (username, hash))
         database.commit()
         
