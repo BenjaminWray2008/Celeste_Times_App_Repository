@@ -1,41 +1,57 @@
-{% extends 'layout.html' %}  
+{% extends 'layout.html' %}
 {% block content %}
-<form id="categorySelect" class="category-form">
-  <label><input type="radio" name="category" value="1" checked>Any%</label><br>
-  <label><input type="radio" name="category" value="2">ARB</label><br>
-  <label><input type="radio" name="category" value="3">100%</label><br>
-  <label><input type="radio" name="category" value="4">Bny%</label><br>
-  <label><input type="radio" name="category" value="5">Cny%</label>
-  <label><input type="radio" name="category" value="6">True Ending</label>
-</form>
+<div class="category-list-leaderboard-centerer">
+<div id="categorySelect" class="category-list-leaderboard">
+  <button data-category="1" class="active">Any%</button>
+  <button data-category="2">ARB</button>
+  <button data-category="3">100%</button>
+  <button data-category="4">Bny%</button>
+  <button data-category="5">Cny%</button>
+  <button data-category="6">True Ending</button>
+</div>
+</div>
+
+
+<div class="sum-of-best-table">
 <div id="leaderboardname" class="leaderboardname"></div>
-<div id='leaderboard' class="leaderboard">  
-    
+<div id='leaderboard' class="leaderboard">
+
+</div>
 </div>
 <script>
-    document.getElementById('categorySelect').addEventListener('change', function () { // Get the value selected when something is selected
-    const checked = document.querySelector('input[name="category"]:checked');
-    if (!checked) return;
-    const category = checked.value;
+  document.getElementById('categorySelect').addEventListener('click', function (e) {
+    if (!e.target.matches('button')) return;
+
+
+    document.querySelectorAll('#categorySelect button').forEach(btn => btn.classList.remove('active'));
+
+
+    e.target.classList.add('active');
+
+   
+    const category = e.target.dataset.category;
     fetch(`/get_leaderboard?category=${encodeURIComponent(category)}`) // Run get_leaderboard route with parameter of category selected
       .then(response => response.json())
       .then(data => { // Data contains the results
         const leaderboardDiv = document.getElementById('leaderboard'); // Select the leaderboard div
         const leaderboardnameDiv = document.getElementById('leaderboardname')
         if (data.length === 0) { // If no results
-        leaderboardDiv.innerHTML = '<p>No results found for this category.</p>'
-        leaderboardnameDiv.innerHTML = '<p></p>'
+          leaderboardDiv.innerHTML = '<p class="no-results">No results found for this category.</p>'
+          leaderboardnameDiv.innerHTML = '<p></p>'
         }
-        else{ // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
-        leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Leaderboard</h3>'
-        leaderboardDiv.innerHTML = data.map((entry, i) => ` 
-          <p class='sum-of-best-values'>${i + 1}. ${entry.username}: ${entry.sum_of_bests}</p>
+        else { // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
+          leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Leaderboard</h3>'
+          leaderboardDiv.innerHTML = data.map((entry, i) => ` 
+          <tr class='sum-of-best-values'><td class='sum-of-best-rank'>${i + 1}.</td> <td class='sum-of-best-username>${entry.username}:</td> <td class='sum-of-best-time'>${entry.sum_of_bests}</td></tr><br>
         `).join('');
         }
       });
   });
 
 
-  document.getElementById('categorySelect').dispatchEvent(new Event('change')); // On initial load, run the function. This will default to the first category
+  window.addEventListener('DOMContentLoaded', () => {
+    const defaultButton = document.querySelector('#categorySelect button.active');
+    defaultButton.click();
+  }); // On initial load, run the function. This will default to the first category
 </script>
 {% endblock %}

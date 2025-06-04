@@ -59,7 +59,8 @@ footer{
 /* Stuff Below is for the home page */
 
 .sum-of-best-values{
-  text-align: center;
+  background-color: red;
+  border-bottom:5px solid black;
 }
 
 .sum-of-best-header{
@@ -67,12 +68,45 @@ footer{
   text-align:center;
 }
 
+.leaderboard{
+  display:table;
+  border:2px solid black;
+  text-align:center;
 
-.category-form{
-  display:flex;
-  justify-content: center;
-  padding:10px;
-  margin-right:20px;
+}
+
+.sum-of-best-table{
+  text-align:center;
+}
+
+
+
+
+.category-list-leaderboard button.active{
+  background-color:#9c50e3;
+}
+
+.category-list-leaderboard{
+  display:inline-block;
+
+  margin-top:1vw;
+  padding:0.2vw;
+  
+  border: 0.2vw solid black;
+  border-radius: 5px;
+
+}
+
+.category-list-leaderboard button {
+  padding:5px;
+  border-radius: 5px;
+  background-color:#e347e5;
+  box-shadow: none;
+  border:none;
+}
+
+.category-list-leaderboard-centerer{
+  text-align: center;
 }
 
 /*Section Below for all styles related to time display */
@@ -94,6 +128,9 @@ footer{
  
 }
 
+.no-results{
+  text-align: center;
+}
 
 .nav-list-categories a {
   display: block;
