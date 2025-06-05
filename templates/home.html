@@ -1,21 +1,27 @@
 {% extends 'layout.html' %}
 {% block content %}
+<h1>Welcome to Celeste Splits!</h1>
+<p>Track your best splits here or view others!</p>
 <div class="category-list-leaderboard-centerer">
-<div id="categorySelect" class="category-list-leaderboard">
-  <button data-category="1" class="active">Any%</button>
-  <button data-category="2">ARB</button>
-  <button data-category="3">100%</button>
-  <button data-category="4">Bny%</button>
-  <button data-category="5">Cny%</button>
-  <button data-category="6">True Ending</button>
-</div>
-</div>
+  <div class="sum-of-best-table-centerer">
+  
 
 
-<div class="sum-of-best-table">
-<div id="leaderboardname" class="leaderboardname"></div>
-<div id='leaderboard' class="leaderboard">
+  <div id="leaderboardname" class="leaderboardname"></div>
 
+  <div id="categorySelect" class="category-list-leaderboard">
+    <button data-category="1" class="active">Any%</button>
+    <button data-category="2">ARB</button>
+    <button data-category="3">100%</button>
+    <button data-category="4">Bny%</button>
+    <button data-category="5">Cny%</button>
+    <button data-category="6">True Ending</button>
+  </div>
+
+  
+  <div id='leaderboard' class="leaderboard">
+
+  </div>
 </div>
 </div>
 <script>
@@ -28,7 +34,7 @@
 
     e.target.classList.add('active');
 
-   
+
     const category = e.target.dataset.category;
     fetch(`/get_leaderboard?category=${encodeURIComponent(category)}`) // Run get_leaderboard route with parameter of category selected
       .then(response => response.json())
@@ -42,7 +48,12 @@
         else { // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
           leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Leaderboard</h3>'
           leaderboardDiv.innerHTML = data.map((entry, i) => ` 
-          <tr class='sum-of-best-values'><td class='sum-of-best-rank'>${i + 1}.</td> <td class='sum-of-best-username>${entry.username}:</td> <td class='sum-of-best-time'>${entry.sum_of_bests}</td></tr><br>
+          <div class='sum-of-best-values'>
+          <p class='sum-of-best-rank'>${i + 1}.</p>
+          <p class='sum-of-best-username'>${entry.username}:</p>
+          <p class='sum-of-best-time'>${entry.sum_of_bests}</p>
+          <a class='link-to-profile' href="/profile/${(entry.profile)[0]}/${(entry.profile)[1]}">Link to Pfp</a>
+          </div>
         `).join('');
         }
       });

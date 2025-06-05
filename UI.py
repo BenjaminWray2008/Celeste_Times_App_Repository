@@ -243,7 +243,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             time = format_time_readable_form(format_time_normal_form(row[1]))
             db.execute('SELECT name FROM user WHERE id = ?', (row[0],))
             name = db.fetchone()[0]
-            leaderboard.append({'username': name, 'sum_of_bests': time}) 
+            leaderboard.append({'username': name, 'sum_of_bests': time, 'profile':[row[0], category]}) 
             #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
         
         return jsonify(leaderboard) #Return the created leaderboard to the js
