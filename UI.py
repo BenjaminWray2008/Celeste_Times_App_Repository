@@ -214,23 +214,51 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         
         return render_template('home.html', title='Home')
     
+    @app.route('/get_category_name')
+    def get_category_name():
+        category = []
+       
+        
+      
+       
+        
+        return jsonify(category)
+        
+
     @app.route('/get_leaderboard')
     def get_leaderboard():
         category = request.args.get('category', 'any%') #Get the category selected on the dropdown. Default is any%
- 
+        sortby = request.args.get('sort', 'time')
+        categoryName = request.args.get('categoryName', 1)
+        
+        print(category, sortby, categoryName)
         db.execute('''
-        SELECT user_id, SUM(time) AS sum_of_bests
+                   SELECT name FROM Category
+                   WHERE id = ?
+                   ''', (categoryName,))
+        name = db.fetchone()
+        print('catname', name)
+        order_clause = ''
+        if sortby == 'alpha':
+            order_clause = 'ORDER BY u.name ASC'
+            print('order user')
+        else:
+            order_clause = 'ORDER by sum_of_bests ASC'
+            print('order time')
+        db.execute(f'''
+        SELECT r1.user_id, u.name, SUM(r1.time) AS sum_of_bests
         FROM Run r1
-        WHERE category_id = ?
+        JOIN User u ON r1.user_id = u.id
+        WHERE r1.category_id = ?
         AND NOT EXISTS (
         SELECT 1
         FROM Run r2
         WHERE r2.user_id = r1.user_id
-        AND r2.category_id = r1.category_id
-        AND (r2.time = 0 OR r2.time IS NULL)
+          AND r2.category_id = r1.category_id
+          AND (r2.time = 0 OR r2.time IS NULL)
         )
-        GROUP BY user_id
-        ORDER BY sum_of_bests ASC''', (category,))
+        GROUP BY r1.user_id
+        {order_clause}''', (category,))
         #Query selects the sum of best for all user where they have filled in all their run entries for the category entered.
         #Grouped by users, and ordered by the smallest sum of best for the leaderboard.
      
@@ -238,12 +266,12 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         
         print(rows)
         leaderboard = []
+        leaderboard.append({'name':name[0]})
         for row in rows:
             print(row[1])
-            time = format_time_readable_form(format_time_normal_form(row[1]))
-            db.execute('SELECT name FROM user WHERE id = ?', (row[0],))
-            name = db.fetchone()[0]
-            leaderboard.append({'username': name, 'sum_of_bests': time, 'profile':[row[0], category]}) 
+            time = format_time_readable_form(format_time_normal_form(row[2]))
+
+            leaderboard.append({'username': row[1], 'sum_of_bests': time, 'profile':[row[0], category]}) 
             #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
         
         return jsonify(leaderboard) #Return the created leaderboard to the js

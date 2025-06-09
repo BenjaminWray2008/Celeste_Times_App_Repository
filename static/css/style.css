@@ -10,8 +10,10 @@
   display: flex;
   flex-direction: column;
   background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
-  padding: 20px;
+  padding: 2vw;
 }
+
+
 
 footer{
   bottom:100%;
@@ -59,6 +61,16 @@ footer{
 
 /* Stuff Below is for the home page */
 
+.home-page-flex{
+  display:flex;
+  justify-content: space-between;
+}
+
+.welcome-header{
+  font-family: 'Poppins';
+  font-size:3vw;
+}
+
 .sum-of-best-values{
   display: grid;
   grid-template-columns: 0.4fr 0.8fr 1fr 1fr;
@@ -66,10 +78,6 @@ footer{
   vertical-align: center;
   align-items: center;
   font-family: 'Nunito';
-
-
-
- 
 }
 
 .leaderboard .sum-of-best-values:last-child{
@@ -81,10 +89,10 @@ footer{
 }
 
 .sum-of-best-header{
-  font-size: 4vw;
+  font-size: 3.9vw;
   text-align:center;
-  font-family: 'VT323';
-  margin-bottom:15px;
+  font-family: 'Poppins';
+  margin-bottom:2vw;
 }
 
 .leaderboard{
@@ -102,8 +110,29 @@ footer{
   place-items: center;
 }
 
+.leaderboard-header{
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  border-left: 2px solid #1A1A2E;
+  border-right: 2px solid #1A1A2E;
+}
 
+.select-sort{
+  margin-right: 4vw;
 
+}
+
+.category-name-sum-of-best{
+  text-align: left;
+  padding-top:2vw;
+  padding-bottom:2vw;
+  padding-left: 4vw;
+  margin:0;  
+  font-family: 'Nunito';
+  font-size: 2vw;
+  
+}
 
 .category-list-leaderboard button.active{
   background-color:#9c50e3;
@@ -114,22 +143,21 @@ footer{
 }
 
 .category-list-leaderboard{
-  display:inline-block;
+  display: flex;
+  align-items: center;
   
-  margin-top:1vw;
-  padding:0.2vw;
-  
+ 
   border: 0.2vw solid black;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-
 }
 
 .category-list-leaderboard button {
-  padding:8px;
-  border-radius: 5px;
+  padding:1vw;
+  
+  width: 100%;
+
   background-color:#e347e5;
-  box-shadow: none;
   border:none;
   font-size: 1.2vw;
   font-family: 'Signika';
