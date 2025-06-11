@@ -28,7 +28,7 @@ footer{
 .header-name-box{
   display: flex;
   justify-content: center;
-  padding-left: 10px;
+ 
 }
 
 
@@ -64,20 +64,30 @@ footer{
 .home-page-flex{
   display:flex;
   justify-content: space-between;
+  gap:3vw;
+  padding-left: 2vw;
+  padding-right:2vw;
 }
 
 .welcome-header{
   font-family: 'Poppins';
   font-size:3vw;
+  text-align: center;
+}
+
+.welcome-info, .welcome-privacy{
+  margin-bottom: 3vw;
+  font-family: 'Signika';
 }
 
 .sum-of-best-values{
   display: grid;
   grid-template-columns: 0.4fr 0.8fr 1fr 1fr;
-  text-align: center;
+  text-align: left;
   vertical-align: center;
   align-items: center;
-  font-family: 'Nunito';
+  font-family: 'Signika';
+  font-size: 1.4vw;
 }
 
 .leaderboard .sum-of-best-values:last-child{
@@ -89,7 +99,7 @@ footer{
 }
 
 .sum-of-best-header{
-  font-size: 3.9vw;
+  font-size: 2.5vw;
   text-align:center;
   font-family: 'Poppins';
   margin-bottom:2vw;
@@ -98,9 +108,9 @@ footer{
 .leaderboard{
   display: grid;
   grid-template-columns: 1fr;
-  border-bottom:2px solid #1A1A2E;
-  border-left:2px solid #1A1A2E;
-  border-right:2px solid #1A1A2E;
+  border-bottom:1.5px solid #1A1A2E;
+  border-left:1.5px solid #1A1A2E;
+  border-right:1.5px solid #1A1A2E;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
 }
@@ -113,28 +123,62 @@ footer{
 .leaderboard-header{
   display: flex;
   align-items: center;
-  justify-content:space-between;
-  border-left: 2px solid #1A1A2E;
-  border-right: 2px solid #1A1A2E;
+  justify-content:center;
+  gap:3vw;
+  border-left: 1.5px solid #1A1A2E;
+  border-right: 1.5px solid #1A1A2E;
 }
 
 .select-sort{
-  margin-right: 4vw;
+  width:50%;
+  background-color: #e347e5;
+  border: black 0.2vw solid;
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: 1.11vw;
+  font-family: 'Signika';
+  padding:0.6vw;
+
+
+  border-radius: 5px;
+
+
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='red' d='M2 0L0 2h4L2 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2vw center;
+  background-size: 1vw;
+}
+
+.select-sort-option{
+  text-align: center;
 
 }
+
+
+
+.select-sort:focus {
+  outline: none;
+}
+
 
 .category-name-sum-of-best{
   text-align: left;
   padding-top:2vw;
   padding-bottom:2vw;
-  padding-left: 4vw;
+
   margin:0;  
-  font-family: 'Nunito';
-  font-size: 2vw;
+  font-family: 'Signika';
+  font-size: 1.4vw;
   
 }
 
-.category-list-leaderboard button.active{
+.leaderboard-width-changer{
+  width: 100%;
+  background:#8bc6cd;
+}
+
+.category-list-leaderboard button.active{ 
   background-color:#9c50e3;
 }
 
@@ -147,7 +191,7 @@ footer{
   align-items: center;
   
  
-  border: 0.2vw solid black;
+  border: 1.5px solid black;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -159,18 +203,20 @@ footer{
 
   background-color:#e347e5;
   border:none;
-  font-size: 1.2vw;
+  font-size: 1.11vw;
   font-family: 'Signika';
 }
 
-.category-list-leaderboard-centerer{
-  place-items: center;
+.category-list-leaderboard-centerer, .welcome{
   width:100%;
 }
+
+
 
 .sum-of-best-leaderboard-centerer{
   width:100%;
   border:2px solid black;
+
 }
 
 /*Section Below for all styles related to time display */
@@ -182,10 +228,12 @@ footer{
    
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  align-items: stretch;
   place-items:center;
+
   list-style-type: none;
   margin: 0;
-  padding: 0;
+ 
   overflow: hidden;
   background-color: #1A1A2E;
  
@@ -194,14 +242,14 @@ footer{
 
 .no-results{
   text-align: center;
+  font-family: 'Signika';
 }
 
 .nav-list-categories a {
   display: block;
   color: white;
   text-align: center;
-  padding: 14px 16px;
- 
+  padding:1vw 1vw;
   text-decoration: none;
   width:100%;
 
@@ -213,11 +261,13 @@ footer{
 
 .nav-list-categories a:hover {
   background-color: #111;
+  height:100%;
+  align-items: center;
 }
 
 
 .nav-list-categories .last-child a{
-  border-right: none;      /* remove border on last item */
+  border-right: none;  
 }
 
 

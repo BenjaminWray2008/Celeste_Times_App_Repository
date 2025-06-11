@@ -1,105 +1,112 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="home-page-flex">
-<div class="welcome">
 <h1 class="welcome-header">Welcome to Celeste Splits!</h1>
-<p class="welcome-info">Track your best splits here by creating an account and entering your times, or view others' splits!</p>
-<p class="welcome-privacy">All data stored is secure and cannot be changed by others.</p>
-</div>
-<div class="category-list-leaderboard-centerer">
-  <div class="sum-of-best-table-centerer">
-
-
-
-    <div id="leaderboardname" class="leaderboardname">Sum of Best Leaderboard</div>
-
-    <div id="categorySelect" class="category-list-leaderboard">
-      <button data-category="1" class="active">Any%</button>
-      <button data-category="2">ARB</button>
-      <button data-category="3">100%</button>
-      <button data-category="4">True Ending</button>
-      <button data-category="5">Bny%</button>
-      <button data-category="6">Cny%</button>
+<div class="home-page-flex">
+  <div class="welcome">
+    <div class="leaderboardname">
+      <h3 class=sum-of-best-header>Track your Best Times here!</h3>
     </div>
-    <div class="leaderboard-header">
+    <p class="welcome-info">Track your best splits here by creating an account and entering your times, or view others'
+      splits!</p>
+    <p class="welcome-privacy">All data stored is secure and cannot be changed by others.</p>
+  </div>
 
-      <h1 id="categoryName" class="category-name-sum-of-best"></h1>
+  <div class="category-list-leaderboard-centerer">
 
-      <select name="SelectSort" id="SelectSort" class="select-sort">
-        <option value="" disabled selected>Sort By:</option>
-        <option data-sort='time' value="time">Fastest Time</option>
-        <option data-sort='name' value="alpha">Alpha</option>
-      </select>
+    <div class="sum-of-best-table-centerer">
 
-    </div>
-    <div id='leaderboard' class="leaderboard">
+      <div id="leaderboardname" class="leaderboardname">Sum of Best Leaderboard</div>
 
+
+      <div class="leaderboard-width-changer">
+        <div id="categorySelect" class="category-list-leaderboard">
+          <button data-category="1" class="active">Any%</button>
+          <button data-category="2">ARB</button>
+          <button data-category="3">100%</button>
+          <button data-category="4">True Ending</button>
+          <button data-category="5">Bny%</button>
+          <button data-category="6">Cny%</button>
+        </div>
+        <div class="leaderboard-header">
+
+          <p id="categoryName" class="category-name-sum-of-best"></p>
+
+          <select name="SelectSort" id="SelectSort" class="select-sort">
+            <option class='select-sort-option' disabled selected hidden>Sort By:</option>
+            <option class='select-sort-option' data-sort='time' value="time">Fastest Time</option>
+            <option class='select-sort-option' data-sort='name' value="alpha">Alpha</option>
+          </select>
+
+        </div>
+        <div id='leaderboard' class="leaderboard">
+
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<script>
+  <script>
 
-  let category = 1;
-  let sortBy = 'time';
-  document.getElementById('SelectSort').addEventListener('change', function () {
-    sortBy = document.getElementById('SelectSort').value;
-    console.log("Sort by:", sortBy);
-    fetchData(category, sortBy);
-  });
+    let category = 1;
+    let sortBy = 'time';
+    document.getElementById('SelectSort').addEventListener('change', function () {
+      sortBy = document.getElementById('SelectSort').value;
+      console.log("Sort by:", sortBy);
+      fetchData(category, sortBy);
+    });
 
-  document.getElementById('categorySelect').addEventListener('click', function (e) {
-    if (!e.target.matches('button')) return;
-    document.querySelectorAll('#categorySelect button').forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
-    category = e.target.dataset.category;
-    console.log("Category:", category);
-    fetchData(category, sortBy);
-  });
-
-
-  function fetchData(category = 1, sortBy = 'time') {
-
-    console.log(category, sortBy, 'stuff')
-    fetch(`/get_leaderboard?category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sortBy)}&categoryName=${encodeURIComponent(category)}`)
-      .then(res => res.json())
-      .then(data => {
+    document.getElementById('categorySelect').addEventListener('click', function (e) {
+      if (!e.target.matches('button')) return;
+      document.querySelectorAll('#categorySelect button').forEach(btn => btn.classList.remove('active'));
+      e.target.classList.add('active');
+      category = e.target.dataset.category;
+      console.log("Category:", category);
+      fetchData(category, sortBy);
+    });
 
 
-        const first_value = Object.values(data)[0]
-        console.log(first_value)
-        const leaderboardDiv = document.getElementById('leaderboard'); // Select the leaderboard div
-        const leaderboardnameDiv = document.getElementById('leaderboardname')
-        const selectsort = document.getElementById('SelectSort')
-        leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>'
-        if (data.length === 1) { // If no results
-          document.getElementById('categoryName').textContent = `${first_value.name}`
-          leaderboardDiv.innerHTML = '<p class="no-results">No results found for this category.</p>'
+    function fetchData(category = 1, sortBy = 'time') {
 
-          
-        }
-        else { // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
+      console.log(category, sortBy, 'stuff')
+      fetch(`/get_leaderboard?category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sortBy)}&categoryName=${encodeURIComponent(category)}`)
+        .then(res => res.json())
+        .then(data => {
+
+
+          const first_value = Object.values(data)[0]
+          console.log(first_value)
+          const leaderboardDiv = document.getElementById('leaderboard'); // Select the leaderboard div
+          const leaderboardnameDiv = document.getElementById('leaderboardname')
+          const selectsort = document.getElementById('SelectSort')
           leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>'
-          document.getElementById('categoryName').textContent = `${first_value.name}`
-          leaderboardDiv.innerHTML = data.slice(1).map((entry, i) => ` 
+          if (data.length === 1) { // If no results
+            document.getElementById('categoryName').textContent = `${first_value.name}`
+            leaderboardDiv.innerHTML = '<p class="no-results">No results found for this category.</p>'
+
+
+          }
+          else { // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
+            leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>'
+            document.getElementById('categoryName').textContent = `${first_value.name}`
+            leaderboardDiv.innerHTML = data.slice(1).map((entry, i) => ` 
           <div class='sum-of-best-values'>
           <p class='sum-of-best-rank'>${i + 1}.</p>
           <p class='sum-of-best-username'>${entry.username}:</p>
           <p class='sum-of-best-time'>${entry.sum_of_bests}</p>
-          <a class='link-to-profile' href="/profile/${(entry.profile)[0]}/${(entry.profile)[1]}">Link to Pfp</a>
+          <a class='link-to-profile' href="/profile/${(entry.profile)[0]}/${(entry.profile)[1]}">Link to Profile</a>
           </div>
         `).join('');
-        }
-      });
-  };
+          }
+        });
+    };
 
 
 
 
 
-  window.addEventListener('DOMContentLoaded', () => {
-    const defaultButton = document.querySelector('#categorySelect button.active');
-    defaultButton.click();
-  }); // On initial load, run the function. This will default to the first category
-</script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const defaultButton = document.querySelector('#categorySelect button.active');
+      defaultButton.click();
+    }); // On initial load, run the function. This will default to the first category
+  </script>
 </div>
 {% endblock %}

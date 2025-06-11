@@ -332,15 +332,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         return render_template('home.html')
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
-    
     def get_times(user_id,category_id):
         data_dictionary = data_dictionary_creation(user_id, category_id, False)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
         db.execute('SELECT name FROM user WHERE id = ?', (user_id,))
         user_name = db.fetchall()[0]
-     
-        return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name)
+        sob_dict = sob_adder(user_id)
+
+        return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict)
 
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id,category_id):
