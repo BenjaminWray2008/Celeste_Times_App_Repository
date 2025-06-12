@@ -34,9 +34,9 @@ footer{
 
 .input-boxes{
   display: flex;
-  gap: 8px;
+  
   flex-wrap: wrap;
-  padding-right: 10px;
+
   justify-content: center;
 }
 
@@ -115,9 +115,11 @@ footer{
   border-left:1.5px solid #1A1A2E;
   border-right:1.5px solid #1A1A2E;
   border-bottom-right-radius: 5px;
-  max-height: 200px;
+  max-height: 300px;
   overflow-y:auto;
   border-bottom-left-radius: 5px;
+  box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* fades the top edge */
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .sum-of-best-table{
@@ -132,6 +134,10 @@ footer{
   gap:3vw;
   border-left: 1.5px solid #1A1A2E;
   border-right: 1.5px solid #1A1A2E;
+  padding-left: 1vw;
+  padding-right:1vw;
+  padding-top:2vw;
+  padding-bottom: 1vw;
 }
 
 .select-sort{
@@ -141,10 +147,10 @@ footer{
   appearance: none; 
   -webkit-appearance: none;
   -moz-appearance: none;
-  font-size: 1.11vw;
+  font-size: 1.4vw;
   font-family: 'Signika';
-  padding:0.6vw;
 
+  padding:0.2vw;
 
   border-radius: 5px;
 
@@ -157,6 +163,12 @@ footer{
   background-repeat: no-repeat;
   background-position: right 2vw center;
   background-size: 1vw;
+}
+
+.search-user-bar{
+  padding:0.2vw;
+  font-size:1.4vw;
+  font-family: 'Signika';
 }
 
 .select-sort-option{
@@ -178,8 +190,7 @@ option.select-sort:hover{
 
 .category-name-sum-of-best{
   text-align: left;
-  padding-top:2vw;
-  padding-bottom:2vw;
+
 
   margin:0;  
   font-family: 'Signika';
