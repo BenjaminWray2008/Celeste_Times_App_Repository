@@ -213,18 +213,9 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def home():
         
         return render_template('home.html', title='Home')
-    
-    @app.route('/get_category_name')
-    def get_category_name():
-        category = []
-       
-        
-      
-       
-        
-        return jsonify(category)
-        
 
+    @app.route('/search_leaderboard')
+    
     @app.route('/get_leaderboard')
     def get_leaderboard():
         category = request.args.get('category', 'any%') #Get the category selected on the dropdown. Default is any%

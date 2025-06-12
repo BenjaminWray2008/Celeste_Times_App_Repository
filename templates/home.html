@@ -37,6 +37,8 @@
             <option class='select-sort-option' data-sort='name' value="alpha">Alpha</option>
           </select>
 
+          <input type="text" id="searchUserInput" placeholder="Search user..." class="search-user-bar" />
+
         </div>
         <div id='leaderboard' class="leaderboard">
 
@@ -88,9 +90,11 @@
             leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>'
             document.getElementById('categoryName').textContent = `${first_value.name}`
             leaderboardDiv.innerHTML = data.slice(1).map((entry, i) => ` 
-          <div class='sum-of-best-values'>
+          <div class='sum-of-best-values' data-username="${entry.username.toLowerCase()}">
+
           <p class='sum-of-best-rank'>${i + 1}.</p>
           <p class='sum-of-best-username'>${entry.username}:</p>
+
           <p class='sum-of-best-time'>${entry.sum_of_bests}</p>
           <a class='link-to-profile' href="/profile/${(entry.profile)[0]}/${(entry.profile)[1]}">Link to Profile</a>
           </div>
@@ -98,6 +102,31 @@
           }
         });
     };
+    document.getElementById('searchUserInput').addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return
+      const query = this.value.trim().toLowerCase();
+      if (!query) return;
+
+      const entries = document.querySelectorAll('.sum-of-best-values');
+      let found = false;
+
+      for (const entry of entries) {
+       
+        const username = entry.dataset.username;
+        console.log(entry, query, username)
+        if (username === query) {
+          entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          entry.classList.add('highlight');
+          setTimeout(() => entry.classList.remove('highlight'), 2000);
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        alert("User not found in current category!");
+      }
+    });
 
 
 

@@ -77,6 +77,7 @@ footer{
 
 .welcome-info, .welcome-privacy{
   margin-bottom: 3vw;
+  font-size: 1.2vw;
   font-family: 'Signika';
 }
 
@@ -89,6 +90,8 @@ footer{
   font-family: 'Signika';
   font-size: 1.4vw;
 }
+
+
 
 .leaderboard .sum-of-best-values:last-child{
 
@@ -112,6 +115,8 @@ footer{
   border-left:1.5px solid #1A1A2E;
   border-right:1.5px solid #1A1A2E;
   border-bottom-right-radius: 5px;
+  max-height: 200px;
+  overflow-y:auto;
   border-bottom-left-radius: 5px;
 }
 
@@ -144,7 +149,11 @@ footer{
   border-radius: 5px;
 
 
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='red' d='M2 0L0 2h4L2 0z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 7l5 6 5-6' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+
+
+
+
   background-repeat: no-repeat;
   background-position: right 2vw center;
   background-size: 1vw;
@@ -159,6 +168,11 @@ footer{
 
 .select-sort:focus {
   outline: none;
+
+}
+
+option.select-sort:hover{
+  background-color:red;
 }
 
 
@@ -176,6 +190,7 @@ footer{
 .leaderboard-width-changer{
   width: 100%;
   background:#8bc6cd;
+
 }
 
 .category-list-leaderboard button.active{ 
@@ -216,6 +231,8 @@ footer{
 .sum-of-best-leaderboard-centerer{
   width:100%;
   border:2px solid black;
+
+
 
 }
 
