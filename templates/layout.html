@@ -14,28 +14,40 @@
         <div class="top-header">
             <div class="header-name-box">
                 <h1 class="header-name">Celeste Splits</h1>
+                <img class='header-image' src="/static/images/berry.png" alt="berry">
             </div>
-
+            <div class="right-side-top-header">
             <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>
 
 
                 <div class="input-boxes">
+                    <div class="username-div">
                     <input class='username' type="text" name="username" placeholder="Search Users..." required>
+                    </div>
+                    <div class="password-div">
                     <input class='password' type="text" name="password" placeholder="Enter Pin">
+                    </div>
                 </div>
                 <div class="submit-button-main-container">
                     <button class='submit-button-main' type="submit">Submit!</button>
                 </div>
 
             </form>
+            </div>
 
-            <a class='sign-up-link' href="/signup">Sign Up!</a>
+        
         </div>
-    
+        <a class='sign-up-link' href="/signup">Sign Up!</a>
         {% block content %}
         {% endblock %}
     </main>
-    <footer>its a footer!!</footer>
+    <footer>
+        <p>
+        Header image by <a href="https://maddymakesgames.com/" target="_blank">Maddy Makes Games</a>, licensed under 
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
+        </p>
+        its a footer!!
+    </footer>
 </body>
 
 </html>

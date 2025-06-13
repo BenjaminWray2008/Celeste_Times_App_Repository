@@ -7,12 +7,30 @@
 
 .top-header{
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
   background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
-  padding: 2vw;
+  padding:1vw;
+  place-items: center;
+  
 }
 
+.input-boxes-form{
+  display:inline-flex;
+  flex-direction: row;
+  
+ 
+}
+
+.username, .password, .submit-button-main, .sign-up-link{
+  padding:0.3vw;
+}
+
+.username-div, .password-div{
+
+  padding-right:0.5vw;
+}
 
 
 footer{
@@ -23,34 +41,19 @@ footer{
   font-family: 'Press Start 2P';
   font-size: 1.8vw;
 }
-
-
 .header-name-box{
   display: flex;
-  justify-content: center;
- 
+  flex-direction: row;
+}
+.header-image{
+  width:10%;
+  height:10%;
+  padding-left: 1vw;
 }
 
 
-.input-boxes{
-  display: flex;
-  
-  flex-wrap: wrap;
-
-  justify-content: center;
-}
 
 
-.submit-button-main-container{
-  display: flex;
-  justify-content: center;
-  margin-top:10px;
-}
-
-
-.sign-up-link{
-  float:right;
-}
 
 
 .username, .password, .submit-button-main, .sign-up-link{
@@ -115,7 +118,7 @@ footer{
   border-left:1.5px solid #1A1A2E;
   border-right:1.5px solid #1A1A2E;
   border-bottom-right-radius: 5px;
-  max-height: 300px;
+  max-height: 200px;
   overflow-y:auto;
   border-bottom-left-radius: 5px;
   box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* fades the top edge */
