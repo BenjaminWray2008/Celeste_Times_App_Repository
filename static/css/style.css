@@ -13,26 +13,19 @@
   background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
   padding:1vw;
   place-items: center;
-  
 }
-
 .input-boxes-form{
-  display:inline-flex;
+  display:flex;
   flex-direction: row;
-  
- 
 }
-
 .username, .password, .submit-button-main, .sign-up-link{
   padding:0.3vw;
 }
-
 .username-div, .password-div{
-
+  display:flex;
+  flex-direction: row;
   padding-right:0.5vw;
 }
-
-
 footer{
   bottom:100%;
 }
@@ -52,7 +45,35 @@ footer{
 }
 
 
+.home-page-nav-bar{
+   
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: stretch;
+  place-items:center;
 
+  list-style-type: none;
+  margin: 0;
+ 
+  overflow: hidden;
+  background-color: #1A1A2E;
+ 
+ 
+}
+
+
+.home-page-nav-bar a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding:1vw 1vw;
+  text-decoration: none;
+  width:100%;
+
+
+  white-space: 'nowrap';
+ 
+}
 
 
 

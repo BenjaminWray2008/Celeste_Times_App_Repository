@@ -303,10 +303,19 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def search():
         username = request.form.get('username') #Get items from form
         password = request.form.get('password')
-
-        db.execute(f'SELECT id, hash FROM User WHERE name = ?;', (username,)) #Get the actual hash of the username entered
+        search_username = request.form.get('search-username')
+        if username and not search_username:
+            searcher = username
+        elif not username and search_username:
+            searcher = search_username
+            password = ''
+        else: 
+            searcher = username
+            
+        print(searcher)
+        db.execute(f'SELECT id, hash FROM User WHERE name = ?;', (searcher,)) #Get the actual hash of the username entered
         results=db.fetchone()
-        
+        print(password)
         if results: #If the user exists
             h = sha256()
             h.update(password.encode())
