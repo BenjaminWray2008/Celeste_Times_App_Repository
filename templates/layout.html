@@ -22,10 +22,10 @@
 
                 
                     <div class="username-div">
-                    <input class='username' type="text" name="username" placeholder="Search Users..." required>
+                    <input class='username' type="text" name="username" placeholder="Enter Username..." required>
                     </div>
                     <div class="password-div">
-                    <input class='password' type="text" name="password" placeholder="Enter Pin">
+                    <input class='password' type="text" name="password" placeholder="Enter Pin...">
                     </div>
             
                 <div class="submit-button-main-container">
@@ -38,8 +38,11 @@
         
         </div>
         <div class="home-page-nav-bar">
+        <a class='sign-up-link' href="/">Home</a>
         <a class='sign-up-link' href="/signup">Sign Up!</a>
-        <form action="{{url_for('search')}}" method="POST">
+        <a class='sign-up-link'href="/about">About Celeste</a>
+ 
+        <form class='search-users-box' action="{{url_for('search')}}" method="POST">
             <input type="text" class="username" name="search-username" placeholder="Search Users...">
         </form>
         </div>

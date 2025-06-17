@@ -11,16 +11,37 @@
   flex-direction: row;
   justify-content: space-between;
   background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
+  box-shadow: inset 0px 0 2px .5px rgba(0, 0, 0, 0.2); 
   padding:1vw;
+  padding-bottom: 0.3vw;
+  padding-top:0.3vw;
   place-items: center;
 }
 .input-boxes-form{
   display:flex;
   flex-direction: row;
 }
-.username, .password, .submit-button-main, .sign-up-link{
-  padding:0.3vw;
+
+.submit-button-main{
+  background-color: white;  
 }
+
+.submit-button-main:hover{
+  background-color: #ba56e8;
+}
+
+.username, .password, .submit-button-main{
+  padding:0.3vw;
+  border-radius: 5px;
+  border:none;
+  font-size: 1.3vw;
+  color:black;
+}
+
+.username::placeholder, .password::placeholder, .search-users-box::placeholder{
+  color:black;
+}
+
 .username-div, .password-div{
   display:flex;
   flex-direction: row;
@@ -48,30 +69,56 @@ footer{
 .home-page-nav-bar{
    
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 15vw 15vw 15vw 1fr;
   align-items: stretch;
   place-items:center;
 
-  list-style-type: none;
+  border-top: 1pxx solid black;
+  box-shadow: inset 0px -5px 5px -5px rgba(0,0,0,0.4); 
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   margin: 0;
- 
+
   overflow: hidden;
-  background-color: #1A1A2E;
+  background: linear-gradient(to bottom, #b574eb 0%, #b162cc 100%);
  
  
 }
 
+.home-page-nav-bar .search-users-box {
+  justify-self: end;
+  padding-right:2vw;
+  
+}
+
+.search-users-box input{
+  border-radius: 5px;
+  border:none;
+  height: 100%;
+  font-size: 1.3vw;
+}
+
+.home-page-nav-bar a:hover {
+  background-color: #ba56e8;
+  height:100%;
+  align-items: center;
+}
+
+
+.home-page-nav-bar .last-child a{
+  border-right: none;  
+}
 
 .home-page-nav-bar a {
+  box-shadow: inset 5px 0px 5px -7px rgba(0,0,0,0.4); 
+  
   display: block;
-  color: white;
+  color: black;
   text-align: center;
   padding:1vw 1vw;
   text-decoration: none;
   width:100%;
-
-
   white-space: 'nowrap';
+  font-size: 1.3vw;
  
 }
 
@@ -160,8 +207,8 @@ footer{
   border-right: 1.5px solid #1A1A2E;
   padding-left: 1vw;
   padding-right:1vw;
-  padding-top:2vw;
-  padding-bottom: 1vw;
+  padding-top:1.5vw;
+  padding-bottom: 1.5vw;
 }
 
 .select-sort{
@@ -486,7 +533,8 @@ option.select-sort:hover{
 }
 
 body{
-  background: linear-gradient(135deg, #C3ECF1, #89a1bf);
+  background-color: #c1dfee;
+
   margin:0;
   padding:0;
   width:100%
