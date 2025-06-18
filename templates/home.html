@@ -1,14 +1,17 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h1 class="welcome-header">Welcome to Celeste Splits!</h1>
+
 <div class="home-page-flex">
-  <div class="welcome">
-    <div class="leaderboardname">
-      <h3 class=sum-of-best-header>Track your Best Times here!</h3>
-    </div>
-    <p class="welcome-info">Track your best splits here by creating an account and entering your times, or view others'
-      splits!</p>
+  <div>
+    <h1 class="welcome-header">Welcome to Celeste Splits!</h1>
+    <h3 class='track-here-header'>Track your Best Times Here</h3>
+
+    <p class="welcome-info">Create an account<br>Upload your Splits <br>Climb the Leaderboard </p>
     <p class="welcome-privacy">All data stored is secure and cannot be changed by others.</p>
+      <div class="home-page-flex-line"></div>
+    <div class="site-stats">
+
+    </div>
   </div>
 
   <div class="category-list-leaderboard-centerer">
@@ -36,9 +39,9 @@
             <option class='select-sort-option' data-sort='time' value="time">Fastest Time</option>
             <option class='select-sort-option' data-sort='name' value="alpha">Alpha</option>
           </select>
-
+          <div class="search-userr-bar-div">
           <input type="text" id="searchUserInput" placeholder="Search user..." class="search-user-bar" />
-
+          </div>
         </div>
         <div id='leaderboard' class="leaderboard">
 
@@ -111,7 +114,7 @@
       let found = false;
 
       for (const entry of entries) {
-       
+
         const username = entry.dataset.username;
         console.log(entry, query, username)
         if (username === query) {
@@ -137,5 +140,7 @@
       defaultButton.click();
     }); // On initial load, run the function. This will default to the first category
   </script>
+
 </div>
+
 {% endblock %}

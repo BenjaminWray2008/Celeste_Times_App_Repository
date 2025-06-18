@@ -23,7 +23,7 @@
 }
 
 .submit-button-main{
-  background-color: white;  
+  background-color: rgb(243, 232, 245);  
 }
 
 .submit-button-main:hover{
@@ -36,6 +36,7 @@
   border:none;
   font-size: 1.3vw;
   color:black;
+  background-color: rgb(243, 232, 245);
 }
 
 .username::placeholder, .password::placeholder, .search-users-box::placeholder{
@@ -74,7 +75,7 @@ footer{
   place-items:center;
 
   border-top: 1pxx solid black;
-  box-shadow: inset 0px -5px 5px -5px rgba(0,0,0,0.4); 
+  box-shadow: inset 5px -5px 5px -5px rgba(0,0,0,0.4); 
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   margin: 0;
 
@@ -135,21 +136,55 @@ footer{
 .home-page-flex{
   display:flex;
   justify-content: space-between;
-  gap:3vw;
-  padding-left: 2vw;
-  padding-right:2vw;
+  gap:7vw;
+  margin-left: 4vw;
+  margin-right:4vw;
 }
 
 .welcome-header{
+  margin-top:3vw;
   font-family: 'Poppins';
-  font-size:3vw;
+  font-size:2.7vw;
   text-align: center;
+  white-space: nowrap;
+}
+
+.track-here-header{
+  font-size:2vw;
+  text-align:center;
+  font-family: 'Poppins';
+  margin-bottom:2vw;
+  margin-top:3vw;
 }
 
 .welcome-info, .welcome-privacy{
   margin-bottom: 3vw;
-  font-size: 1.2vw;
+  text-align: center;
   font-family: 'Signika';
+  
+}
+
+.welcome-privacy{
+  font-size: 1.2vw;
+}
+
+.welcome-info{
+ 
+  font-size: 1.6vw;
+}
+
+.home-page-flex-line {
+
+  width:100%;
+  grid-column: 1 / -1; /* span full row */
+
+
+
+
+  padding: 5px;
+  background-color: #e347e5;
+
+
 }
 
 .sum-of-best-values{
@@ -177,6 +212,7 @@ footer{
   text-align:center;
   font-family: 'Poppins';
   margin-bottom:2vw;
+  margin-top:3vw;
 }
 
 .leaderboard{
@@ -186,7 +222,7 @@ footer{
   border-left:1.5px solid #1A1A2E;
   border-right:1.5px solid #1A1A2E;
   border-bottom-right-radius: 5px;
-  max-height: 200px;
+  max-height: 300px;
   overflow-y:auto;
   border-bottom-left-radius: 5px;
   box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* fades the top edge */
@@ -214,14 +250,14 @@ footer{
 .select-sort{
   width:50%;
   background-color: #e347e5;
-  border: black 0.2vw solid;
+  border: black 0.1vw solid;
   appearance: none; 
   -webkit-appearance: none;
   -moz-appearance: none;
-  font-size: 1.4vw;
+  font-size: 1.3vw;
   font-family: 'Signika';
 
-  padding:0.2vw;
+  padding:0.3vw;
 
   border-radius: 5px;
 
@@ -236,10 +272,19 @@ footer{
   background-size: 1vw;
 }
 
+
 .search-user-bar{
-  padding:0.2vw;
-  font-size:1.4vw;
-  font-family: 'Signika';
+  
+  padding:0.3vw;
+  border-radius: 5px;
+  border:none;
+  font-size: 1.3vw;
+  color:black;
+  background-color: rgb(243, 232, 245);
+}
+
+.search-user-bar::placeholder{
+  color:black;
 }
 
 .select-sort-option{
@@ -265,7 +310,7 @@ option.select-sort:hover{
 
   margin:0;  
   font-family: 'Signika';
-  font-size: 1.4vw;
+  font-size: 1.3vw;
   
 }
 
