@@ -68,15 +68,15 @@ footer{
 
 
 .home-page-nav-bar{
-   
+
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
   display: grid;
   grid-template-columns: 15vw 15vw 15vw 1fr;
   align-items: stretch;
   place-items:center;
 
-  border-top: 1pxx solid black;
-  box-shadow: inset 5px -5px 5px -5px rgba(0,0,0,0.4); 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+
   margin: 0;
 
   overflow: hidden;
@@ -109,8 +109,10 @@ footer{
   border-right: none;  
 }
 
+
+
 .home-page-nav-bar a {
-  box-shadow: inset 5px 0px 5px -7px rgba(0,0,0,0.4); 
+
   
   display: block;
   color: black;
@@ -134,11 +136,12 @@ footer{
 /* Stuff Below is for the home page */
 
 .home-page-flex{
+  box-shadow: inset 0px 8px 8px -4px rgba(0, 0, 0, 0.4);
   display:flex;
   justify-content: space-between;
   gap:7vw;
-  margin-left: 4vw;
-  margin-right:4vw;
+  padding-left: 4vw;
+  padding-right:4vw;
 }
 
 .welcome-header{
