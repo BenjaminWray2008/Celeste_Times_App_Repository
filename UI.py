@@ -211,8 +211,25 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
    
     @app.route('/')
     def home():
-        
-        return render_template('home.html', title='Home')
+        db.execute('''
+                   SELECT COUNT(id)
+                   FROM User
+                   ''')
+        counter=db.fetchall()
+        db.execute('''
+                    SELECT COUNT(*) AS total_completed_category_runs
+                    FROM (
+                    SELECT
+                    r.user_id,
+                    r.category_id
+                    FROM Run r
+                    GROUP BY r.user_id, r.category_id
+                    HAVING SUM(CASE WHEN r.time <= 0 OR r.time IS NULL THEN 1 ELSE 0 END) = 0
+                    ) AS valid_categories;
+                    ''')
+        counter2=db.fetchall()
+        print(counter2)
+        return render_template('home.html', title='Home', counter=counter, counter2=counter2)
 
     @app.route('/search_leaderboard')
     

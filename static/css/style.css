@@ -3,6 +3,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Press+Start+2P&family=Signika:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Press+Start+2P&family=Signika:wght@300..700&family=VT323&display=swap');
 
+/* Globals: */
+
+body{
+  background-color: #c1dfee;
+
+  margin:0;
+  padding:0;
+  width:100%
+}
+
+footer{
+  width:100%;
+  background-color: rgb(136, 183, 136);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+
 /* Stuff Below is for the header section */
 
 .top-header{
@@ -69,7 +90,7 @@ footer{
 
 .home-page-nav-bar{
 
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
+
   display: grid;
   grid-template-columns: 15vw 15vw 15vw 1fr;
   align-items: stretch;
@@ -152,7 +173,7 @@ footer{
   white-space: nowrap;
 }
 
-.track-here-header{
+.track-here-header, .site-stats-header{
   font-size:2vw;
   text-align:center;
   font-family: 'Poppins';
@@ -160,7 +181,7 @@ footer{
   margin-top:3vw;
 }
 
-.welcome-info, .welcome-privacy{
+.welcome-info, .welcome-privacy, .total-runs, .total-runners{
   margin-bottom: 3vw;
   text-align: center;
   font-family: 'Signika';
@@ -171,7 +192,7 @@ footer{
   font-size: 1.2vw;
 }
 
-.welcome-info{
+.welcome-info, .total-runs{
  
   font-size: 1.6vw;
 }
@@ -187,7 +208,10 @@ footer{
   padding: 5px;
   background-color: #e347e5;
 
+}
 
+.site-stats{
+  text-align: center;
 }
 
 .sum-of-best-values{
@@ -580,16 +604,4 @@ option.select-sort:hover{
   font-size: 2vw;
 }
 
-body{
-  background-color: #c1dfee;
-
-  margin:0;
-  padding:0;
-  width:100%
-}
-
-
-* {
-  box-sizing: border-box;
-}
 
