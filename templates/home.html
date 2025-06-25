@@ -118,7 +118,7 @@
 
         const username = entry.dataset.username;
         console.log(entry, query, username)
-        if (username === query) {
+        if (username.includes(query)) {
           entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
           entry.classList.add('highlight');
           setTimeout(() => entry.classList.remove('highlight'), 2000);

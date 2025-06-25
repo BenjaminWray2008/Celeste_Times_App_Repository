@@ -314,25 +314,29 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         id = results[0]
       
         new_user_data(id) #Running function to add all empty time entries for new user
-        return render_template('home.html')
+        return redirect(url_for('home'))
     
     @app.route('/search', methods=['POST'])
     def search():
+        searcher = None
         username = request.form.get('username') #Get items from form
         password = request.form.get('password')
         search_username = request.form.get('search-username')
+        
+        print(username, search_username, password)
         if username and not search_username:
             searcher = username
         elif not username and search_username:
             searcher = search_username
             password = ''
-        else: 
+        elif username and search_username: 
             searcher = username
+            print('hii')
             
         print(searcher)
         db.execute(f'SELECT id, hash FROM User WHERE name = ?;', (searcher,)) #Get the actual hash of the username entered
         results=db.fetchone()
-        print(password)
+        print('hiiiii', results)
         if results: #If the user exists
             h = sha256()
             h.update(password.encode())
@@ -346,7 +350,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             return redirect(url_for('profile',user_id=user_id,category_id=1)) #Else, run page that lets user view times
         
         print('No user found.') #If the username entered doesn't exist, reload home page.
-        return render_template('home.html')
+        return redirect(url_for('home'))
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def get_times(user_id,category_id):
