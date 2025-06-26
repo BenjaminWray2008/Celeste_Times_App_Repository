@@ -1,55 +1,82 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="nav-list-categories">
 
-        <a href="/">Home</a></li>
-        <a href="/profile/{{user_id}}/1">any%</a>
-        <a href="/profile/{{user_id}}/2">ARB</a>
-        <a href="/profile/{{user_id}}/3">100%</a>
-        <a href="/profile/{{user_id}}/4">True Ending</a>
-        <a href="/profile/{{user_id}}/5">Bny%</a>
-        <a href="/profile/{{user_id}}/6">Cny%</a>
-</div>
 <div class="profile-headers">
-    <div class="left-half">
+  <div class="left-half">
     <h1 class="profile-name">{{user_name[0]}}</h1>
-    </div>
-    <div class="right-half">
-        <ul class="sob-list">
-        <h3 class="sob-stats-header">SOB Categories:</h3>
-        {% for category in sob_dict %}
-            <li class="sob-stats">{{category}}: {{sob_dict[category]}}</li>
-        {% endfor %}
-        </ul>
-    </div>
+  </div>
+  <div class="right-half">
+    <ul class="sob-list">
+      <h3 class="sob-stats-header">SOB Categories:</h3>
+      {% for category in sob_dict %}
+      <li class="sob-stats">{{category}}: {{sob_dict[category]}}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+
+
+
+
+
+
 
 
 </div>
-<!-- Run route update_times on submit -->
-<form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST">
+<div class="input-flex-screen">
 
-  <h1 class="category-name">{{name[0]}}</h1>
-  <div class="display-grid"> 
-    <!-- Grid of every chapter -->
-    {% for chapter in data_dictionary %}
-    <div class="display-grid-item">
-      <h2 class="chapter-header">{{chapter}}</h2>
-      <div class="checkpoints">
-        <!-- Grid of every checkpoint within every chapter -->
-        {% for checkpoint in data_dictionary[chapter] %}
-        <div class="checkpoint-box">
-          <!-- Name of checkpoint and time that corresponds to that checkpoint-->
-          <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
-          <input class='checkpoint-time' type="text" name="checkpoints[]" placeholder="{{checkpoint[1]}}">
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    {% if loop.index % 3 == 0 %}
-    <div class="row-marker"></div>
-    {% endif %}
-    {% endfor %}
+
+
+  <div class="left-sidebar">
+      <!-- <div class="nav-list-categories"> -->
+
+  <a href="/">Home</a></li>
+  <a href="/get_times/{{user_id}}/1">any%</a>
+  <a href="/get_times/{{user_id}}/2">ARB</a>
+  <a href="/get_times/{{user_id}}/3">100%</a>
+  <a href="/get_times/{{user_id}}/4">True Ending</a>
+  <a href="/get_times/{{user_id}}/5">Bny%</a>
+  <a href="/get_times/{{user_id}}/6">Cny%</a>
+
   </div>
-  <button type="submit" name="submit_button">Submit</button>
-</form>
+
+
+
+
+
+  <div class="form-rightside">
+    <div class="searchbox-get-times">
+      <input type="text">
+    </div>
+  <!-- Run route update_times on submit -->
+  <form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST">
+
+    <!-- <h1 class="category-name">{{name[0]}}</h1> -->
+    <div class="display-grid">
+      <!-- Grid of every chapter -->
+      {% for chapter in data_dictionary %}
+      <div class="display-grid-item">
+        <h2 class="chapter-header">{{chapter}}</h2>
+        <div class="checkpoints">
+          <!-- Grid of every checkpoint within every chapter -->
+          {% for checkpoint in data_dictionary[chapter] %}
+          <div class="checkpoint-box">
+            <!-- Name of checkpoint and time that corresponds to that checkpoint-->
+            <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
+            <input class='checkpoint-time' type="text" name="checkpoints[]" placeholder="{{checkpoint[1]}}">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% if loop.index % 3 == 0 %}
+      <div class="row-marker"></div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <button type="submit" name="submit_button">Submit</button>
+  </form>
+</div>
+
+
+
 {% endblock %}

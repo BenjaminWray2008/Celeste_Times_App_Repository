@@ -26,6 +26,8 @@ footer{
 
 /* Stuff Below is for the header section */
 
+.entire-header{}
+
 .top-header{
   width: 100%;
   display:flex;
@@ -98,29 +100,22 @@ footer{
 
   display: grid;
   grid-template-columns: 15vw 15vw 15vw 1fr;
-  align-items: stretch;
-  place-items:center;
-
-
-
-  margin: 0;
-
-  overflow: hidden;
+  align-items: center;
   background: linear-gradient(to bottom, #b574eb 0%, #b162cc 100%);
- 
- 
-
+  overflow: hidden;
+  margin: 0;
+  place-items: center;
 }
 
 .username{
   justify-content: right;
 }
 
-.home-page-nav-bar .search-users-box {
-  
-  padding-right:2vw;
-
-  
+.search-users-box {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding-right: 2vw;
 }
 
 
@@ -129,11 +124,6 @@ footer{
   background-color: #ba56e8;
   height:100%;
   align-items: center;
-}
-
-
-.home-page-nav-bar.last-child {
-  place-items: right;
 }
 
 
@@ -448,6 +438,40 @@ option.select-sort:hover{
 }
 
 
+.left-sidebar {
+  position:sticky;
+  top: 0vw; 
+  left: 0;
+  width: 12vw;
+  background-color: #b574eb;
+  height: 100%;
+  padding: 2vw 1vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+}
+
+.left-sidebar a {
+  color: white;
+  text-decoration: none;
+  font-size: 1vw;
+  padding: 0.5vw;
+  border-radius: 0.3vw;
+  background-color: #914ecb;
+}
+
+.left-sidebar a:hover {
+  background-color: #a75edf;
+}
+
+.input-flex-screen{
+  display:flex;
+  justify-content: space-between;
+  padding:5vw 5vw 5vw 0;
+
+}
+
+
 .checkpoint-box {
   display: grid;
   gap: 0.2vw;
@@ -466,7 +490,7 @@ option.select-sort:hover{
 
 
 
-/* Ensure all input fields have the same width */
+
 .checkpoint-time {
   width: 100%;
   font-family: 'Poppins';
@@ -530,7 +554,7 @@ option.select-sort:hover{
 /* Make all display grids consistent */
 .display-grid {
   display: grid;
-  padding:5vw;
+
   grid-template-columns: 1fr 1fr 1fr;
   gap: 5vw;
   align-items: start center;

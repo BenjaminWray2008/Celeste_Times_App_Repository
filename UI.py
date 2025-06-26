@@ -206,8 +206,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
    
     @app.errorhandler(404)
     def stoptryingtohack(i):
-        return render_template('404.html')
-        
+        return render_template('404.html')  
    
     @app.route('/')
     def home():
@@ -230,8 +229,6 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         counter2=db.fetchall()
         print(counter2)
         return render_template('home.html', title='Home', counter=counter, counter2=counter2)
-
-    @app.route('/search_leaderboard')
     
     @app.route('/get_leaderboard')
     def get_leaderboard():
@@ -283,7 +280,6 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
         
         return jsonify(leaderboard) #Return the created leaderboard to the js
-     
         
     @app.route('/signup')
     def signup():
