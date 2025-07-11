@@ -4,13 +4,14 @@
 <div class="home-page-flex">
   <div>
     <h1 class="welcome-header">Welcome to Celeste Splits!</h1>
-    <h3 class='track-here-header'>Track your Best Times Here</h3>
+    <p class='track-here-header'>Track your Best Times Here</p>
 
     <p class="welcome-info">Create an account<br>Upload your Splits <br>Climb the Leaderboard </p>
     <p class="welcome-privacy">All data stored is secure and cannot be changed by others.</p>
       <div class="home-page-flex-line"></div>
     <div class="site-stats">
-
+      <p class="site-stats-header">Site Wide Stats:</p>
+        <p class="total-runs">Total Category Entries: {{counter2[0][0]}} <br>Runner Accounts: {{counter[0][0]}}</p> 
     </div>
   </div>
 
@@ -117,7 +118,7 @@
 
         const username = entry.dataset.username;
         console.log(entry, query, username)
-        if (username === query) {
+        if (username.includes(query)) {
           entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
           entry.classList.add('highlight');
           setTimeout(() => entry.classList.remove('highlight'), 2000);

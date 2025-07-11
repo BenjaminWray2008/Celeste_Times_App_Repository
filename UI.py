@@ -1,10 +1,13 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify, abort
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify, abort, request
 import sqlite3
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 from hashlib import sha256
 import re
 from math import trunc
-
+import datetime
+from dateutil.relativedelta import relativedelta
+import os
 
 #Globals
 listy = ['hi', 'Any%', 'ARB', '100%', 'True Ending', 'Bny%', 'Cny%']
@@ -14,7 +17,13 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     db=database.cursor()
     app=Flask(__name__)
     app.secret_key = 'password'
-    
+
+    def time_clause(thing):
+        if thing == 1:
+            return ''
+        else:
+            return 's'
+
     def sob_adder(user_id):
         sob_dict = {'Any%': '', 'ARB': '', '100%': '', 'True Ending': '', 'Bny%': '', 'Cny%': ''}
         for category in sob_dict:
@@ -203,18 +212,37 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 data_dictionary[chapter].append(('Total Total', format_time_readable_form(format_time_normal_form(final_time))))
         return data_dictionary
    
-   
+    def social_grabber(user_id):
+        db.execute('SELECT link, social_name FROM Socials WHERE user_id = ?', (user_id,))
+        results = db.fetchall()
+        print('results', results)
+        return results
+
     @app.errorhandler(404)
     def stoptryingtohack(i):
-        return render_template('404.html')
-        
+        return render_template('404.html')  
    
     @app.route('/')
     def home():
-        
-        return render_template('home.html', title='Home')
-
-    @app.route('/search_leaderboard')
+        db.execute('''
+                   SELECT COUNT(id)
+                   FROM User
+                   ''')
+        counter=db.fetchall()
+        db.execute('''
+                    SELECT COUNT(*) AS total_completed_category_runs
+                    FROM (
+                    SELECT
+                    r.user_id,
+                    r.category_id
+                    FROM Run r
+                    GROUP BY r.user_id, r.category_id
+                    HAVING SUM(CASE WHEN r.time <= 0 OR r.time IS NULL THEN 1 ELSE 0 END) = 0
+                    ) AS valid_categories;
+                    ''')
+        counter2=db.fetchall()
+       
+        return render_template('home.html', title='Home', counter=counter, counter2=counter2)
     
     @app.route('/get_leaderboard')
     def get_leaderboard():
@@ -266,7 +294,6 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
         
         return jsonify(leaderboard) #Return the created leaderboard to the js
-     
         
     @app.route('/signup')
     def signup():
@@ -289,7 +316,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         db.execute('SELECT id FROM user WHERE hash = ?', (hash,))
         if db.fetchall():
             abort(404)
-        db.execute('INSERT INTO User (name, hash) VALUES (?, ?)', (username, hash))
+        
+        db.execute('INSERT INTO User (name, hash, description, date_joined) VALUES (?, ?, ?, ?)', (username, hash, 'Tell us about Yourself!', datetime.datetime.now()))
         database.commit()
         
         db.execute('SELECT id FROM User WHERE name == ?', (username,))
@@ -297,25 +325,29 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         id = results[0]
       
         new_user_data(id) #Running function to add all empty time entries for new user
-        return render_template('home.html')
+        return redirect(url_for('home'))
     
     @app.route('/search', methods=['POST'])
     def search():
+        searcher = None
         username = request.form.get('username') #Get items from form
         password = request.form.get('password')
         search_username = request.form.get('search-username')
+        
+        print(username, search_username, password)
         if username and not search_username:
             searcher = username
         elif not username and search_username:
             searcher = search_username
             password = ''
-        else: 
+        elif username and search_username: 
             searcher = username
+            print('hii')
             
         print(searcher)
         db.execute(f'SELECT id, hash FROM User WHERE name = ?;', (searcher,)) #Get the actual hash of the username entered
         results=db.fetchone()
-        print(password)
+        print('hiiiii', results)
         if results: #If the user exists
             h = sha256()
             h.update(password.encode())
@@ -329,18 +361,67 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             return redirect(url_for('profile',user_id=user_id,category_id=1)) #Else, run page that lets user view times
         
         print('No user found.') #If the username entered doesn't exist, reload home page.
-        return render_template('home.html')
+        return redirect(url_for('home'))
+    
+    @app.route('/pfp/<int:user_id>/<int:category_id>', methods = ['POST'])
+    def new_pfp(user_id, category_id):
+        file = request.files['pfp']
+        
+        pfp_directory = secure_filename(file.filename)
+        file_path = os.path.join('C:\dev\Celeste_Times_App_Repository\static\pfps', pfp_directory)
+        file.save(file_path)
+        db.execute('UPDATE User SET pfp_path = ? WHERE id = ?;', (pfp_directory, user_id))
+        database.commit()
+        return redirect(url_for('get_times', user_id = user_id, category_id = category_id))
+
+    @app.route('/socials/<int:user_id>/<int:category_id>/<string:old_social_name>', methods=['POST'])
+    def edit_socials(user_id, category_id, old_social_name):
+        social_link = request.form.get('social_link')
+        social_name = request.form.get('social_name')
+        button_type = request.form.get('action')
+        print(old_social_name)
+        if button_type == 'edit':
+            db.execute('UPDATE Socials SET link = ?, social_name = ? WHERE user_id = ? AND social_name = ?', (social_link, social_name, user_id, old_social_name))
+        else:
+            db.execute('DELETE FROM Socials WHERE user_id = ? AND social_name = ?', (user_id, old_social_name))
+        database.commit()
+        return redirect(url_for('get_times', user_id = user_id, category_id = category_id))
+    
+    @app.route('/add_socials/<int:user_id>/<int:category_id>', methods=['POST'])
+    def add_socials(user_id, category_id):
+        social_link = request.form.get('init_social')
+        social_name = request.form.get('init_name')
+        db.execute('INSERT INTO Socials (user_id, link, social_name) VALUES (?, ?, ?)', (user_id, social_link, social_name))
+        database.commit()
+        return redirect(url_for('get_times', user_id = user_id, category_id = category_id))
+    
+    @app.route('/descriptioner/<int:user_id>/<int:category_id>', methods=['POST'])
+    def get_description(user_id, category_id):
+        description = request.form.get('description')
+        db.execute('UPDATE User SET description = ? WHERE id = ?', (description, user_id))
+        database.commit()
+        return redirect(url_for('get_times', user_id = user_id, category_id = category_id))
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def get_times(user_id,category_id):
+        db.execute('SELECT pfp_path FROM User WHERE id = ?', (user_id,))
+        pfp = db.fetchone()[0]
+        print('pfp', pfp)
+        db.execute('SELECT date_joined FROM User WHERE id = ?', (user_id,))
+        current_time = datetime.datetime.now()
+        member_since = relativedelta(current_time, datetime.datetime.strptime(db.fetchone()[0], "%Y-%m-%d %H:%M:%S.%f"))
+        
+        member_since = f"{member_since.years} Year{time_clause(member_since.years)}, {member_since.months} Month{time_clause(member_since.months)}, and {member_since.days} Day{time_clause(member_since.days)} Ago"
+        results = social_grabber(user_id)
         data_dictionary = data_dictionary_creation(user_id, category_id, False)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
-        db.execute('SELECT name FROM user WHERE id = ?', (user_id,))
-        user_name = db.fetchall()[0]
+        db.execute('SELECT name, description FROM user WHERE id = ?', (user_id,))
+        stuff = db.fetchall()
+        user_name = stuff[0][0]
+        user_description = stuff[0][1]
         sob_dict = sob_adder(user_id)
-
-        return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict)
+        return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since, pfp = pfp)
 
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id,category_id):
