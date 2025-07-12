@@ -1,51 +1,151 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="nav-list-categories">
+<div class="get-times-page">
+    <div class="profile-headers">
+        <div class="top-half-header">
+            <div class="pfp-name-div header-styler">
+                <div class="profile-picture-profile ">
+                    <h1 class="profile-name-profile">{{user_name}}</h1>
+                    <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture" alt="pfp"
+                        id="profile-picture-display">
+                </div>
 
-        <a href="/">Home</a></li>
-        <a href="/profile/{{user_id}}/1">any%</a>
-        <a href="/profile/{{user_id}}/2">ARB</a>
-        <a href="/profile/{{user_id}}/3">100%</a>
-        <a href="/profile/{{user_id}}/4">True Ending</a>
-        <a href="/profile/{{user_id}}/5">Bny%</a>
-        <a href="/profile/{{user_id}}/6">Cny%</a>
-</div>
-<div class="profile-headers">
-    <div class="left-half">
-    <h1 class="profile-name">{{user_name[0]}}</h1>
-    </div>
-    <div class="right-half">
-        <ul class="sob-list">
-        <h3 class="sob-stats-header">SOB Categories:</h3>
-        {% for category in sob_dict %}
-            <li class="sob-stats">{{category}}: {{sob_dict[category]}}</li>
-        {% endfor %}
-        </ul>
-    </div>
-
-
-</div>
-
-<h2 class="category-name">{{name[0]}}</h2>
-<div class="display-grid">
-    {% for chapter in data_dictionary %}
-    <div class="display-grid-item">
-        <h2 class="chapter-header">{{chapter}}</h2>
-        <div class="checkpoints">
-            {% for checkpoint in data_dictionary[chapter] %}
-            <div class="checkpoint-box">
-                <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
-                <p class="checkpoint-time">{{checkpoint[1]}}</p>
+                <div class="profile-name-div">
+                    <p class="profile-description-profile">{{user_description}}</p>
+                    <div class="all-socials">
+                        {%for social in socials%}
+                        <div class="social-links">
+                            <a class="social-link-profile" href="{{social[0]}}" target="_blank">{{social[1]}} </a>
+                            <p class="social-link-profile">{{user_name}}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <p class="joined-since-profile">Joined {{member_since}}</p>
+                </div>
             </div>
-            {% endfor %}
 
+        
+            <div class="sob-list-div header-styler">
+                <div>
+                    <p class="sob-stats-header">Chapter SOB:</p>
+                    {% for category in sob_dict %}
+                    <div class="sob-stats-both">
+                        <p class="sob-stats-category">{{category}}:</p>
+                        <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
+                        <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="sob-list-div header-styler">
+                <div>
+                    <p class="sob-stats-header">Checkpoint SOB:</p>
+                    {% for category in sob_dict %}
+                    <div class="sob-stats-both">
+                        <p class="sob-stats-category">{{category}}:</p>
+                        <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
+                        <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
 
         </div>
-    </div>
-    {% if loop.index % 3 == 0 %}
-    <div class="row-marker"></div>
-    {% endif %}
-    {% endfor %}
-</div>
 
-{% endblock %}
+        <div class="top-half-header">
+             <div class="header-styler">
+         <canvas id="chapterChart" class="profile-graph"></canvas>
+    </div>
+        </div>
+
+    </div>
+
+    <div class="get-times-grid">
+
+        <div class="nav-list-categories">
+            <a href="/">Home</a></li>
+            <a href="/get_times/{{user_id}}/1">Any%</a>
+            <a href="/get_times/{{user_id}}/2">ARB</a>
+            <a href="/get_times/{{user_id}}/3">100%</a>
+            <a href="/get_times/{{user_id}}/4">True Ending</a>
+            <a href="/get_times/{{user_id}}/5">Bny%</a>
+            <a href="/get_times/{{user_id}}/6">Cny%</a>
+        </div>
+
+        <div class="display-grid">
+            {% for chapter in data_dictionary %}
+            <div class="display-grid-item">
+                <h2 class="chapter-header">{{chapter}}</h2>
+                <div class="checkpoints">
+                    {% for checkpoint in data_dictionary[chapter] %}
+                    <div class="checkpoint-box">
+                        <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
+                        <p class="checkpoint-time">{{checkpoint[1]}}</p>
+                    </div>
+                    {% endfor %}
+
+
+                </div>
+            </div>
+            {% if loop.index % 3 == 0 %}
+            <div class="row-marker"></div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+
+
+        <script>
+            const ctx = document.getElementById('chapterChart').getContext('2d');
+
+            const chapterChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Ch1', 'Ch2', 'Ch3', 'Ch4', 'Ch5'],
+                    datasets: [
+                        {
+                            label: 'Player 1',
+                            data: [20, 50, 90, 130, 170],
+                            borderColor: 'black',
+                            backgroundColor: 'transparent',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Player 2',
+                            data: [22, 52, 78, 100, 100],
+                            borderColor: 'orange',
+                            backgroundColor: 'transparent',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Time (seconds)',
+                                ticks: {
+                                    stepSize: 20
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Chapter'
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+        {% endblock %}

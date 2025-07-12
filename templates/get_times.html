@@ -4,77 +4,87 @@
   <div class="profile-headers">
     <div class="top-half-header">
       <div class="pfp-name-div header-styler">
-      <div class="profile-picture-form-content ">
+        <div class="profile-picture-form-content ">
 
-        <form action="{{ url_for('new_pfp', user_id = user_id, category_id = category_id) }}" method="POST" class="profile-picture-form" enctype="multipart/form-data">
-          <label for="profile-picture-input" class="browse-label">Import...</label>
-          <input class="profile-picture-input" type="file" name="pfp" accept="image/*" id="profile-picture-input"
-            required>
-          <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture" alt="pfp"
-            id="profile-picture-display">
-          <div class="profile-picture-changes-buttons" id="changes-buttons">
-            <button class="profile-picture-submit" type="submit" id="submit-button">Apply!</button>
-            <button class="profile-picture-cancel" id="profile-picture-discard">Cancel!</button>
-          </div>
-        </form>
+          <form action="{{ url_for('new_pfp', user_id = user_id, category_id = category_id) }}" method="POST"
+            class="profile-picture-form" enctype="multipart/form-data">
+            <label for="profile-picture-input" class="browse-label">Import...</label>
+            <input class="profile-picture-input" type="file" name="pfp" accept="image/*" id="profile-picture-input"
+              required>
+            <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture" alt="pfp"
+              id="profile-picture-display">
+            <div class="profile-picture-changes-buttons" id="changes-buttons">
+              <button class="profile-picture-submit" type="submit" id="submit-button">Apply!</button>
+              <button class="profile-picture-cancel" id="profile-picture-discard">Cancel!</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="profile-name-div">
+          <h1 class="profile-name">{{user_name}}</h1>
+
+          <form class="text-area-form"
+            action="{{url_for('get_description', user_id = user_id, category_id = category_id)}}" method="POST">
+<textarea class="profile-description" name="description" id="description" maxlength="50">{{user_description}}</textarea>
+            <button class="profile-description-submit" type="submit">Submit Description</button>
+          </form>
+
+
+
+        </div>
       </div>
 
-      <div class="profile-name-div">
-        <h1 class="profile-name">{{user_name}}</h1>
-
-        <form class="text-area-form"
-          action="{{url_for('get_description', user_id = user_id, category_id = category_id)}}" method="POST">
-          <textarea class="profile-description" name="description" id="description">{{user_description}}</textarea>
-          <button class="profile-description-submit" type="submit">Submit Description</button>
-        </form>
-
-
-
-      </div>
-      </div>
-        
       <div class="header-styler">
         <div>
-        <p class="profile-name">About {{user_name}}</p>
+
           <p class="joined-since">Joined {{member_since}}</p>
-      <div class="all-socials">
-        {%for social in socials%}
-        <form
-          action="{{url_for('edit_socials', user_id = user_id, category_id = category_id, old_social_name = social[1])}}"
-          method="POST">
+          <div class="all-socials">
+            {%for social in socials%}
+            <form
+              action="{{url_for('edit_socials', user_id = user_id, category_id = category_id, old_social_name = social[1])}}"
+              method="POST">
 
-          <input type="text" name="social_name" value="{{social[1]}}" required>
-          <input type="text" name="social_link" value="{{social[0]}}" required>
+              <input type="text" name="social_name" value="{{social[1]}}" class="social-link" required>
+              <input type="text" name="social_link" value="{{social[0]}}" class="social-link" required>
 
-          <button type="submit" name="action" value="edit">Confirm Edits!</button>
-          <button type="submit" name="action" value="delete"
-            onclick="return confirm('Are you sure you want to delete this social?');">Delete</button>
-        </form>
-        {% endfor %}
+              <button type="submit" name="action" value="edit" class="social-button">Confirm Edits</button>
+              <button type="submit" name="action" value="delete" class="social-button"
+                onclick="return confirm('Are you sure you want to delete this social?');">Delete</button>
+            </form>
+            {% endfor %}
+          </div>
+
+          <form action="{{url_for('add_socials', user_id = user_id, category_id = category_id)}}" method="POST">
+            <input type="text" name="init_name" placeholder="Social Name" class="social-link" required>
+            <input type="text" name="init_social" placeholder="Paste Social Link" class="social-link" required>
+
+            <button type="submit" class="social-button">Submit</button>
+          </form>
+        </div>
       </div>
 
-      <form action="{{url_for('add_socials', user_id = user_id, category_id = category_id)}}" method="POST">
-        <input type="text" name="init_name" placeholder="Social Name" required>
-        <input type="text" name="init_social" placeholder="Paste Social Link" required>
+      <div class="sob-list-div header-styler">
+        <div>
 
-        <button type="submit">Submit!</button>
-      </form>
-      </div>
-</div>
-    
- <div class="sob-list-div header-styler">
-  <div>
-        <h3 class="sob-stats-header">SOB Categories:</h3>
-        <ul class="sob-list">
 
+          <p class="sob-stats-header">Checkpoint SOBs:</p>
           {% for category in sob_dict %}
-          <li class="sob-stats">{{category}}: {{sob_dict[category]}}</li>
+          <div class="sob-stats-both">
+            <p class="sob-stats-category">{{category}}:</p>
+            <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
+            <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+          </div>
           {% endfor %}
-        </ul>
+
+        </div>
       </div>
-   </div>
     </div>
 
+
+
+  </div>
+
+  <div class="get-times-grid">
 
     <div class="nav-list-categories">
       <a href="/">Home</a></li>
@@ -85,10 +95,6 @@
       <a href="/get_times/{{user_id}}/5">Bny%</a>
       <a href="/get_times/{{user_id}}/6">Cny%</a>
     </div>
-
-  </div>
-
-  <div class="get-times-grid">
     <!-- Run route update_times on submit -->
     <form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST">
 

@@ -6,47 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
     <title>Celester</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <main>
         <div class="entire-header">
-        <div class="top-header">
-            <div class="header-name-box">
-                <h1 class="header-name">Celeste Splits</h1>
-                <img class='header-image' src="/static/images/berry.png" alt="berry">
+            <div class="top-header">
+                <div class="header-name-box">
+                    <h1 class="header-name">Celeste Splits</h1>
+                    <img class='header-image' src="/static/images/berry.png" alt="berry">
+                </div>
+                <div class="right-side-top-header">
+                    <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>
+
+
+
+                        <div class="username-div">
+                            <input class='username' type="text" name="username" placeholder="Enter Username...">
+                        </div>
+                        <div class="password-div">
+                            <input class='password' type="text" name="password" placeholder="Enter Pin...">
+                        </div>
+
+                        <div class="submit-button-main-container">
+                            <button class='submit-button-main' type="submit">Submit!</button>
+                        </div>
+
+
+                </div>
+
+
             </div>
-            <div class="right-side-top-header">
-                <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>
+            <div class="home-page-nav-bar">
+                <a class='sign-up-link' href="/">Home</a>
+                <a class='sign-up-link' href="/signup">Sign Up!</a>
+                <a class='sign-up-link' href="/about">About Celeste</a>
 
-
-
-                    <div class="username-div">
-                        <input class='username' type="text" name="username" placeholder="Enter Username...">
-                    </div>
-                    <div class="password-div">
-                        <input class='password' type="text" name="password" placeholder="Enter Pin...">
-                    </div>
-
-                    <div class="submit-button-main-container">
-                        <button class='submit-button-main' type="submit">Submit!</button>
-                    </div>
-
-
+                <div class="search-users-box">
+                    <input type="text" class="username" name="search-username" placeholder="Search Users...">
+                </div>
+                </form>
             </div>
-
-
-        </div>
-        <div class="home-page-nav-bar">
-            <a class='sign-up-link' href="/">Home</a>
-            <a class='sign-up-link' href="/signup">Sign Up!</a>
-            <a class='sign-up-link' href="/about">About Celeste</a>
-
-            <div class="search-users-box">
-            <input type="text" class="username" name="search-username" placeholder="Search Users...">
-            </div>
-            </form>
-        </div>
         </div>
         {% block content %}
         {% endblock %}
