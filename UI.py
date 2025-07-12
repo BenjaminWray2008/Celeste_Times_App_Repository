@@ -25,8 +25,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             return 's'
 
     def sob_adder(user_id):
-        sob_dict = {'Any%': '', 'ARB': '', '100%': '', 'True Ending': '', 'Bny%': '', 'Cny%': ''}
-        for category in sob_dict:
+        sob_dict = {'Category':('Time:', '#'),'Any%': '', 'ARB': '', '100%': '', 'True Ending': '', 'Bny%': '', 'Cny%': ''}
+        for category in list(sob_dict.keys())[1:]:
             db.execute('SELECT SUM(time) AS sob FROM Run WHERE user_id = ? AND type = "checkpoint" AND category_id = (SELECT id FROM Category WHERE name = ?);', (user_id, category))
             sob = db.fetchone()[0]
             db.execute('SELECT id FROM Category WHERE name = ?', (category,))
@@ -37,7 +37,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 if time[2] == sob:
                     sob_dict[category] = (format_time_readable_form(format_time_normal_form(sob)), prefix_adder(sob_leaderboard.index(time)+1))
             if not sob_dict[category]:
-                sob_dict[category] = (format_time_readable_form(format_time_normal_form(sob)), 'Ineligible')
+                sob_dict[category] = (format_time_readable_form(format_time_normal_form(sob)), 'N/A')
         return sob_dict
     
     def prefix_adder(num):
@@ -181,7 +181,19 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         results = db.fetchall()
         
         for category in results:
+
+            
+
+
             category_id = category[0]
+
+
+            
+         
+            
+            chapter_listy = []
+            
+
             db.execute('SELECT checkpoint_id FROM CategoryCheckpoint WHERE category_id = ?', (category_id,))
             checkpoints_list = db.fetchall() #For each category, getting a list of all checkpoints in that category
             
@@ -190,6 +202,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                 results = db.fetchone()
                 name = results[0]
                 chapter_name = (name.split(' '))[-1]
+                if chapter_name not in chapter_listy:
+                    chapter_listy.append(chapter_name)
                 db.execute('SELECT id FROM Chapter WHERE name = ?', (chapter_name,))
                 results = db.fetchone()
                 chapter_id = results[0]
@@ -198,7 +212,17 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                            (time, run_number, type, chapter_id, user_id, category_id)
                            VALUES (0, ?, ?, ?, ?, ?)''',
                            (checkpoint[0], 'checkpoint', chapter_id, id, category_id)) #For every checkpoint for every category, inserting a run entry for the new user.
-        database.commit()
+            print(chapter_listy, "chapter listy")
+            for chapter in chapter_listy:
+                db.execute('SELECT id FROM Chapter WHERE name = ?', (chapter,))
+                chapter_id_real = db.fetchone()[0]
+                db.execute('''INSERT INTO Run 
+                            (time, run_number, type, chapter_id, user_id, category_id)
+                            VALUES (0, ?, ?, ?, ?, ?)''',
+                            (-1, 'IL', chapter_id_real, id, category_id))
+            database.commit()
+
+            database.commit()
 
     def data_dictionary_creation(user_id, category_id, variable):
         data_dictionary = {}
@@ -206,6 +230,14 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                    WHERE category_id = ? ORDER BY orderer ASC''', (category_id,)) #Gets all checkpoints of a specific category in order of display
         results = db.fetchall()
         checkpoint_id = [j[0] for j in results]
+
+        db.execute('SELECT chapter_id, time FROM Run WHERE type = "IL" AND user_id = ? AND category_id = ?;', (user_id, category_id))
+        chapters = db.fetchall()
+        data_dictionary['Chapter SOB'] = []
+        for chapter in chapters:
+            db.execute('SELECT name FROM Chapter WHERE id = ?', (chapter[0],))
+            chapter_name = db.fetchone()[0]
+            data_dictionary['Chapter SOB'].append((chapter_name+' hi', format_time_readable_form(format_time_normal_form(chapter[1]))))
         
         for checkpoint in checkpoint_id:
             db.execute('''SELECT name FROM Chapter WHERE id IN 
@@ -232,6 +264,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                     if time_tuple[1] is not None:
                         final_time += round(float(format_time_second_form(time_tuple[1])), 3)
                 data_dictionary[chapter].append(('Total Total', format_time_readable_form(format_time_normal_form(final_time))))
+
+        print(data_dictionary)
         return data_dictionary
    
     def social_grabber(user_id):
@@ -267,6 +301,9 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
    
     @app.route('/')
     def home():
+
+      
+
         db.execute('''
                    SELECT COUNT(id)
                    FROM User
@@ -439,6 +476,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         db.execute('SELECT pfp_path FROM User WHERE id = ?', (user_id,))
         pfp = db.fetchone()[0]
         print('pfp', pfp)
+        if not pfp:
+            pfp = '11435188454_ac025460e3_w.jpg'
         db.execute('SELECT date_joined FROM User WHERE id = ?', (user_id,))
         current_time = datetime.datetime.now()
         member_since = relativedelta(current_time, datetime.datetime.strptime(db.fetchone()[0], "%Y-%m-%d %H:%M:%S.%f"))
@@ -490,13 +529,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         db.execute('SELECT pfp_path FROM User WHERE id = ?', (user_id,))
         pfp = db.fetchone()[0]
         print('pfp', pfp)
+        if not pfp:
+            pfp = '11435188454_ac025460e3_w.jpg'
         db.execute('SELECT date_joined FROM User WHERE id = ?', (user_id,))
         current_time = datetime.datetime.now()
         member_since = relativedelta(current_time, datetime.datetime.strptime(db.fetchone()[0], "%Y-%m-%d %H:%M:%S.%f"))
         
         member_since = f"{member_since.years} Year{time_clause(member_since.years)}, {member_since.months} Month{time_clause(member_since.months)}, and {member_since.days} Day{time_clause(member_since.days)} Ago"
         results = social_grabber(user_id)
-        data_dictionary = data_dictionary_creation(user_id, category_id, False)
+        data_dictionary = data_dictionary_creation(user_id, category_id, True)
         db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
         db.execute('SELECT name, description FROM user WHERE id = ?', (user_id,))

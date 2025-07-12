@@ -21,44 +21,58 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div>
-                    <p class="joined-since-profile">Joined {{member_since}}</p>
-                </div>
+               
             </div>
 
-        
+
+
             <div class="sob-list-div header-styler">
                 <div>
                     <p class="sob-stats-header">Chapter SOB:</p>
-                    {% for category in sob_dict %}
-                    <div class="sob-stats-both">
-                        <p class="sob-stats-category">{{category}}:</p>
-                        <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
-                        <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+                    <div class="sob-stats-border">
+                        {% for category in sob_dict %}
+                        {% if loop.index == 2 %}
+                        <hr>
+                        {% endif %}
+                        <div class="sob-stats-both">
+                            <p class="sob-stats-category">{{category}}:</p>
+                            <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
+                            <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
 
-            <div class="sob-list-div header-styler">
+
+
                 <div>
                     <p class="sob-stats-header">Checkpoint SOB:</p>
-                    {% for category in sob_dict %}
-                    <div class="sob-stats-both">
-                        <p class="sob-stats-category">{{category}}:</p>
-                        <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
-                        <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+                    <div class="sob-stats-border">
+
+                        {% for category in sob_dict %}
+                        {% if loop.index == 2 %}
+                        <hr>
+                        {% endif %}
+                        <div class="sob-stats-both">
+
+                            <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
+                            <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
+
             </div>
-
         </div>
+        <div class="second-top-half-header">
 
-        <div class="top-half-header">
-             <div class="header-styler">
-         <canvas id="chapterChart" class="profile-graph"></canvas>
-    </div>
+            <div class="header-styler-dif">
+                <canvas id="chapterChart" class="profile-graph"></canvas>
+
+            </div>
+            <div class="header-styler-dif">
+                <p class="joined-since-profile">Joined {{member_since}}</p>
+            </div>
         </div>
 
     </div>
@@ -67,12 +81,12 @@
 
         <div class="nav-list-categories">
             <a href="/">Home</a></li>
-            <a href="/get_times/{{user_id}}/1">Any%</a>
-            <a href="/get_times/{{user_id}}/2">ARB</a>
-            <a href="/get_times/{{user_id}}/3">100%</a>
-            <a href="/get_times/{{user_id}}/4">True Ending</a>
-            <a href="/get_times/{{user_id}}/5">Bny%</a>
-            <a href="/get_times/{{user_id}}/6">Cny%</a>
+            <a href="/profile/{{user_id}}/1">Any%</a>
+            <a href="/profile/{{user_id}}/2">ARB</a>
+            <a href="/profile/{{user_id}}/3">100%</a>
+            <a href="/profile/{{user_id}}/4">True Ending</a>
+            <a href="/profile/{{user_id}}/5">Bny%</a>
+            <a href="/profile/{{user_id}}/6">Cny%</a>
         </div>
 
         <div class="display-grid">

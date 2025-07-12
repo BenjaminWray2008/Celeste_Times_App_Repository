@@ -448,6 +448,8 @@ option.select-sort:hover{
   padding-bottom: 5px;
   border: 1.5px solid black;
   row-gap: 5px;
+  max-height: 35vh;
+  overflow-y: auto;
 
 
 
@@ -484,7 +486,8 @@ option.select-sort:hover{
   display: grid;
   padding:1vw;
  
-  
+  border-bottom-left-radius: 0.75vw;
+  border-bottom-right-radius: 0.75vw;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 5vw;
   align-items: start center;
@@ -555,24 +558,66 @@ option.select-sort:hover{
 
 .top-half-header{
   display: flex;
-  width: 100%;
-  align-items: center;
+  flex-direction: column;
+  
   margin-top:1.5vw;
-  justify-content: space-between;
+  
+  gap:1.5vw;
 }
 
+.top-half-header-get-times{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5vw;
+}
+
+
+
+.second-top-half-header{
+  height: 100%;
+  display: flex;
+  max-height: 30.5vw;
+  margin-top:1.5vw;
+  flex-direction: column;
+  width: 100%;
+  gap:1.5vw;
+  justify-content: space-between;
+  
+} 
+
 .header-styler{
-  height:12vw;
+  height:14.5vw;
   display: flex;
   align-items: center;
   background-color: #d3b9f7;
   border: 1px rgb(105, 93, 107) solid;
-  align-items: center;
+  text-align: center;
   padding:0 2vw 0 2vw;
   border-radius: 0.75vw;
   overflow: hidden; 
   overflow-y: auto;
   
+}
+
+.header-styler-dif{
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d3b9f7;
+  border: 1px rgb(105, 93, 107) solid;
+  align-items: center;
+  
+  border-radius: 0.75vw;
+  overflow: hidden; 
+  overflow-y: auto;
+  
+}
+
+.profile-headers{
+  display: flex;
+  gap:1.5vw;
+
 }
 
 .get-times-page{
@@ -719,7 +764,7 @@ option.select-sort:hover{
 
 .sob-stats-both{
   display: flex;
-  width:21vw;
+  
   gap:3vw;
   
 }
@@ -733,19 +778,25 @@ option.select-sort:hover{
 
 }
 
+.sob-stats-border:first-child{
+  border-bottom:2px black solid;
+  background-color: red;
+}
+
 .sob-stats-category{
   width: 5.8vw;
+  text-align: left;
   
 }
 
 .sob-stats-time{
-  width:2vw;
-  text-align: left;
+  width:3vw;
+  text-align: center;
 }
 
 .sob-stats-ranking{
   width: 5vw;
-  text-align: right;
+  text-align: center;
 }
 
 
@@ -794,6 +845,12 @@ option.select-sort:hover{
 
 .all-socials{
  
+}
+
+.init-social-form{
+  display: flex;
+  justify-content: left;
+  
 }
 
 
@@ -849,12 +906,22 @@ option.select-sort:hover{
 }
 
 .profile-graph{
-  width:fit-content;
-  height: 15vw;
+  max-width: 100%; /* Ensure graph is responsive */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Remove extra space below canvas */
+    background-color: white; /* White background for the chart area itself */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 95%; /* Make it almost fill its container */
+}
+
+.graph-styler{
+  
 }
 
 .joined-since-profile{
-  width:13vw;
+  width:100%;
   border-bottom:2px black solid;
   padding-bottom: 1.5vw;
   font-size: 1vw;
