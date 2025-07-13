@@ -13,6 +13,8 @@ body{
   width:100%
 }
 
+
+
 footer{
   width:100%;
   background-color: rgb(136, 183, 136);
@@ -42,7 +44,7 @@ footer{
 }
 .input-boxes-form{
   display:flex;
-  flex-direction: row;
+  flex-direction: row;  
 }
 
 .submit-button-main{
@@ -139,7 +141,7 @@ footer{
   text-decoration: none;
   width:100%;
   white-space: 'nowrap';
-  font-size: 1vw;
+  font-size: 1.2vw;
  
 }
 
@@ -406,7 +408,7 @@ option.select-sort:hover{
   gap: 0.2vw;
   width: 100%;
   grid-template-columns: 1fr 1fr;
-  border: 1.5px black;
+  border: 1.5px rgb(255, 255, 255);
   place-items: center;
   padding-right: 5px;
   padding-left: 5px;
@@ -433,7 +435,7 @@ option.select-sort:hover{
 
 
 .checkpoints .checkpoint-box:not(:last-child){
-  border-bottom: 1.5px solid #000;
+  border-bottom: 2.5px solid #e347e5;
   padding-bottom: 5px;
 
 
@@ -446,7 +448,7 @@ option.select-sort:hover{
   border-radius: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
-  border: 1.5px solid black;
+  border: 2.5px solid #e347e5;
   row-gap: 5px;
   max-height: 35vh;
   overflow-y: auto;
@@ -485,7 +487,9 @@ option.select-sort:hover{
 .display-grid {
   display: grid;
   padding:1vw;
- 
+  border-bottom: 1px rgb(105, 93, 107) solid;
+  border-left: 1px rgb(105, 93, 107) solid;
+  border-right: 1px rgb(105, 93, 107) solid;
   border-bottom-left-radius: 0.75vw;
   border-bottom-right-radius: 0.75vw;
   grid-template-columns: 1fr 1fr 1fr;
@@ -494,6 +498,37 @@ option.select-sort:hover{
   width: 100%;
   background:#d3b9f7;
 
+}
+
+.submit-get-times{
+  background-color: #ff75a0;
+  border: 2px solid black;
+  width:30vw;
+  height:5vw;
+  padding:0;
+  margin-top: 1.5vw;
+  margin-bottom: 1.5vw;
+  border-radius: 0.75vw;
+  font-size: 1vw;
+  font-weight: bold;
+  font-family: 'Nunito';
+  
+}
+
+.submit-get-times:hover{
+  background-color: #ff75d3;
+}
+
+.display-grid-form{
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+}
+
+.submit-button-center{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Make checkpoint names consistent width */
@@ -509,8 +544,8 @@ option.select-sort:hover{
 
 .chapter-header{
   text-align: center;
-  font-family: 'Press Start 2P';
-  font-size:1.5vw;
+  font-family: 'Nunito';
+  font-size:1.2vw;
   
 }
 
@@ -518,7 +553,9 @@ option.select-sort:hover{
 
 .nav-list-categories{
 
-  
+  border-top: 1px rgb(105, 93, 107) solid;
+  border-left: 1px rgb(105, 93, 107) solid;
+  border-right: 1px rgb(105, 93, 107) solid;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   align-items: center;
@@ -622,13 +659,17 @@ option.select-sort:hover{
 
 .get-times-page{
   padding: 0 5vw 0 5vw;
+  
 }
 
 .get-times-grid{
-    border: 1px rgb(105, 93, 107) solid;
+    
     border-radius: 1vw;
     margin-top:1.5vw;
+ 
 }
+
+
 
 .profile-name {
   font-family: 'Poppings';
@@ -890,9 +931,29 @@ option.select-sort:hover{
 .social-links{
   display: flex;
   flex-direction: row;
-  margin:0;
-  padding:0;
+  margin:0.2vw;
+  padding:0.2vw;
   gap:0.5vw;
+  background-color: #ce6ae9;
+  border-radius: 0.75vw;
+  width:fit-content;
+}
+
+.all-socials-profile{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color:#bb89e9e5;
+  padding-bottom: 0.5vw;
+  border-radius: 0.75vw;
+  border: 2px solid #333;
+}
+
+.socials-header{
+  font-family: 'Nunito';
+  font-size: 1vw;
+  font-weight: bold;
 }
 
 .social-link-profile{
@@ -900,20 +961,39 @@ option.select-sort:hover{
   font-family: 'Poppings';
   font-size: 1vw;
   margin:0;
-  font-family:'Nunito';
+  font-family:'Nunito'; 
   padding:0;
-  margin-top:0.5vw;
+ 
+ 
+}
+
+.profile-name-div-profile{
+  gap:1vw;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pfp-name-div-profile{
+  display: flex;
+  flex-direction: row;
+  gap:1.5vw;
+  align-items: center;
+  
 }
 
 .profile-graph{
-  max-width: 100%; /* Ensure graph is responsive */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Remove extra space below canvas */
-    background-color: white; /* White background for the chart area itself */
+  max-width: 100%;
+    height: auto;
+    display: block; 
+    background-color: white; 
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    width: 95%; /* Make it almost fill its container */
+    width: 95%; 
+    font-family: 'Nunito';
+    font-size: 10vw;
 }
 
 .graph-styler{
@@ -927,4 +1007,8 @@ option.select-sort:hover{
   font-size: 1vw;
   font-family: 'Nunito';
   text-align: center;
+}
+
+.bottom-graph-styler{
+
 }

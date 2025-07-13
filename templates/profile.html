@@ -3,16 +3,17 @@
 <div class="get-times-page">
     <div class="profile-headers">
         <div class="top-half-header">
-            <div class="pfp-name-div header-styler">
+            <div class="pfp-name-div-profile header-styler">
                 <div class="profile-picture-profile ">
                     <h1 class="profile-name-profile">{{user_name}}</h1>
                     <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture" alt="pfp"
                         id="profile-picture-display">
                 </div>
 
-                <div class="profile-name-div">
+                <div class="profile-name-div-profile">
                     <p class="profile-description-profile">{{user_description}}</p>
-                    <div class="all-socials">
+                    <div class="all-socials-profile">
+                        <p class="socials-header">{{user_name}}'s Socials:</p>
                         {%for social in socials%}
                         <div class="social-links">
                             <a class="social-link-profile" href="{{social[0]}}" target="_blank">{{social[1]}} </a>
@@ -36,8 +37,8 @@
                         {% endif %}
                         <div class="sob-stats-both">
                             <p class="sob-stats-category">{{category}}:</p>
-                            <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
-                            <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+                            <p class="sob-stats-time">{{sob_dict[category][1][0]}}</p>
+                            <p class="sob-stats-ranking">{{sob_dict[category][1][1]}}</p>
                         </div>
                         {% endfor %}
                     </div>
@@ -55,8 +56,8 @@
                         {% endif %}
                         <div class="sob-stats-both">
 
-                            <p class="sob-stats-time">{{sob_dict[category][0]}}</p>
-                            <p class="sob-stats-ranking">{{sob_dict[category][1]}}</p>
+                            <p class="sob-stats-time">{{sob_dict[category][0][0]}}</p>
+                            <p class="sob-stats-ranking">{{sob_dict[category][0][1]}}</p>
                         </div>
                         {% endfor %}
                     </div>
@@ -70,7 +71,7 @@
                 <canvas id="chapterChart" class="profile-graph"></canvas>
 
             </div>
-            <div class="header-styler-dif">
+            <div class="header-styler-dif bottom-graph-styler">
                 <p class="joined-since-profile">Joined {{member_since}}</p>
             </div>
         </div>
@@ -113,23 +114,67 @@
 
 
         <script>
+            
+            const max = {{ graph_x_labels }};
+
+            const x_axis_listy = [];
+            for (let i = 1; i <= max; i++) {
+                x_axis_listy.push(`CH${i}`);
+        
+            }
+            const user_data_list = [];
+            const compare_user_data_list = [];
+            let user_data = {{user_data_dictionary['Chapter SOB'] | tojson}}
+            let compare_user_data = {{data_dictionary_compare['Chapter SOB'] | tojson}}
+            for (const item of user_data) {
+                if (user_data_list.length === 0) {
+                    user_data_list.push(item[1])
+                    
+                }
+                else{
+
+                user_data_list.push(item[1]+user_data_list[user_data_list.length - 1])
+                
+                }
+            }
+
+            for (const value of compare_user_data) {
+                if (compare_user_data_list.length === 0) {
+                    compare_user_data_list.push(value[1])
+                    
+                }
+                else{
+
+                compare_user_data_list.push(value[1]+compare_user_data_list[compare_user_data_list.length - 1])
+                
+                }
+            }
+            console.log(user_data_list, compare_user_data_list)
+
+           
+
+
+
+            let y_axis_listy = Math.max({{sob_compare}}, {{sob_compare_user}});
             const ctx = document.getElementById('chapterChart').getContext('2d');
 
             const chapterChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Ch1', 'Ch2', 'Ch3', 'Ch4', 'Ch5'],
+              
+                    labels: x_axis_listy,   
                     datasets: [
                         {
-                            label: 'Player 1',
-                            data: [20, 50, 90, 130, 170],
+                            label: '{{user_name}}',
+                            data: user_data_list,
                             borderColor: 'black',
                             backgroundColor: 'transparent',
-                            tension: 0.3
+                            tension: 0.3,
+                            
                         },
                         {
                             label: 'Player 2',
-                            data: [22, 52, 78, 100, 100],
+                            data: compare_user_data_list,
                             borderColor: 'orange',
                             backgroundColor: 'transparent',
                             tension: 0.3
@@ -139,16 +184,26 @@
                 options: {
                     responsive: true,
                     plugins: {
+                        legend: {
+                            labels: {
+                                color: 'black',
+                                font: {
+                                size: 20,
+                                weight: 'bold'
+                                }
+                            }
+                            },
 
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
+                            max: y_axis_listy,
                             title: {
                                 display: true,
                                 text: 'Time (seconds)',
-                                ticks: {
-                                    stepSize: 20
+                            ticks: {
+                                
                                 }
                             }
                         },
