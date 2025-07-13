@@ -116,7 +116,7 @@
         <script>
             
             const max = {{ graph_x_labels }};
-
+            const chapter_list = {{chapters_list |tojson}}
             const x_axis_listy = [];
             for (let i = 1; i <= max; i++) {
                 x_axis_listy.push(`CH${i}`);
@@ -162,7 +162,7 @@
                 type: 'line',
                 data: {
               
-                    labels: x_axis_listy,   
+                    labels: chapter_list,   
                     datasets: [
                         {
                             label: '{{user_name}}',

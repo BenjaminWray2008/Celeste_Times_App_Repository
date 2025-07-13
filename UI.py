@@ -609,11 +609,24 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             print(j[1])
            
 
+        db.execute('SELECT chapter_id FROM Run WHERE type = "IL" AND user_id = ? AND category_id = ?;', (user_id, category_id))
+        chapters_query = db.fetchall()
+        print(chapters_query, 'chapters')
+       
+        placeholders = ', '.join('?' for i in chapters_query) 
+        db.execute(f'SELECT name FROM Chapter WHERE id IN ({placeholders}) ORDER BY chapter_order ASC', tuple(i[0] for i in chapters_query))
+        new_chapters = db.fetchall()
+        print('cha', new_chapters)
+        chapters_list = []
+        for i in new_chapters:
+            chapters_list.append(i[0])
+
+
         print(user_data_dictionary)
         print(data_dictionary_compare)
-       
-        return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since, pfp = pfp,
-                                graph_x_labels = len(data_dictionary)-1, user_data_dictionary = user_data_dictionary, data_dictionary_compare = data_dictionary_compare, sob_compare = sob_compare, sob_compare_user = sob_compare_user)
+        print(chapters_list)
+        return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since, pfp = pfp
+                               , user_data_dictionary = user_data_dictionary, data_dictionary_compare = data_dictionary_compare, sob_compare = float(sob_compare), sob_compare_user = float(sob_compare_user), chapters_list = chapters_list, graph_x_labels = len(data_dictionary)-1)
 
 if __name__ == '__main__':
     app.run(debug=True)
