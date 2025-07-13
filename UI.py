@@ -626,7 +626,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         print(data_dictionary_compare)
         print(chapters_list)
         return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since, pfp = pfp
-                               , user_data_dictionary = user_data_dictionary, data_dictionary_compare = data_dictionary_compare, sob_compare = float(sob_compare), sob_compare_user = float(sob_compare_user), chapters_list = chapters_list, graph_x_labels = len(data_dictionary)-1)
+                               , user_data_dictionary = user_data_dictionary, data_dictionary_compare = data_dictionary_compare, sob_compare = float(sob_compare), sob_compare_user = float(sob_compare_user), chapters_list = chapters_list, graph_x_labels = len(data_dictionary)-1, compare_name = 'benj')
 
 if __name__ == '__main__':
     app.run(debug=True)

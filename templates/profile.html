@@ -156,6 +156,7 @@
 
 
             let y_axis_listy = Math.max({{sob_compare}}, {{sob_compare_user}});
+            const new_y_axis_listy = Math.ceil(y_axis_listy / 100) * 100;
             const ctx = document.getElementById('chapterChart').getContext('2d');
 
             const chapterChart = new Chart(ctx, {
@@ -169,15 +170,15 @@
                             data: user_data_list,
                             borderColor: 'black',
                             backgroundColor: 'transparent',
-                            tension: 0.3,
+                    
                             
                         },
                         {
-                            label: 'Player 2',
+                            label: '{{compare_name}}',
                             data: compare_user_data_list,
                             borderColor: 'orange',
                             backgroundColor: 'transparent',
-                            tension: 0.3
+                            
                         }
                     ]
                 },
@@ -198,20 +199,42 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            max: y_axis_listy,
+                            max: new_y_axis_listy,
                             title: {
                                 display: true,
                                 text: 'Time (seconds)',
-                            ticks: {
-                                
+                                font: {
+                                    family: 'Nunito',
+                                    size: 20,
+                                    color: 'black'
                                 }
-                            }
+                            },
+                            ticks: {
+                                stepSize: 50,  
+                                font: {
+                                    size:18
+                                }
+                                }
+                            
                         },
                         x: {
                             title: {
                                 display: true,
-                                text: 'Chapter'
-                            }
+                                text: 'Chapter',
+                                font: {
+                                    family: 'Nunito',
+                                    size: 20,
+                                    color: 'black'
+                                }
+                                
+                            },
+                            ticks: {
+                                
+                                font: {
+                                    size:18
+                                }
+                                 
+                                }
                         }
                     }
                 }
