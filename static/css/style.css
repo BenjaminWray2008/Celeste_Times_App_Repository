@@ -369,7 +369,7 @@ option.select-sort:hover{
 
   background-color:#e347e5;
   border:none;
-  font-size: 1.11vw;
+  font-size: 1vw;
   font-family: 'Signika';
 }
 
@@ -716,7 +716,9 @@ option.select-sort:hover{
   background-color: #ff75a0;
   border:1px black solid;
   font-family: 'Nunito';
-  width:3.5vw;
+  width:4vw;
+  font-size: 1vw;
+  text-align: center;
 
 }
 
@@ -781,10 +783,15 @@ option.select-sort:hover{
 
 }
 
+.text-area-form:active{
+  border:2px black solid;
+}
+
 .profile-description-submit{
   border:none;
   width:12vw;
   height:1.2vw;
+  font-size: 1vw;
   font-family: 'Nunito';
   background-color:#ff75a0;
   
@@ -1001,14 +1008,28 @@ option.select-sort:hover{
 }
 
 .joined-since-profile{
-  width:100%;
+  width:fit-content;
   border-bottom:2px black solid;
-  padding-bottom: 1.5vw;
+  padding:0 1.5vw 1.5vw 1.5vw;
+  margin-left: 1.5vw;
   font-size: 1vw;
   font-family: 'Nunito';
   text-align: center;
+  
 }
 
 .bottom-graph-styler{
+  display:flex;
+  justify-content: space-between;
+}
 
+.compare-to{
+  font-family: 'Nunito';
+  font-size: 1vw;
+  margin:0;
+  text-align: center;
+}
+
+.compare-to-div{
+  margin-right:1.5vw;
 }

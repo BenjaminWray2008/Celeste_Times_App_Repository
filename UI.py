@@ -324,11 +324,37 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         rows = db.fetchall()
         return rows
 
+    def comparison_data(user_id, category_id):
+        data_dictionary_compare = data_dictionary_creation(user_id, category_id, False)
+        db.execute('SELECT SUM(time) AS sob FROM Run WHERE user_id = ? AND type = "IL" AND category_id = ?', (user_id, category_id))
+        sob_compare = db.fetchone()[0]
+        
+        for j in data_dictionary_compare['Chapter SOB']:
+            j[1] = float(format_time_second_form(j[1]))
+            print(j[1])
+        print(data_dictionary_compare)
+        print(sob_compare)
+        print('SEKJF GSIHE S')
+        return (data_dictionary_compare, sob_compare)
 
     @app.errorhandler(404)
     def stoptryingtohack(i):
         return render_template('404.html')  
    
+    @app.route('/get_comparison')
+    def send_comparison_data():
+        category_id = request.args.get('category_id')
+        user_name = request.args.get('searched_name')
+        db.execute('SELECT id FROM User WHERE name = ?;', (user_name,))
+        user_id = db.fetchone()
+        if user_id:
+            real_user_id = user_id[0]
+            data = comparison_data(real_user_id, category_id)
+        else:
+            data = comparison_data(26, category_id)
+    
+        return jsonify([data])
+
     @app.route('/')
     def home():
 
@@ -572,7 +598,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         pfp = db.fetchone()[0]
         print('pfp', pfp)
         if not pfp:
-            pfp = '11435188454_ac025460e3_w.jpg'
+            pfp = 'download.png'
         db.execute('SELECT date_joined FROM User WHERE id = ?', (user_id,))
         current_time = datetime.datetime.now()
         member_since = relativedelta(current_time, datetime.datetime.strptime(db.fetchone()[0], "%Y-%m-%d %H:%M:%S.%f"))
@@ -589,24 +615,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         sob_dict = sob_adder(user_id)
 
         user_data_dictionary = data_dictionary_creation(user_id, category_id, False)
-        data_dictionary_compare = data_dictionary_creation(26, category_id, False)
-        db.execute('SELECT SUM(time) AS sob FROM Run WHERE user_id = ? AND type = "IL" AND category_id = ?', (26, category_id))
-        sob_compare = db.fetchone()[0]
+        
         db.execute('SELECT SUM(time) AS sob FROM Run WHERE user_id = ? AND type = "IL" AND category_id = ?', (user_id, category_id))
         sob_compare_user = db.fetchone()[0]
-        
-        print(sob_compare)
         print(user_data_dictionary)
-        print(data_dictionary_compare)
-
-
         for i in user_data_dictionary['Chapter SOB']:
             i[1] = float(format_time_second_form(i[1]))
             print(i[1])
 
-        for j in data_dictionary_compare['Chapter SOB']:
-            j[1] = float(format_time_second_form(j[1]))
-            print(j[1])
+        data_dictionary_compare, sob_compare = comparison_data(26, category_id)
            
 
         db.execute('SELECT chapter_id FROM Run WHERE type = "IL" AND user_id = ? AND category_id = ?;', (user_id, category_id))
@@ -623,7 +640,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
 
         print(user_data_dictionary)
-        print(data_dictionary_compare)
+        
         print(chapters_list)
         return render_template('profile.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since, pfp = pfp
                                , user_data_dictionary = user_data_dictionary, data_dictionary_compare = data_dictionary_compare, sob_compare = float(sob_compare), sob_compare_user = float(sob_compare_user), chapters_list = chapters_list, graph_x_labels = len(data_dictionary)-1, compare_name = 'benj')

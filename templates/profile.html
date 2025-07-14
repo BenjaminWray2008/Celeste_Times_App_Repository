@@ -73,6 +73,50 @@
             </div>
             <div class="header-styler-dif bottom-graph-styler">
                 <p class="joined-since-profile">Joined {{member_since}}</p>
+                <div class="compare-to-div">
+                <p class="compare-to">Compare to:</p>
+                <input class="compare-to-input" type="text" name="" id="compare-to-input">
+
+
+                <script>
+                    compare_to_input = document.getElementById('compare-to-input')
+                    compare_to_input.addEventListener('keydown', function (e) {
+                        if (e.key !== 'Enter') return
+                        const query = this.value.trim().toLowerCase();
+                        if (!query) return;
+
+                        console.log(query)
+                        const current_url = window.location.href;
+                        const parts = current_url.split("/").filter(Boolean); 
+                        const category_id = parts[parts.length - 1]
+                        fetch(`/get_comparison?category=${encodeURIComponent(category_id)}&searched_name=${encodeURIComponent(query)}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data)
+                            let compare_user_data = {{data[0] | tojson}}
+                            console.log(compare_user_data)
+                        })
+                    })
+
+                </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
             </div>
         </div>
 
@@ -117,11 +161,7 @@
             
             const max = {{ graph_x_labels }};
             const chapter_list = {{chapters_list |tojson}}
-            const x_axis_listy = [];
-            for (let i = 1; i <= max; i++) {
-                x_axis_listy.push(`CH${i}`);
-        
-            }
+          
             const user_data_list = [];
             const compare_user_data_list = [];
             let user_data = {{user_data_dictionary['Chapter SOB'] | tojson}}
@@ -189,7 +229,7 @@
                             labels: {
                                 color: 'black',
                                 font: {
-                                size: 20,
+                                size: 15,
                                 weight: 'bold'
                                 }
                             }
@@ -205,14 +245,14 @@
                                 text: 'Time (seconds)',
                                 font: {
                                     family: 'Nunito',
-                                    size: 20,
+                                    size: 15,
                                     color: 'black'
                                 }
                             },
                             ticks: {
                                 stepSize: 50,  
                                 font: {
-                                    size:18
+                                    size:15
                                 }
                                 }
                             
@@ -223,7 +263,7 @@
                                 text: 'Chapter',
                                 font: {
                                     family: 'Nunito',
-                                    size: 20,
+                                    size: 15,
                                     color: 'black'
                                 }
                                 
@@ -231,7 +271,7 @@
                             ticks: {
                                 
                                 font: {
-                                    size:18
+                                    size:15
                                 }
                                  
                                 }
