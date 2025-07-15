@@ -74,8 +74,8 @@
             <div class="header-styler-dif bottom-graph-styler">
                 <p class="joined-since-profile">Joined {{member_since}}</p>
                 <div class="compare-to-div">
-                <p class="compare-to">Compare to:</p>
-                <input class="compare-to-input" type="text" name="" id="compare-to-input">
+            
+                <input class="search-user-bar compare-to-input" type="text" name="" id="compare-to-input" placeholder="Compare Profile to:">
 
 
                 <script>
@@ -88,13 +88,17 @@
                         console.log(query)
                         const current_url = window.location.href;
                         const parts = current_url.split("/").filter(Boolean); 
+                        console.log(parts, 'parts')
                         const category_id = parts[parts.length - 1]
                         fetch(`/get_comparison?category=${encodeURIComponent(category_id)}&searched_name=${encodeURIComponent(query)}`)
                         .then(res => res.json())
                         .then(data => {
-                            console.log(data)
-                            let compare_user_data = {{data[0] | tojson}}
-                            console.log(compare_user_data)
+                            const first_value = Object.values(data)[0]
+                            const user_namer = Object.values(data)[1]
+                            console.log(first_value)
+                            console.log(first_value[1], first_value[0]['Chapter SOB'])
+                            
+                            new_data(first_value[0]['Chapter SOB'], first_value[1], user_namer)
                         })
                     })
 
@@ -158,14 +162,15 @@
 
 
         <script>
-            
-            const max = {{ graph_x_labels }};
-            const chapter_list = {{chapters_list |tojson}}
+            function new_data(compare_user_data, sob_compare_user, user_namer) {
+            console.log(user_namer)
+            console.log(compare_user_data)
+            const chapter_list = {{chapters_list | tojson}}
           
             const user_data_list = [];
             const compare_user_data_list = [];
             let user_data = {{user_data_dictionary['Chapter SOB'] | tojson}}
-            let compare_user_data = {{data_dictionary_compare['Chapter SOB'] | tojson}}
+           
             for (const item of user_data) {
                 if (user_data_list.length === 0) {
                     user_data_list.push(item[1])
@@ -194,12 +199,24 @@
            
 
 
+            const sob_comparer = {{sob_compare}}
+            let y_axis_listy = Math.max(sob_comparer, sob_compare_user);
 
-            let y_axis_listy = Math.max({{sob_compare}}, {{sob_compare_user}});
             const new_y_axis_listy = Math.ceil(y_axis_listy / 100) * 100;
+
+            console.log(sob_compare_user, sob_comparer, y_axis_listy, new_y_axis_listy)
+
+            if (chapterChart) {
+                console.log('chapter chart destroyed')
+                chapterChart.destroy();
+                             }
+
             const ctx = document.getElementById('chapterChart').getContext('2d');
 
-            const chapterChart = new Chart(ctx, {
+
+        
+
+            chapterChart = new Chart(ctx, {
                 type: 'line',
                 data: {
               
@@ -214,7 +231,7 @@
                             
                         },
                         {
-                            label: '{{compare_name}}',
+                            label: user_namer,
                             data: compare_user_data_list,
                             borderColor: 'orange',
                             backgroundColor: 'transparent',
@@ -224,6 +241,8 @@
                 },
                 options: {
                     responsive: true,
+                  
+                    maintainAspectRatio: false,  
                     plugins: {
                         legend: {
                             labels: {
@@ -279,5 +298,12 @@
                     }
                 }
             });
+
+        };
+        let chapterChart
+        let compare_user_data = {{data_dictionary_compare['Chapter SOB'] | tojson}}
+        let sob_compare_user_variable = {{sob_compare_user}}
+        let user_namerer = '{{compare_name}}'
+        new_data(compare_user_data, sob_compare_user_variable, user_namerer)
         </script>
         {% endblock %}

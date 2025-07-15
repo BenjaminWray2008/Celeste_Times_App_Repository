@@ -17,7 +17,7 @@ body{
 
 footer{
   width:100%;
-  background-color: rgb(136, 183, 136);
+  background-color:#ffb3d9;
 }
 
 * {
@@ -929,7 +929,7 @@ option.select-sort:hover{
   height:fit-content;
   font-family: 'Nunito';
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-
+  overflow-wrap: break-word;
   text-align: left;
   padding:0.5vw;
   margin-bottom:0vw;
@@ -999,6 +999,7 @@ option.select-sort:hover{
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     width: 95%; 
+    height:100%;
     font-family: 'Nunito';
     font-size: 10vw;
 }
@@ -1010,7 +1011,7 @@ option.select-sort:hover{
 .joined-since-profile{
   width:fit-content;
   border-bottom:2px black solid;
-  padding:0 1.5vw 1.5vw 1.5vw;
+  padding:0 1.5vw 1vw 1.5vw;
   margin-left: 1.5vw;
   font-size: 1vw;
   font-family: 'Nunito';
@@ -1020,16 +1021,12 @@ option.select-sort:hover{
 
 .bottom-graph-styler{
   display:flex;
-  justify-content: space-between;
+  gap:5vw;
 }
 
-.compare-to{
-  font-family: 'Nunito';
-  font-size: 1vw;
-  margin:0;
-  text-align: center;
-}
+
 
 .compare-to-div{
   margin-right:1.5vw;
+  
 }

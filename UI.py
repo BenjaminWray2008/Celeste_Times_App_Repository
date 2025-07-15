@@ -343,8 +343,9 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
    
     @app.route('/get_comparison')
     def send_comparison_data():
-        category_id = request.args.get('category_id')
+        category_id = request.args.get('category')
         user_name = request.args.get('searched_name')
+        print(category_id, user_name, 'stuff')
         db.execute('SELECT id FROM User WHERE name = ?;', (user_name,))
         user_id = db.fetchone()
         if user_id:
@@ -352,8 +353,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             data = comparison_data(real_user_id, category_id)
         else:
             data = comparison_data(26, category_id)
-    
-        return jsonify([data])
+        print(data, 'data')
+        return jsonify([data, user_name])
 
     @app.route('/')
     def home():
