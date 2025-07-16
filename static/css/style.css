@@ -789,11 +789,16 @@ option.select-sort:hover{
 
 .profile-description-submit{
   border:none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width:12vw;
   height:1.2vw;
   font-size: 1vw;
   font-family: 'Nunito';
+  padding:1vw 0 1vw 0;
   background-color:#ff75a0;
+  border-bottom: 2px black solid;
   
 }
 
@@ -807,6 +812,7 @@ option.select-sort:hover{
   justify-content: left;
   flex-direction: column;
   border:2px black solid;
+  border-bottom:none;
  
 }
 

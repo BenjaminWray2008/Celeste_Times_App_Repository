@@ -517,15 +517,24 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def add_socials(user_id, category_id):
         social_link = request.form.get('init_social')
         social_name = request.form.get('init_name')
-        db.execute('INSERT INTO Socials (user_id, link, social_name) VALUES (?, ?, ?)', (user_id, social_link, social_name))
-        database.commit()
+        db.execute('SELECT COUNT(user_id) FROM Socials WHERE user_id = ?', (user_id,))
+        amount = db.fetchone()[0]
+        print(amount)
+        if amount <= 3:
+            db.execute('INSERT INTO Socials (user_id, link, social_name) VALUES (?, ?, ?)', (user_id, social_link, social_name))
+            database.commit()
         return redirect(url_for('get_times', user_id = user_id, category_id = category_id))
     
     @app.route('/descriptioner/<int:user_id>/<int:category_id>', methods=['POST'])
     def get_description(user_id, category_id):
         description = request.form.get('description')
-        db.execute('UPDATE User SET description = ? WHERE id = ?', (description, user_id))
-        database.commit()
+        if len(description) <= 50:
+            
+            db.execute('UPDATE User SET description = ? WHERE id = ?', (description, user_id))
+            database.commit()
+           
+        else:
+            abort(404)
         return redirect(url_for('get_times', user_id = user_id, category_id = category_id))
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
