@@ -77,7 +77,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             return num
 
     def format_time_normal_form(time):
-       
+        print('time', time)
         if float(time) != 0:
             minutes = float(time)//60
             seconds = float(time)%60
@@ -86,12 +86,14 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             milliseconds = float(time)-trunc(float(time))
          
             milliseconds = round(milliseconds, 3)
-     
+            print('mili', milliseconds)
             milliseconds = str(milliseconds)[2:]
+            print('new mili', milliseconds)
      
-            time = f"{int(minutes)}:{int(seconds)}.{int(milliseconds)}"
+            time = f"{int(minutes)}:{int(seconds)}.{milliseconds}"
         else:
             time = 0
+        print('new_time', time)
         return time
     
     def format_time_readable_form(time):
@@ -353,13 +355,12 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             data = comparison_data(real_user_id, category_id)
         else:
             data = comparison_data(26, category_id)
+            user_name = 'benj'
         print(data, 'data')
         return jsonify([data, user_name])
 
     @app.route('/')
     def home():
-
-      
 
         db.execute('''
                    SELECT COUNT(id)
@@ -551,7 +552,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         member_since = f"{member_since.years} Year{time_clause(member_since.years)}, {member_since.months} Month{time_clause(member_since.months)}, and {member_since.days} Day{time_clause(member_since.days)} Ago"
         results = social_grabber(user_id)
         data_dictionary = data_dictionary_creation(user_id, category_id, False)
-        db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
+        db.execute('SELECT name FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
         db.execute('SELECT name, description FROM user WHERE id = ?', (user_id,))
         stuff = db.fetchall()
@@ -616,7 +617,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         member_since = f"{member_since.years} Year{time_clause(member_since.years)}, {member_since.months} Month{time_clause(member_since.months)}, and {member_since.days} Day{time_clause(member_since.days)} Ago"
         results = social_grabber(user_id)
         data_dictionary = data_dictionary_creation(user_id, category_id, True)
-        db.execute('SELECT name, count FROM category WHERE id = ?', (category_id,))
+        db.execute('SELECT name FROM category WHERE id = ?', (category_id,))
         name = db.fetchall()[0]
         db.execute('SELECT name, description FROM user WHERE id = ?', (user_id,))
         stuff = db.fetchall()

@@ -199,12 +199,13 @@
            
 
 
-            const sob_comparer = {{sob_compare}}
-            let y_axis_listy = Math.max(sob_comparer, sob_compare_user);
+            
+           
+            let y_axis_listy = Math.max(sob_compare_user, sob_compare_user_variable);
 
             const new_y_axis_listy = Math.ceil(y_axis_listy / 100) * 100;
 
-            console.log(sob_compare_user, sob_comparer, y_axis_listy, new_y_axis_listy)
+            console.log('sdfsdf', sob_compare_user, sob_compare_user_variable, new_y_axis_listy)
 
             if (chapterChart) {
                 console.log('chapter chart destroyed')
@@ -269,9 +270,9 @@
                                 }
                             },
                             ticks: {
-                                stepSize: 50,  
+                                stepSize: 100,  
                                 font: {
-                                    size:15
+                                    size:12
                                 }
                                 }
                             
@@ -290,7 +291,7 @@
                             ticks: {
                                 
                                 font: {
-                                    size:15
+                                    size:12
                                 }
                                  
                                 }
@@ -302,8 +303,11 @@
         };
         let chapterChart
         let compare_user_data = {{data_dictionary_compare['Chapter SOB'] | tojson}}
-        let sob_compare_user_variable = {{sob_compare_user}}
+        const sob_compare_user_variable = {{sob_compare_user}}
+        let user_compare_variable = {{sob_compare}}
+
         let user_namerer = '{{compare_name}}'
-        new_data(compare_user_data, sob_compare_user_variable, user_namerer)
+        console.log('sefojhshj', sob_compare_user_variable)
+        new_data(compare_user_data, user_compare_variable, user_namerer)
         </script>
         {% endblock %}
