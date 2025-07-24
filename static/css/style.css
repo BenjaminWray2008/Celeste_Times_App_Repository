@@ -1,9 +1,13 @@
+
+/* #region imports */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Signika:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Press+Start+2P&family=Signika:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Press+Start+2P&family=Signika:wght@300..700&family=VT323&display=swap');
 
-/* Globals: */
+/* #endregion */
+
+/* #region Globals: */
 
 body{
   background-color: #bce0ee;
@@ -24,8 +28,9 @@ footer{
   box-sizing: border-box;
 }
 
+/* #endregion */
 
-/* Stuff Below for sign up page */
+/* #region Stuff Below for sign up page */
 
 .sign-up-page{
   padding:2.5vw;
@@ -116,37 +121,59 @@ footer{
   font-size: 1vw;
 }
 
-/* Stuff Below is for the header section */
+/* #endregion */
+
+/* #region Stuff Below is for the header section */
 
 .entire-header{}
 
+.header-signin{
+  padding:0.3vw 0 0.3vw 0vw;
+  width:10vw;
+  border-radius: 5px;
+  margin-right:2vw;
+  text-align: center;
+  font-size: 1vw;
+  color:black;
+  background-color: rgb(243, 232, 245);
+  font-family: 'Nunito';
+  text-decoration: none;
+  border: 2px solid #FF6B6B;
+  font-weight: bold;
+}
+
+.header-signin:hover{
+  background-color: rgb(233, 213, 237);
+}
+
+
 .top-header{
-  width: 100%;
+  
   display:flex;
   flex-direction: row;
   justify-content: space-between;
   background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
   box-shadow: inset 0px 0 2px .5px rgba(0, 0, 0, 0.2); 
-  padding:1vw;
+  padding-left:1vw;
   padding-bottom: 0.3vw;
   padding-top:0.3vw;
   place-items: center;
 }
+
 .input-boxes-form{
   display:flex;
   flex-direction: row;  
 }
 
-.submit-button-main{
-  background-color: rgb(243, 232, 245);  
-}
+
 
 .submit-button-main:hover{
   background-color: #ba56e8;
 }
 
 
-.username, .password, .submit-button-main {
+.username{
+  width:15vw;
   padding:0.3vw;
   border-radius: 5px;
   border:none;
@@ -159,11 +186,7 @@ footer{
   color:black;
 }
 
-.username-div, .password-div{
-  display:flex;
-  flex-direction: row;
-  padding-right:0.5vw;
-}
+
 
 .username{
   float:right;
@@ -183,7 +206,7 @@ footer{
 .header-image{
   width:10%;
   height:100%;
-  margin-top: 0.4vw;
+
   padding-left: 1vw;
 }
 
@@ -191,8 +214,9 @@ footer{
 .home-page-nav-bar{
 
 
-  display: grid;
-  grid-template-columns: 15vw 15vw 15vw 1fr;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
   background: linear-gradient(to bottom, #b574eb 0%, #b162cc 100%);
   overflow: hidden;
@@ -200,14 +224,22 @@ footer{
   place-items: center;
 }
 
+
+.leftside-home-page-nav{
+  display: flex;
+
+}
+
+.leftside-home-page-nav a{
+  width:15vw;
+}
+
 .username{
   justify-content: right;
 }
 
 .search-users-box {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
+  
   padding-right: 2vw;
 }
 
@@ -224,12 +256,12 @@ footer{
 .home-page-nav-bar a {
 
   
-  display: block;
+ 
   color: black;
   text-align: center;
   padding: 0.8vw 0.8vw;
   text-decoration: none;
-  width:100%;
+  
   white-space: 'nowrap';
   font-size: 1.2vw;
  
@@ -241,9 +273,9 @@ footer{
   font-family:'Nunito';
 }
 
+/* #endregion */
 
-
-/* Stuff Below is for the home page */
+/* #region Stuff Below is for the home page */
 
 .home-page-flex{
   box-shadow: inset 0px 8px 8px -4px rgba(0, 0, 0, 0.4);
@@ -289,7 +321,7 @@ footer{
 .home-page-flex-line {
 
   width:100%;
-  grid-column: 1 / -1; /* span full row */
+  grid-column: 1 / -1; /* Done by Chatgpt */
 
 
   border:none;
@@ -340,7 +372,7 @@ footer{
   max-height: 25vw;
   overflow-y:auto;
   border-bottom-left-radius: 0.75vw;
-  box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* fades the top edge */
+  box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* Done by ChatGPT */
 
 }
 
@@ -432,8 +464,7 @@ option.select-sort:hover{
   width: 100%;
   background:#8bc6cd;
   border:1px black solid;
-  border-bottom-left-radius:0.75vw;
-  border-bottom-right-radius:0.75vw;
+
 
 }
 
@@ -475,7 +506,10 @@ option.select-sort:hover{
 
 }
 
-/*Section Below for all styles related to time display */
+
+/* #endregion */
+
+/* #region Section Below for all styles related to time display */
 
 
 
@@ -548,11 +582,11 @@ option.select-sort:hover{
 
 
 }
-/* Make all display grid items consistent */
+
 .display-grid-item {
-  border-collapse: collapse;
+  border-collapse: collapse; /*Made by ChatGPT*/
  
-  /* Add consistent width and padding */
+
   width: 100%;
  
 }
@@ -561,7 +595,7 @@ option.select-sort:hover{
 .row-marker {
 
 
-  grid-column: 1 / -1; /* span full row */
+  grid-column: 1 / -1; /*  Made by ChatGPT */
 
 
 
@@ -574,10 +608,10 @@ option.select-sort:hover{
 
 
 
-/* Make all display grids consistent */
 .display-grid {
   display: grid;
   padding:1vw;
+  /* Borders below done by ChatGPT */
   border-bottom: 1px rgb(105, 93, 107) solid;
   border-left: 1px rgb(105, 93, 107) solid;
   border-right: 1px rgb(105, 93, 107) solid;
@@ -622,7 +656,7 @@ option.select-sort:hover{
   justify-content: center;
 }
 
-/* Make checkpoint names consistent width */
+
 .checkpoint-name {
   width: 100%;
   text-align: center left;
@@ -631,7 +665,7 @@ option.select-sort:hover{
   font-size:1vw;
 }
 
-/* Make checkpoint times consistent width */
+
 
 .chapter-header{
   text-align: center;
@@ -643,7 +677,7 @@ option.select-sort:hover{
 
 
 .nav-list-categories{
-
+  /* Borders below done by ChatGPT */
   border-top: 1px rgb(105, 93, 107) solid;
   border-left: 1px rgb(105, 93, 107) solid;
   border-right: 1px rgb(105, 93, 107) solid;
@@ -657,6 +691,7 @@ option.select-sort:hover{
 
   border-top-left-radius: 1vw;
   border-top-right-radius: 1vw;  
+  /* Box shadow below done by ChatGPT */
   box-shadow: inset 0px 0 2px .5px rgba(0, 0, 0, 0.2); 
 }
 
@@ -998,8 +1033,9 @@ option.select-sort:hover{
   
 }
 
+/* #endregion */
 
-/* Profile page changes to css: */
+/* #region Profile page changes to css: */
 
 .profile-name-profile{
   text-align: center;
@@ -1127,3 +1163,5 @@ option.select-sort:hover{
   margin-right:1.5vw;
   
 }
+
+/* #endregion */

@@ -17,11 +17,11 @@
                     <h1 class="header-name">Celeste Splits</h1>
                     <img class='header-image' src="/static/images/berry.png" alt="berry">
                 </div>
-                <div class="right-side-top-header">
-                    <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>
+           
+                   <a class='header-signin' href="/signin">Sign in!</a>
 
 
-
+<!-- 
                         <div class="username-div">
                             <input class='username' type="text" name="username" placeholder="Enter Username...">
                         </div>
@@ -31,22 +31,25 @@
 
                         <div class="submit-button-main-container">
                             <button class='submit-button-main' type="submit">Submit!</button>
-                        </div>
+                        </div> -->
 
 
-                </div>
+        
 
 
             </div>
             <div class="home-page-nav-bar">
+                <div class="leftside-home-page-nav">
                 <a class='sign-up-link' href="/">Home</a>
                 <a class='sign-up-link' href="/signup">Sign Up!</a>
                 <a class='sign-up-link' href="/about">About Celeste</a>
-
-                <div class="search-users-box">
-                    <input type="text" class="username" name="search-username" placeholder="Search Users...">
                 </div>
-                </form>
+                <div class="search-users-box">
+                     <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>
+                    <input type="text" class="username" name="search-username" placeholder="Search Users...">
+                    </form>
+                </div>
+           
             </div>
         </div>
         {% block content %}

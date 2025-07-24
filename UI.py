@@ -426,6 +426,10 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def signup():
         return render_template('signup.html')
     
+    @app.route('/signin')
+    def signin():
+        return render_template('signin.html')
+    
     @app.route('/new_user', methods=['POST'])
     def new_user():
         username = request.form.get('username') #Get the items from the form
