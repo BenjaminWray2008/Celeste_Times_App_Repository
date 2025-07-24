@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="sign-up-page">
+    <div class="total-sign-up">
+        <h1 class="sign-up-header">Sign in to Celeste Splits</h1>
+        <hr class="home-page-flex-line signup-page-flex-line">
+        <form action="{{url_for('search')}}" method='POST'>
+            <div class="details-div">
+                <label for="username" class="signup-labels">Enter Username:</label>
+                <input type="text" name="username" required max_length=20 class="username-signup">
+                <br>
+                <label for="password" class="signup-labels">Enter Password:</label>
+                <input type="password" name="password" required maxlength="20" class="password-signup">
+                <br>
+            
+            <div class="signup-button-signin">
+                <div class="signin-div">
+                    <p class="signin-labels">Don't Have an account?</p>
+                    <a href="/signup" class="signin-labels">Sign up!</a>
+
+                </div>
+                <div>
+                <button type="submit" class="submit-signup signup-labels">Submit!</button>
+                </div>
+            </div>
+</div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
