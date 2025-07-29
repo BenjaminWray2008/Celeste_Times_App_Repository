@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify, abort, request
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify, abort, request, g
 import sqlite3
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
@@ -339,9 +339,28 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         print('SEKJF GSIHE S')
         return (data_dictionary_compare, sob_compare)
 
+    def check_session():
+        user_session = session.get('user_id')
+        if user_session:
+            return True
+        else: 
+            return False
+
     @app.errorhandler(404)
     def stoptryingtohack(i):
         return render_template('404.html')  
+   
+    @app.before_request
+    def check_login():
+        user_id = session.get('user_id')
+        g.user = None
+        
+        if user_id:
+            db.execute('SELECT * FROM User WHERE id = ?', (user_id,))
+            results = db.fetchall()
+            
+            g.user = results
+        print(g.user, 'userglobal')
    
     @app.route('/get_comparison')
     def send_comparison_data():
@@ -404,7 +423,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         else:
             order_clause = 'ORDER by sum_of_bests ASC'
             print('order time')
-        rows = ranker(order_clause, category, 'AND r1.type = "IL"')
+        rows = ranker(order_clause, category, 'AND r1.type = "checkpoint"')
         #Query selects the sum of best for all user where they have filled in all their run entries for the category entered.
         #Grouped by users, and ordered by the smallest sum of best for the leaderboard.
      
@@ -429,6 +448,11 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     @app.route('/signin')
     def signin():
         return render_template('signin.html')
+    
+    @app.route('/logout')
+    def logout():
+        session.clear()
+        return redirect(url_for('home'))
     
     @app.route('/new_user', methods=['POST'])
     def new_user():
@@ -459,7 +483,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         return redirect(url_for('home'))
     
     @app.route('/search', methods=['POST'])
-    def search():
+    def search():   
         searcher = None
         username = request.form.get('username') #Get items from form
         password = request.form.get('password')
@@ -485,7 +509,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             hashed = h.hexdigest()
             user_id, hash = results #Work out the hash of the password entered
             if hash == hashed: #If the hashes are the same
-           
+                session['user_id'] = user_id
             
                 return redirect(url_for('get_times',user_id=user_id, category_id=1)) #Run page that lets user change times
         
@@ -544,69 +568,75 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def get_times(user_id,category_id):
-        db.execute('SELECT pfp_path FROM User WHERE id = ?', (user_id,))
-        pfp = db.fetchone()[0]
-        print('pfp', pfp)
-        if not pfp:
-            pfp = '11435188454_ac025460e3_w.jpg'
-        db.execute('SELECT date_joined FROM User WHERE id = ?', (user_id,))
-        current_time = datetime.datetime.now()
-        member_since = relativedelta(current_time, datetime.datetime.strptime(db.fetchone()[0], "%Y-%m-%d %H:%M:%S.%f"))
-        
-        member_since = f"{member_since.years} Year{time_clause(member_since.years)}, {member_since.months} Month{time_clause(member_since.months)}, and {member_since.days} Day{time_clause(member_since.days)} Ago"
-        results = social_grabber(user_id)
-        data_dictionary = data_dictionary_creation(user_id, category_id, False)
-        db.execute('SELECT name FROM category WHERE id = ?', (category_id,))
-        name = db.fetchall()[0]
-        db.execute('SELECT name, description FROM user WHERE id = ?', (user_id,))
-        stuff = db.fetchall()
-        user_name = stuff[0][0]
-        user_description = stuff[0][1]
-        sob_dict = sob_adder(user_id)
-        return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since, pfp = pfp)
-
+        if check_session():
+            db.execute('SELECT pfp_path FROM User WHERE id = ?', (user_id,))
+            pfp = db.fetchone()[0]
+            print('pfp', pfp)
+            if not pfp:
+                pfp = '11435188454_ac025460e3_w.jpg'
+            db.execute('SELECT date_joined FROM User WHERE id = ?', (user_id,))
+            current_time = datetime.datetime.now()
+            member_since = relativedelta(current_time, datetime.datetime.strptime(db.fetchone()[0], "%Y-%m-%d %H:%M:%S.%f"))
+            
+            member_since = f"{member_since.years} Year{time_clause(member_since.years)}, {member_since.months} Month{time_clause(member_since.months)}, and {member_since.days} Day{time_clause(member_since.days)} Ago"
+            results = social_grabber(user_id)
+            data_dictionary = data_dictionary_creation(user_id, category_id, False)
+            db.execute('SELECT name FROM category WHERE id = ?', (category_id,))
+            name = db.fetchall()[0]
+            db.execute('SELECT name, description FROM user WHERE id = ?', (user_id,))
+            stuff = db.fetchall()
+            user_name = stuff[0][0]
+            user_description = stuff[0][1]
+            sob_dict = sob_adder(user_id)
+            return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since, pfp = pfp)
+        else:
+            abort(404)
+   
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id,category_id):
-        if request.method == 'POST':
-            checkpoint_times=request.form.getlist('checkpoints[]') #Getting Form data
-            data_dictionary = data_dictionary_creation(user_id, category_id, False) #Creating the dictionary of checkpoints
-        
-            list_of_checkpoints = []
-            print(data_dictionary)
-            for chapter in data_dictionary:
-                
-                for checkpoint_tuple in data_dictionary[chapter]:
-                 
-                    if checkpoint_tuple[0] != 'Total Total': #This tuple is created for total times for sections. This is not needed here
-                        list_of_checkpoints.append(checkpoint_tuple[0])
-  
-            for time, checkpoint in zip(checkpoint_times, list_of_checkpoints): #Comparing the list of form data to the list of checkpoint names
-                print('time', time, checkpoint)
-                if time != '': #time is equal to '' if no time has been submitted
-                   
-                    if valid_time_checker(time): #If the time is valid
-                        time = format_time_second_form(time) #Turns time into ss.msmsmsms
-                        db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
-                        results = db.fetchone()
-                        if results:
-                           
-                            checkpoint_id = results[0]
-                            db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;',
-                                    (time, user_id, category_id, checkpoint_id)) #Update the database with the new time
-                        else:
-                            checkpoint = ' '.join(checkpoint.split(' ')[:-1])
-                            db.execute('SELECT id FROM Chapter WHERE name = ?;', (checkpoint,))
-                            new_results = db.fetchone()[0]
-                            
-                            print(new_results)
-                            db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND chapter_id = ? AND type = "IL";',
-                                    (time, user_id, category_id, new_results))
-                        
-                            
-                        database.commit()
-        
-        return redirect(url_for('profile',user_id=user_id,category_id=category_id))
+        if check_session():
+            if request.method == 'POST':
+                checkpoint_times=request.form.getlist('checkpoints[]') #Getting Form data
+                data_dictionary = data_dictionary_creation(user_id, category_id, False) #Creating the dictionary of checkpoints
+            
+                list_of_checkpoints = []
+                print(data_dictionary)
+                for chapter in data_dictionary:
+                    
+                    for checkpoint_tuple in data_dictionary[chapter]:
+                    
+                        if checkpoint_tuple[0] != 'Total Total': #This tuple is created for total times for sections. This is not needed here
+                            list_of_checkpoints.append(checkpoint_tuple[0])
     
+                for time, checkpoint in zip(checkpoint_times, list_of_checkpoints): #Comparing the list of form data to the list of checkpoint names
+                    print('time', time, checkpoint)
+                    if time != '': #time is equal to '' if no time has been submitted
+                    
+                        if valid_time_checker(time): #If the time is valid
+                            time = format_time_second_form(time) #Turns time into ss.msmsmsms
+                            db.execute('SELECT id FROM Checkpoint WHERE name = ?', (checkpoint,))
+                            results = db.fetchone()
+                            if results:
+                            
+                                checkpoint_id = results[0]
+                                db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND run_number = ?;',
+                                        (time, user_id, category_id, checkpoint_id)) #Update the database with the new time
+                            else:
+                                checkpoint = ' '.join(checkpoint.split(' ')[:-1])
+                                db.execute('SELECT id FROM Chapter WHERE name = ?;', (checkpoint,))
+                                new_results = db.fetchone()[0]
+                                
+                                print(new_results)
+                                db.execute('UPDATE Run SET time = ? WHERE user_id = ? AND category_id = ? AND chapter_id = ? AND type = "IL";',
+                                        (time, user_id, category_id, new_results))
+                            
+                                
+                            database.commit()
+            
+            return redirect(url_for('profile',user_id=user_id,category_id=category_id))
+        else:
+            abort(404)
+   
     @app.route('/profile/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def profile(user_id, category_id):
         db.execute('SELECT pfp_path FROM User WHERE id = ?', (user_id,))

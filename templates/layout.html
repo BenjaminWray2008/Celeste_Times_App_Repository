@@ -17,10 +17,25 @@
                     <h1 class="header-name">Celeste Splits</h1>
                     <img class='header-image' src="/static/images/berry.png" alt="berry">
                 </div>
-           
-                   <a class='header-signin' href="/signin">Sign in!</a>
+                    <div class="header-signin-div">
+                  
+                   {% if g.user %}
+                   <div class="signed-in-div">
+                        <div class="signed-in-div-second">
+                        <p class="profile-name">{{g.user[0][1]}}</p>
+                      
+                        <img src="{{ url_for('static', filename='pfps/' + g.user[0][5]) }}" class="profile-picture-header" alt="pfp">
+                        </div>
+                        <a href="/logout" class="logout">Logout</a>
+                    </div>
+                    {% else %}
+                     <a class='header-signin' href="/signin">Sign in!</a>
+                   
+                   {% endif %}
 
 
+                 
+                        </div>
 <!-- 
                         <div class="username-div">
                             <input class='username' type="text" name="username" placeholder="Enter Username...">
@@ -41,8 +56,12 @@
             <div class="home-page-nav-bar">
                 <div class="leftside-home-page-nav">
                 <a class='sign-up-link' href="/">Home</a>
-                <a class='sign-up-link' href="/signup">Sign Up!</a>
+                <a class='sign-up-link' href="/signup">Sign Up</a>
                 <a class='sign-up-link' href="/about">About Celeste</a>
+                  {% if g.user %}
+                        <a class='sign-up-link' href="/profile/{{g.user[0][0]}}/1">Profile</a>
+                        <a class='sign-up-link' href="/get_times/{{g.user[0][0]}}/1">Splits</a>
+                  {% endif %}
                 </div>
                 <div class="search-users-box">
                      <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>

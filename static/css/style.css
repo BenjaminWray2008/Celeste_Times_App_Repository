@@ -21,7 +21,7 @@ body{
 
 footer{
   width:100%;
-  background-color:#ffb3d9;
+  background-color:#89c3da;
 }
 
 * {
@@ -127,9 +127,41 @@ footer{
 
 .entire-header{}
 
+.signed-in-div{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  width:17vw;
+  padding-right:2vw;
+}
+
+.logout{
+  color:rgb(225, 59, 145);
+  font-family: 'Nunito';
+  font-size: 1.4vw;
+}
+
+.logout:hover{
+  color:rgb(227, 39, 136);
+}
+
+.signed-in-div-second{
+  display:flex;
+  gap:1vw;
+  align-items: center;
+}
+
+.profile-picture-header{
+  width:3.5vw;
+  height: 3.5vw;
+  object-fit: cover;
+  border-radius:50%;
+  border:2px white solid;
+}
+
 .header-signin{
-  padding:0.3vw 0 0.3vw 0vw;
-  width:10vw;
+  padding:0.3vw 4vw 0.3vw 4vw;
+  
   border-radius: 5px;
   margin-right:2vw;
   text-align: center;
@@ -140,6 +172,10 @@ footer{
   text-decoration: none;
   border: 2px solid #FF6B6B;
   font-weight: bold;
+}
+
+.header-signin-div{
+  width:fit-content;
 }
 
 .header-signin:hover{
