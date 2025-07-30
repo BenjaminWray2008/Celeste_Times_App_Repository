@@ -11,7 +11,7 @@
             <label for="profile-picture-input" class="browse-label">Import...</label>
             <input class="profile-picture-input" type="file" name="pfp" accept="image/*" id="profile-picture-input"
               required>
-            <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture" alt="pfp"
+            <img src="{{ url_for('static', filename='pfps/' + g.user[0][5]) }}" class="profile-picture" alt="pfp"
               id="profile-picture-display">
             <div class="profile-picture-changes-buttons" id="changes-buttons">
               <button class="profile-picture-submit" type="submit" id="submit-button">Apply!</button>
@@ -43,7 +43,7 @@
             {%for social in socials%}
             <form
               action="{{url_for('edit_socials', user_id = user_id, category_id = category_id, old_social_name = social[1])}}"
-              method="POST">
+              method="POST" class="init-social-form">
 
               <input type="text" name="social_name" value="{{social[1]}}" class="social-link" required>
               <input type="text" name="social_link" value="{{social[0]}}" class="social-link" required>

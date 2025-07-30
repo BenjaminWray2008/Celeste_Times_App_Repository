@@ -36,29 +36,30 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
            
             for time in sob_leaderboard:
                 
-                if time[2] == sob:
+                if (time[2] == sob) and (user_id == time[0]):
                     sob_dict[category].append((format_time_readable_form(format_time_normal_form(sob)), prefix_adder(sob_leaderboard.index(time)+1)))
-            print(category, sob, 'hoiii')
+           
             if not sob_dict[category]:
                 sob_dict[category].append((format_time_readable_form(format_time_normal_form(sob)), 'N/A'))
 
 
-            db.execute('SELECT SUM(time) AS sob FROM Run WHERE user_id = ? AND type = "IL" AND category_id = (SELECT id FROM Category WHERE name = ?);', (user_id, category))
+            db.execute('SELECT SUM(time) AS sob FROM Run WHERE user_id = ? AND type = "IL" AND category_id = ?', (user_id, category_id))
             sob = db.fetchone()[0]
+        
             sob_leaderboard = ranker('ORDER by sum_of_bests ASC', category_id, 'AND r1.type = "IL"')
            
             for time in sob_leaderboard:
                 
-                if time[2] == sob:
+                if (time[2] == sob) and (user_id == time[0]):
                     sob_dict[category].append((format_time_readable_form(format_time_normal_form(sob)), prefix_adder(sob_leaderboard.index(time)+1)))
-            print(category, sob, 'hoiii')
+  
             if len(sob_dict[category]) < 2:
                 sob_dict[category].append((format_time_readable_form(format_time_normal_form(sob)), 'N/A'))
 
 
         
 
-        print(sob_dict)
+       
         return sob_dict
     
     def prefix_adder(num):
@@ -77,7 +78,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             return num
 
     def format_time_normal_form(time):
-        print('time', time)
+    
         if float(time) != 0:
             minutes = float(time)//60
             seconds = float(time)%60
@@ -86,14 +87,14 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             milliseconds = float(time)-trunc(float(time))
          
             milliseconds = round(milliseconds, 3)
-            print('mili', milliseconds)
+ 
             milliseconds = str(milliseconds)[2:]
-            print('new mili', milliseconds)
+
      
             time = f"{int(minutes)}:{int(seconds)}.{milliseconds}"
         else:
             time = 0
-        print('new_time', time)
+
         return time
     
     def format_time_readable_form(time):
@@ -235,7 +236,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
                            (time, run_number, type, chapter_id, user_id, category_id)
                            VALUES (0, ?, ?, ?, ?, ?)''',
                            (checkpoint[0], 'checkpoint', chapter_id, id, category_id)) #For every checkpoint for every category, inserting a run entry for the new user.
-            print(chapter_listy, "chapter listy")
+         
             for chapter in chapter_listy:
                 db.execute('SELECT id FROM Chapter WHERE name = ?', (chapter,))
                 chapter_id_real = db.fetchone()[0]
@@ -256,15 +257,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
         db.execute('SELECT chapter_id FROM Run WHERE type = "IL" AND user_id = ? AND category_id = ?;', (user_id, category_id))
         chapters_query = db.fetchall()
-        print(chapters_query, 'chapters')
+    
         data_dictionary['Chapter SOB'] = []
         placeholders = ', '.join('?' for i in chapters_query) 
         db.execute(f'SELECT name FROM Chapter WHERE id IN ({placeholders}) ORDER BY chapter_order ASC', tuple(i[0] for i in chapters_query))
         new_chapters = db.fetchall()
-        print('new_chapters', new_chapters)
+       
         
         for index, chapter in enumerate(new_chapters):
-            print('chapter', chapter)
+        
             db.execute('SELECT id FROM Chapter WHERE name = ?', chapter)
             chapter_id = db.fetchone()[0]
             db.execute('SELECT time FROM Run WHERE type = "IL" AND user_id = ? AND category_id = ? AND chapter_id = ?', (user_id, category_id, chapter_id))
@@ -283,7 +284,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             checkpoint_name = db.fetchone()
             db.execute('SELECT time FROM Run WHERE user_id = ? AND category_id = ? AND run_number = ? AND type = "checkpoint";', (user_id, category_id, checkpoint))
             time = db.fetchone()
-            print(time)
+         
             new_time = format_time_normal_form(time[0]) #Turn time into mm:ss.msmsms form
             data_dictionary[results[0]].append([checkpoint_name[0], format_time_readable_form(new_time)]) 
             #Add to the dictionary under the key of the chapter that is in, the checkpoint name and the time it corrresponds to
@@ -303,7 +304,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def social_grabber(user_id):
         db.execute('SELECT link, social_name FROM Socials WHERE user_id = ?', (user_id,))
         results = db.fetchall()
-        print('results', results)
+   
         return results
 
     def ranker(order_clause, category, type_clause):
@@ -317,13 +318,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         SELECT 1
         FROM Run r2
         WHERE r2.user_id = r1.user_id
+         
             AND r2.category_id = r1.category_id
-          
+            AND r2.type = r1.type
             AND (r2.time = 0 OR r2.time IS NULL)
         )
         GROUP BY r1.user_id
         {order_clause}''', (category,))
         rows = db.fetchall()
+  
         return rows
 
     def comparison_data(user_id, category_id):
@@ -333,10 +336,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         
         for j in data_dictionary_compare['Chapter SOB']:
             j[1] = float(format_time_second_form(j[1]))
-            print(j[1])
-        print(data_dictionary_compare)
-        print(sob_compare)
-        print('SEKJF GSIHE S')
+        
+  
         return (data_dictionary_compare, sob_compare)
 
     def check_session():
@@ -366,7 +367,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     def send_comparison_data():
         category_id = request.args.get('category')
         user_name = request.args.get('searched_name')
-        print(category_id, user_name, 'stuff')
+       
         db.execute('SELECT id FROM User WHERE name = ?;', (user_name,))
         user_id = db.fetchone()
         if user_id:
@@ -375,7 +376,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         else:
             data = comparison_data(26, category_id)
             user_name = 'benj'
-        print(data, 'data')
+   
         return jsonify([data, user_name])
 
     @app.route('/')
@@ -409,31 +410,31 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         sortby = request.args.get('sort', 'time')
         categoryName = request.args.get('categoryName', 1)
         
-        print(category, sortby, categoryName)
+  
         db.execute('''
                    SELECT name FROM Category
                    WHERE id = ?
                    ''', (categoryName,))
         name = db.fetchone()
-        print('catname', name)
+     
         order_clause = ''
         if sortby == 'alpha':
             order_clause = 'ORDER BY u.name ASC'
-            print('order user')
+        
         else:
             order_clause = 'ORDER by sum_of_bests ASC'
-            print('order time')
+            
         rows = ranker(order_clause, category, 'AND r1.type = "checkpoint"')
         #Query selects the sum of best for all user where they have filled in all their run entries for the category entered.
         #Grouped by users, and ordered by the smallest sum of best for the leaderboard.
      
         
         
-        print(rows)
+ 
         leaderboard = []
         leaderboard.append({'name':name[0]})
         for row in rows:
-            print(row[1])
+         
             time = format_time_readable_form(format_time_normal_form(row[2]))
 
             leaderboard.append({'username': row[1], 'sum_of_bests': time, 'profile':[row[0], category]}) 
@@ -472,7 +473,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         if db.fetchall():
             abort(404)
         
-        db.execute('INSERT INTO User (name, hash, description, date_joined) VALUES (?, ?, ?, ?)', (username, hash, 'Tell us about Yourself!', datetime.datetime.now()))
+        db.execute('INSERT INTO User (name, hash, description, date_joined, pfp_path) VALUES (?, ?, ?, ?, ?)', (username, hash, 'Tell us about Yourself!', datetime.datetime.now(), 'download.png'))
         database.commit()
         
         db.execute('SELECT id FROM User WHERE name == ?', (username,))
@@ -480,7 +481,8 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         id = results[0]
       
         new_user_data(id) #Running function to add all empty time entries for new user
-        return redirect(url_for('home'))
+        session.clear()
+        return redirect(url_for('signin'))
     
     @app.route('/search', methods=['POST'])
     def search():   
@@ -569,11 +571,6 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET','POST'])
     def get_times(user_id,category_id):
         if check_session():
-            db.execute('SELECT pfp_path FROM User WHERE id = ?', (user_id,))
-            pfp = db.fetchone()[0]
-            print('pfp', pfp)
-            if not pfp:
-                pfp = '11435188454_ac025460e3_w.jpg'
             db.execute('SELECT date_joined FROM User WHERE id = ?', (user_id,))
             current_time = datetime.datetime.now()
             member_since = relativedelta(current_time, datetime.datetime.strptime(db.fetchone()[0], "%Y-%m-%d %H:%M:%S.%f"))
@@ -588,7 +585,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             user_name = stuff[0][0]
             user_description = stuff[0][1]
             sob_dict = sob_adder(user_id)
-            return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since, pfp = pfp)
+            return render_template('get_times.html', user_id = user_id, category_id = category_id, data_dictionary = data_dictionary, name = name, user_name = user_name, sob_dict = sob_dict, user_description = user_description, socials = results, member_since = member_since)
         else:
             abort(404)
    

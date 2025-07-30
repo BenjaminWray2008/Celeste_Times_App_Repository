@@ -335,11 +335,11 @@ footer{
   text-align:center;
   font-family: 'Poppins';
   margin-bottom:2vw;
-  margin-top:3vw;
+  margin-top:0vw;
 }
 
 .welcome-info, .welcome-privacy, .total-runs, .total-runners{
-  margin-bottom: 3vw;
+  
   text-align: center;
   font-family: 'Signika';
   
@@ -362,8 +362,9 @@ footer{
 
   border:none;
   border-radius: 0.75vw;
-
-  padding: 5px;
+  margin-top:2vw;
+  margin-bottom:2vw;
+  padding: 3px;
   background-color: #e347e5;
 
 }
@@ -393,7 +394,7 @@ footer{
 }
 
 .sum-of-best-header{
-  font-size: 2.5vw;
+  font-size: 2.7vw;
   text-align:center;
   font-family: 'Poppins';
   margin-bottom:2vw;
@@ -405,7 +406,7 @@ footer{
   grid-template-columns: 1fr;
   
   border-bottom-right-radius: 0.75vw;
-  max-height: 25vw;
+  max-height: 35vw;
   overflow-y:auto;
   border-bottom-left-radius: 0.75vw;
   box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* Done by ChatGPT */
@@ -422,7 +423,7 @@ footer{
   align-items: center;
   justify-content:center;
   gap:3vw;
- 
+  
   padding-left: 1vw;
   padding-right:1vw;
   padding-top:1.5vw;
@@ -1046,8 +1047,8 @@ option.select-sort:hover{
 }
 
 .social-link, .social-button{
-  padding:0.15vw;
-  margin:0.1vw;
+  padding:0.1vw;
+  margin:0.2vw;
   border-radius: 5px;
   border:none;
   font-size: 1vw;
