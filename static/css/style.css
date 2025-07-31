@@ -11,17 +11,46 @@
 
 body{
   background-color: #bce0ee;
-
+  height: 100%;
   margin:0;
   padding:0;
   width:100%
 }
 
+main{
+  flex:1;
+  padding-bottom:2.5vw;
+}
+
+.whole-site{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
 
 footer{
   width:100%;
-  background-color:#89c3da;
+  background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);  
+  box-shadow: 0px -2px 8px 0px rgba(0, 0, 0, 0.4);
+}
+
+footer p{
+  font-family: 'Nunito';
+  font-size: 1vw;
+}
+
+.footer-div{
+  padding:0.1vw 1vw 0.1vw 1.5vw;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-about{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 * {
@@ -123,6 +152,15 @@ footer{
 
 /* #endregion */
 
+/* #region Stuff below is for about page */
+.about-page{
+  display: flex;
+  justify-content: space-between;
+  height: 30vw;
+
+}
+/* #endregion */
+
 /* #region Stuff Below is for the header section */
 
 .entire-header{}
@@ -131,14 +169,16 @@ footer{
   display:flex;
   justify-content: space-between;
   align-items: center;
-  width:17vw;
+  width:fit-content;
   padding-right:2vw;
+
 }
 
 .logout{
   color:rgb(225, 59, 145);
   font-family: 'Nunito';
   font-size: 1.4vw;
+  padding-left:1vw; 
 }
 
 .logout:hover{
@@ -189,7 +229,7 @@ footer{
   flex-direction: row;
   justify-content: space-between;
   background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
-  box-shadow: inset 0px 0 2px .5px rgba(0, 0, 0, 0.2); 
+  box-shadow: inset 0px 0 1px .5px rgba(0, 0, 0, 0.2); 
   padding-left:1vw;
   padding-bottom: 0.3vw;
   padding-top:0.3vw;
@@ -249,7 +289,7 @@ footer{
 
 .home-page-nav-bar{
 
-
+  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -314,7 +354,7 @@ footer{
 /* #region Stuff Below is for the home page */
 
 .home-page-flex{
-  box-shadow: inset 0px 8px 8px -4px rgba(0, 0, 0, 0.4);
+
   display:flex;
   justify-content: space-between;
   gap:7vw;
@@ -406,7 +446,7 @@ footer{
   grid-template-columns: 1fr;
   
   border-bottom-right-radius: 0.75vw;
-  max-height: 35vw;
+  max-height: 20vw;
   overflow-y:auto;
   border-bottom-left-radius: 0.75vw;
   box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* Done by ChatGPT */

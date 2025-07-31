@@ -404,6 +404,10 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
        
         return render_template('home.html', title='Home', counter=counter, counter2=counter2)
     
+    @app.route('/about')
+    def about():
+        return render_template('about.html')
+    
     @app.route('/get_leaderboard')
     def get_leaderboard():
         category = request.args.get('category', 'any%') #Get the category selected on the dropdown. Default is any%
