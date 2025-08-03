@@ -309,7 +309,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
     def ranker(order_clause, category, type_clause):
         db.execute(f'''
-        SELECT r1.user_id, u.name, SUM(r1.time) AS sum_of_bests
+        SELECT r1.user_id, u.name, u.pfp_path, SUM(r1.time) AS sum_of_bests
         FROM Run r1
         JOIN User u ON r1.user_id = u.id
         WHERE r1.category_id = ?
@@ -437,13 +437,18 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
  
         leaderboard = []
         leaderboard.append({'name':name[0]})
-        for row in rows:
-         
-            time = format_time_readable_form(format_time_normal_form(row[2]))
-
-            leaderboard.append({'username': row[1], 'sum_of_bests': time, 'profile':[row[0], category]}) 
+        print(rows)
+        for index, row in enumerate(rows):
+            if index == 0:
+                best_time = row[3]
+            time = format_time_readable_form(format_time_normal_form(row[3]))
+            print(best_time, row[3])
+            best = float(row[3])-float(best_time)
+            best = format_time_readable_form(format_time_normal_form(best))
+            best = f'+{best}'
+            leaderboard.append({'username': row[1], 'sum_of_bests': time, 'profile':[row[0], category], 'pfp':row[2], 'best':best})
             #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
-        
+        print(leaderboard)
         return jsonify(leaderboard) #Return the created leaderboard to the js
         
     @app.route('/signup')

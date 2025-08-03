@@ -93,16 +93,26 @@
           else { // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
             leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>'
             document.getElementById('categoryName').textContent = `${first_value.name}`
-            leaderboardDiv.innerHTML = data.slice(1).map((entry, i) => ` 
+            console.log(data)
+            leaderboardDiv.innerHTML = data.slice(1).map((entry, i) => {
+            let pfp = `/static/pfps/${entry.pfp}`;
+            return `
+             
           <div class='sum-of-best-values' data-username="${entry.username.toLowerCase()}">
+          
 
           <p class='sum-of-best-rank'>${i + 1}.</p>
-          <p class='sum-of-best-username'>${entry.username}:</p>
-
+          <div class='leaderboard-row-center'>
+          <img src="${pfp}" class="profile-picture-leaderboard" alt="pfp">
+          <a href="/profile/${(entry.profile)[0]}/${(entry.profile)[1]}" class='sum-of-best-username'>${entry.username}:</a>
+            </div>
           <p class='sum-of-best-time'>${entry.sum_of_bests}</p>
-          <a class='link-to-profile' href="/profile/${(entry.profile)[0]}/${(entry.profile)[1]}">Link to Profile</a>
+          <p class='best-subtract'>${entry.best}</p>
+
+    
           </div>
-        `).join('');
+        `;
+          }).join('');
           }
         });
     };

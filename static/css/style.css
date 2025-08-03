@@ -415,7 +415,8 @@ footer{
 
 .sum-of-best-values{
   display: grid;
-  grid-template-columns: 0.4fr 0.8fr 1fr 1fr;
+  align-items: center;
+  grid-template-columns: 0.7fr 2fr 1.5fr 1fr;
   text-align: left;
   vertical-align: center;
   align-items: center;
@@ -423,7 +424,24 @@ footer{
   font-size: 1.4vw;
 }
 
+.profile-picture-leaderboard{
 
+   width:3.5vw;
+  height: 3.5vw;
+  object-fit: cover;
+  border-radius:50%;
+  border:2px white solid;
+}
+
+.best-subtract{
+  color:red;
+}
+
+.leaderboard-row-center{
+  display: flex;
+  gap:2vw;
+  align-items: center;
+}
 
 .leaderboard .sum-of-best-values:last-child{
 
