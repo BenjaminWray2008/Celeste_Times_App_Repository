@@ -7,10 +7,10 @@
         <form action="{{url_for('new_user')}}" method='POST'>
             <div class="details-div">
                 <label for="username" class="signup-labels">Enter Username:</label>
-                <input type="text" name="username" required max_length=20 class="username-signup">
+                <input type="text" name="username" required maxlength=12 minlength="4" class="username-signup">
                 <br>
                 <label for="password" class="signup-labels">Enter Password:</label>
-                <input type="password" name="password" required maxlength="20" minlength="4" class="password-signup">
+                <input type="password" name="password" required maxlength="12" minlength="4" class="password-signup">
                 <br>
             
             <div class="signup-button-signin">

@@ -6,18 +6,21 @@
             <div class="pfp-name-div-profile header-styler">
                 <div class="profile-picture-profile ">
                     <h1 class="profile-name-profile">{{user_name}}</h1>
+                    <div class="pfp-socials">
                     <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture" alt="pfp"
                         id="profile-picture-display">
+                    <p class="profile-description-profile">{{user_description}}</p>
+                    </div>
                 </div>
 
                 <div class="profile-name-div-profile">
-                    <p class="profile-description-profile">{{user_description}}</p>
-                    <div class="all-socials-profile">
+                    
+                      <div class="all-socials-profile">
                         <p class="socials-header">{{user_name}}'s Socials:</p>
                         {%for social in socials%}
                         <div class="social-links">
-                            <a class="social-link-profile" href="{{social[0]}}" target="_blank">{{social[1]}} </a>
-                            <p class="social-link-profile">{{user_name}}</p>
+                            <a class="social-link-profile" href="{{social[0]}}" target="_blank">{{social[1][:10]}}</a>
+                            <p class="social-link-profile">{{user_name[:10]}}</p>
                         </div>
                         {% endfor %}
                     </div>

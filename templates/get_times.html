@@ -25,8 +25,8 @@
 
           <form class="text-area-form"
             action="{{url_for('get_description', user_id = user_id, category_id = category_id)}}" method="POST">
-            <textarea class="profile-description" name="description" id="description"
-              maxlength="50">{{user_description}}</textarea>
+            <textarea wrap="hard" class="profile-description" name="description" id="description"
+              maxlength="50" >{{user_description}}</textarea>
             <button class="profile-description-submit" type="submit">Submit Description</button>
           </form>
 
@@ -77,8 +77,8 @@
           {% endif %}
           <div class="sob-stats-both">
             <p class="sob-stats-category">{{category}}:</p>
-            <p class="sob-stats-time">{{sob_dict[category][1][0]}}</p>
-            <p class="sob-stats-ranking">{{sob_dict[category][1][1]}}</p>
+            <p class="sob-stats-time">{{sob_dict[category][0][0]}}</p>
+            <p class="sob-stats-ranking">{{sob_dict[category][0][1]}}</p>
           </div>
           {% endfor %}
 

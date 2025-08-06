@@ -33,7 +33,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
             db.execute('SELECT id FROM Category WHERE name = ?', (category,))
             category_id = db.fetchone()[0] 
             sob_leaderboard = ranker('ORDER by sum_of_bests ASC', category_id, 'AND r1.type = "checkpoint"')
-           
+            print(sob_leaderboard)
             for time in sob_leaderboard:
                 
                 if (time[2] == sob) and (user_id == time[0]):
@@ -59,7 +59,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
 
         
 
-       
+        print(sob_dict)
         return sob_dict
     
     def prefix_adder(num):
@@ -568,12 +568,15 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
     @app.route('/descriptioner/<int:user_id>/<int:category_id>', methods=['POST'])
     def get_description(user_id, category_id):
         description = request.form.get('description')
+        print('end', description, 'emd')
+        print(len(description))
         if len(description) <= 50:
             
             db.execute('UPDATE User SET description = ? WHERE id = ?', (description, user_id))
             database.commit()
            
         else:
+            print('>50')
             abort(404)
         return redirect(url_for('get_times', user_id = user_id, category_id = category_id))
 

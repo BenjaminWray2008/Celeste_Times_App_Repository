@@ -23,7 +23,7 @@
                    {% if g.user %}
                    <div class="signed-in-div">
                         <div class="signed-in-div-second">
-                        <p class="profile-name">{{g.user[0][1]}}</p>
+                        <p class="profile-name" style="max-width: none;">{{g.user[0][1]}}</p>
                       
                         <img src="{{ url_for('static', filename='pfps/' + g.user[0][5]) }}" class="profile-picture-header" alt="pfp">
                         </div>

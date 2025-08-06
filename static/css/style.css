@@ -175,7 +175,7 @@ footer p{
 }
 
 .logout{
-  color:rgb(225, 59, 145);
+  color:rgb(133, 3, 255);
   font-family: 'Nunito';
   font-size: 1.4vw;
   padding-left:1vw; 
@@ -416,7 +416,7 @@ footer{
 .sum-of-best-values{
   display: grid;
   align-items: center;
-  grid-template-columns: 0.7fr 2fr 1.5fr 1fr;
+  grid-template-columns: 0.7fr 2fr 1.5fr 1.5fr;
   text-align: left;
   vertical-align: center;
   align-items: center;
@@ -463,12 +463,16 @@ footer{
   display: grid;
   grid-template-columns: 1fr;
   
-  border-bottom-right-radius: 0.75vw;
+  
   max-height: 20vw;
   overflow-y:auto;
-  border-bottom-left-radius: 0.75vw;
+
   box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* Done by ChatGPT */
 
+}
+
+.highlight{
+  background-color: #bde6f6;
 }
 
 .sum-of-best-table{
@@ -898,6 +902,8 @@ option.select-sort:hover{
   padding-bottom: 0.75vw;
   font-family:'Nunito';
   margin:0;
+  max-width: 13vw;
+  overflow-x: auto;
   
   
 
@@ -1000,6 +1006,7 @@ option.select-sort:hover{
   resize:none;
   border:none;
   padding:0.5vw;
+  overflow-y: auto;
 
 
 }
@@ -1030,6 +1037,7 @@ option.select-sort:hover{
 
 .text-area-form{
   display: flex;
+  width: fit-content;
   justify-content: left;
   flex-direction: column;
   border:2px black solid;
@@ -1135,16 +1143,31 @@ option.select-sort:hover{
 .profile-name-profile{
   text-align: center;
   font-family: 'Poppings';
-  font-size: 2vw;
+  font-size: 1.5vw;
+  max-width: 15vw;
+  overflow-x: auto;
   margin:0;
+  margin-bottom:1vw;
   font-family:'Nunito';
 
+}
+
+.pfp-socials{
+  display: flex;
+  justify-content: space-between;
+  max-width:15vw;
+  align-items: center;
+  
 }
 
 .profile-picture-profile{
   display:flex;
   flex-direction: column;
-  padding-bottom: 0vw;
+  place-items: center;
+  align-items: center;
+  justify-content: center;
+  place-content: center;
+
 }
 
 .profile-description-profile {
@@ -1153,13 +1176,14 @@ option.select-sort:hover{
   border: 2px solid #333;
   border-radius: 0.75vw;
   font-size: 0.8vw;
-  width: 12vw;
-  height:fit-content;
+  max-width: 7vw;
+
   font-family: 'Nunito';
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   overflow-wrap: break-word;
   text-align: left;
   padding:0.5vw;
+  margin-left:1vw;
   margin-bottom:0vw;
 }
 
@@ -1178,6 +1202,8 @@ option.select-sort:hover{
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin:0;
+  padding:0.5vw;
   justify-content: center;
   background-color:#bb89e9e5;
   padding-bottom: 0.5vw;
@@ -1203,11 +1229,13 @@ option.select-sort:hover{
 }
 
 .profile-name-div-profile{
-  gap:1vw;
+
   display: flex;
+  margin:0;
   text-align: center;
   flex-direction: column;
   justify-content: center;
+ 
 }
 
 .pfp-name-div-profile{
@@ -1215,6 +1243,9 @@ option.select-sort:hover{
   flex-direction: row;
   gap:1.5vw;
   align-items: center;
+  justify-content: space-between;
+  padding-top:1vw;
+  padding-bottom:1vw;
   
 }
 
@@ -1256,7 +1287,12 @@ option.select-sort:hover{
 
 .compare-to-div{
   margin-right:1.5vw;
+
   
+}
+
+.compare-to-input{
+  border:2px black solid;
 }
 
 /* #endregion */

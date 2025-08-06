@@ -117,29 +117,37 @@
         });
     };
     document.getElementById('searchUserInput').addEventListener('keydown', function (e) {
+      
       if (e.key !== 'Enter') return
       const query = this.value.trim().toLowerCase();
+    
       if (!query) return;
 
       const entries = document.querySelectorAll('.sum-of-best-values');
-      let found = false;
 
+      
+      
+      document.querySelectorAll('.highlight').forEach(item => item.classList.remove('highlight'))
+      console.log('remove class')
+      
+ 
+      
+ 
       for (const entry of entries) {
 
         const username = entry.dataset.username;
         console.log(entry, query, username)
         if (username.includes(query)) {
+      
+        
           entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
           entry.classList.add('highlight');
-          setTimeout(() => entry.classList.remove('highlight'), 2000);
-          found = true;
+          
+    
           break;
         }
       }
 
-      if (!found) {
-        alert("User not found in current category!");
-      }
     });
 
 
