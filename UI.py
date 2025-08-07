@@ -482,7 +482,7 @@ with sqlite3.connect("times.db",check_same_thread=False) as database: #Connectin
         if db.fetchall():
             abort(404)
         
-        db.execute('INSERT INTO User (name, hash, description, date_joined, pfp_path) VALUES (?, ?, ?, ?, ?)', (username, hash, 'Tell us about Yourself!', datetime.datetime.now(), 'download.png'))
+        db.execute('INSERT INTO User (name, hash, description, date_joined, pfp_path) VALUES (?, ?, ?, ?, ?)', (username, hash, 'Tell us about Yourself!', datetime.datetime.now(), 'download.jpg'))
         database.commit()
         
         db.execute('SELECT id FROM User WHERE name == ?', (username,))

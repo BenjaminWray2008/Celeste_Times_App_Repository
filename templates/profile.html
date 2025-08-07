@@ -4,26 +4,40 @@
     <div class="profile-headers">
         <div class="top-half-header">
             <div class="pfp-name-div-profile header-styler">
-                <div class="profile-picture-profile ">
+                <div class="profile-picture-profile">
+                    <div class="flex-div-row">
                     <h1 class="profile-name-profile">{{user_name}}</h1>
-                    <div class="pfp-socials">
-                    <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture" alt="pfp"
+                    <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture-profile-real" alt="pfp"
                         id="profile-picture-display">
+                    </div>
+                    <div class="pfp-socials">
+                    
                     <p class="profile-description-profile">{{user_description}}</p>
                     </div>
                 </div>
 
                 <div class="profile-name-div-profile">
-                    
+                     {% if socials %}
                       <div class="all-socials-profile">
-                        <p class="socials-header">{{user_name}}'s Socials:</p>
+                        <p class="socials-header">Find {{user_name}} at:</p>
+                       
                         {%for social in socials%}
                         <div class="social-links">
+                            <div class="social-link-link">
                             <a class="social-link-profile" href="{{social[0]}}" target="_blank">{{social[1][:10]}}</a>
+                            </div>
                             <p class="social-link-profile">{{user_name[:10]}}</p>
                         </div>
                         {% endfor %}
-                    </div>
+                           </div>
+                        {% else %}
+                       
+                        <p class="socials-header">Seems like {{user_name}} hasn't added any socials D:</p>
+                        
+                         
+                        {% endif %}
+
+                 
                 </div>
                
             </div>
