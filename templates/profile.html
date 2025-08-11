@@ -11,22 +11,26 @@
                         id="profile-picture-display">
                     </div>
                     <div class="pfp-socials">
+                    <div class="pfp-socials-real">
                     
                     <p class="profile-description-profile">{{user_description}}</p>
                     </div>
+                    </div>
                 </div>
 
-                <div class="profile-name-div-profile">
+                <div class="profile-picture-profile">
                      {% if socials %}
                       <div class="all-socials-profile">
-                        <p class="socials-header">Find {{user_name}} at:</p>
+                        <p class="socials-header">Socials:</p>
                        
                         {%for social in socials%}
                         <div class="social-links">
                             <div class="social-link-link">
-                            <a class="social-link-profile" href="{{social[0]}}" target="_blank">{{social[1][:10]}}</a>
+                            <a class="social-link-profile" href="{{social[0]}}" target="_blank">{{social[1][:14]}}</a>
                             </div>
-                            <p class="social-link-profile">{{user_name[:10]}}</p>
+                            <div class="social-link-link-link">
+                            <p class="social-link-profile">{{user_name[:12]}}</p>
+                            </div>
                         </div>
                         {% endfor %}
                            </div>
