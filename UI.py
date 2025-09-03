@@ -350,7 +350,7 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             db.execute('SELECT name FROM checkpoint WHERE id = ?',
                        (checkpoint,))
             checkpoint_name = db.fetchone()
-            #Get the time from that checkpoint
+            # Get the time from that checkpoint
             db.execute('''SELECT time FROM Run WHERE user_id = ?
                        AND category_id = ? AND
                        run_number = ? AND
@@ -363,7 +363,7 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             data_dictionary[results[0]].append([checkpoint_name[0],
                                                 format_time_readable_form(
                                                     new_time)])
-        if variable:  # For profile need a total time for each chapter
+        if variable:  # For if profile need a total time for each chapter
             for chapter in data_dictionary:
                 final_time = 0
                 for time_tuple in data_dictionary[chapter]:
@@ -411,10 +411,11 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
   
         return rows
 
-    def comparison_data(user_id, category_id):
+    def comparison_data(user_id, category_id):  # Info for different user
         data_dictionary_compare = data_dictionary_creation(
             user_id, category_id, False)
         
+        # Get user's SOB
         db.execute('''SELECT SUM(time) AS sob FROM Run WHERE
                    user_id = ? AND
                    type = "IL" AND category_id = ?''',
@@ -426,19 +427,19 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
         
         return (data_dictionary_compare, sob_compare)
 
-    def check_session():
+    def check_session():  # If user logged in
         user_session = session.get('user_id')
         if user_session:
             return True
-        else:
+        else:  # Will not let them access page
             return False
 
     @app.errorhandler(404)
-    def stoptryingtohack(i):
+    def stoptryingtohack(i):  # 404 page runner
         return render_template('404.html')
    
     @app.before_request
-    def check_login():
+    def check_login():  # Gets global user data before running other pages
         user_id = session.get('user_id')
         g.user = None
         
@@ -449,30 +450,30 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             g.user = results
         print(g.user, 'userglobal')
    
-    @app.route('/get_comparison')
+    @app.route('/get_comparison')  # Generate data dictionary for searched user
     def send_comparison_data():
         category_id = request.args.get('category')
         user_name = request.args.get('searched_name')
        
         db.execute('SELECT id FROM User WHERE name = ?;', (user_name,))
         user_id = db.fetchone()
-        if user_id:
+        if user_id:  # If search entered
             real_user_id = user_id[0]
             data = comparison_data(real_user_id, category_id)
-        else:
+        else:  # Default is person id 26
             data = comparison_data(26, category_id)
             user_name = 'benj'
    
-        return jsonify([data, user_name])
+        return jsonify([data, user_name])  # Return info to the js
 
     @app.route('/')
     def home():
-
         db.execute('''
                    SELECT COUNT(id)
                    FROM User
                    ''')
-        counter = db.fetchall()
+        counter = db.fetchall()  # Total runners
+        
         db.execute('''
                     SELECT COUNT(*) AS total_completed_category_runs
                     FROM (
@@ -483,19 +484,21 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                     WHERE r.type = "checkpoint"
                     GROUP BY r.user_id, r.category_id
                     
-                    HAVING SUM(CASE WHEN r.time <= 0 OR r.time IS NULL THEN 1 ELSE 0 END) = 0
+                    HAVING SUM(
+                        CASE WHEN r.time <= 0
+                        OR r.time IS NULL THEN 1 ELSE 0 END) = 0
                     ) AS valid_categories;
                     ''')
-        counter2 = db.fetchall()
+        counter2 = db.fetchall()  # Total completed run entries
        
         return render_template('home.html', title='Home',
                                counter=counter, counter2=counter2)
     
-    @app.route('/about')
+    @app.route('/about')  # Page for about Celeste speedrunning
     def about():
         return render_template('about.html')
     
-    @app.route('/get_leaderboard')
+    @app.route('/get_leaderboard')  # Generate leaderboard for home page
     def get_leaderboard():
         category = request.args.get('category', 'any%')
         sortby = request.args.get('sort', 'time')
@@ -515,13 +518,10 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             order_clause = 'ORDER by sum_of_bests ASC'
             
         rows = ranker(order_clause, category, 'AND r1.type = "checkpoint"')
-        #Query selects the sum of best for all user where they have filled in all their run entries for the category entered.
-        #Grouped by users, and ordered by the smallest sum of best for the leaderboard.
-     
         leaderboard = []
         leaderboard.append({'name': name[0]})
         print(rows)
-        for index, row in enumerate(rows):
+        for index, row in enumerate(rows):  # Check how far from best entry
             if index == 0:
                 best_time = row[3]
             time = format_time_readable_form(format_time_normal_form(row[3]))
@@ -532,31 +532,32 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             leaderboard.append({'username': row[1], 'sum_of_bests': time,
                                 'profile': [row[0], category], 'pfp': row[2],
                                 'best': best})
-            #Add dictionaries to the leaderboard (this is the format js expects) containing the user name and their sum time.
+            # Add dictionaries to leaderboard - this is the format js expects
+            # Each contains user name and their sum time.
         print(leaderboard)
         return jsonify(leaderboard)  # Return the created leaderboard to the js
         
-    @app.route('/signup')
+    @app.route('/signup')  # Page for signing up a user
     def signup():
         return render_template('signup.html')
     
-    @app.route('/signin')
+    @app.route('/signin')  # Page for logging in a user
     def signin():
         return render_template('signin.html')
     
-    @app.route('/logout')
+    @app.route('/logout')  # Route for logging out a user
     def logout():
         session.clear()
         return redirect(url_for('home'))
     
-    @app.route('/new_user', methods=['POST'])
+    @app.route('/new_user', methods=['POST'])  # Check if new user valid
     def new_user():
         username = request.form.get('username')  # Get the items from the form
         password = request.form.get('password')
-        if len(password) < 4 or len(password) > 20:
+        if len(password) < 4 or len(password) > 20:  # password conditions
             abort(404)
         db.execute('SELECT id FROM user WHERE name = ?', (username,))
-        if db.fetchall():
+        if db.fetchall():  # if username exists already
             abort(404)
         
         # Hashing the users password for security
@@ -572,17 +573,17 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             VALUES (?, ?, ?, ?, ?)''',
             (username, hash, 'Tell us about Yourself!',
              datetime.datetime.now(), 'download.jpg'))
+        database.commit()  # Entering new user into database
         
-        database.commit()
         db.execute('SELECT id FROM User WHERE name == ?', (username,))
         results = db.fetchone()
         id = results[0]
       
-        new_user_data(id)  # Running function to add all empty time entries for new user
+        new_user_data(id)  # function to add all empty time entries for user
         session.clear()
         return redirect(url_for('signin'))
     
-    @app.route('/search', methods=['POST'])
+    @app.route('/search', methods=['POST'])  # Form for sending search data
     def search():
         searcher = None
         username = request.form.get('username')  # Get items from form
@@ -590,6 +591,8 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
         search_username = request.form.get('search-username')
         
         print(username, search_username, password)
+        
+        # Checking combinations to see who to search for / login as
         if username and not search_username:
             searcher = username
         elif not username and search_username:
@@ -608,47 +611,46 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             h.update(password.encode())
             hashed = h.hexdigest()
             user_id, hash = results
-            if hash == hashed:
+            if hash == hashed:  # If hashes match same password was entered
                 session['user_id'] = user_id
             
-                return redirect(url_for('get_times',
+                return redirect(url_for('get_times',  # Send to edit times page
                                         user_id=user_id, category_id=1))
         
-            return redirect(url_for('profile',
+            return redirect(url_for('profile',  # Send to profile, wrong login
                                     user_id=user_id, category_id=1))
         
         print('No user found.')
-        return redirect(url_for('home'))
+        return redirect(url_for('home'))  # No user found - send to homepage
     
-    @app.route('/pfp/<int:user_id>/<int:category_id>', methods=['POST'])
-    def new_pfp(user_id, category_id):
-        file = request.files['pfp']
-        
+    @app.route('/pfp/<int:user_id>/<int:category_id>', methods=['POST']) 
+    def new_pfp(user_id, category_id):  # Add new pfp for user
+        file = request.files['pfp']  # Get the added file
         pfp_directory = secure_filename(file.filename)
-        file_path = os.path.join(
+        file_path = os.path.join(  # Find its path
             'C:\dev\Celeste_Times_App_Repository\static\pfps', pfp_directory)
         file.save(file_path)
         
         db.execute('UPDATE User SET pfp_path = ? WHERE id = ?;',
                    (pfp_directory, user_id))
-        database.commit()
+        database.commit()  # Add new pfp path to database as users pfp
         
         return redirect(url_for('get_times', user_id=user_id,
                                 category_id=category_id))
 
     @app.route('/socials/<int:user_id>/<int:category_id>/<string:old_social_name>', methods=['POST'])
-    def edit_socials(user_id, category_id, old_social_name):
+    def edit_socials(user_id, category_id, old_social_name):  # Edit socials
         social_link = request.form.get('social_link')
         social_name = request.form.get('social_name')
         button_type = request.form.get('action')
         print(old_social_name)
-        if button_type == 'edit':
+        if button_type == 'edit':  # If they changed an original link
             db.execute('''UPDATE Socials SET link = ?,
                        social_name = ?
                        WHERE user_id = ?
                        AND social_name = ?''',
                        (social_link, social_name, user_id, old_social_name))
-        else:
+        else:  # They must have deleted the link
             db.execute('''DELETE FROM Socials
                        WHERE user_id = ?
                        AND social_name = ?''',
@@ -660,28 +662,27 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                                 category_id=category_id))
     
     @app.route('/add_socials/<int:user_id>/<int:category_id>', methods=['POST'])
-    def add_socials(user_id, category_id):
+    def add_socials(user_id, category_id):  # Created new social link
         social_link = request.form.get('init_social')
         social_name = request.form.get('init_name')
         db.execute('SELECT COUNT(user_id) FROM Socials WHERE user_id = ?',
                    (user_id,))
-        amount = db.fetchone()[0]
+        amount = db.fetchone()[0]  # 4 socials max
         
         if amount <= 3:
             db.execute('''INSERT INTO Socials (
                 user_id, link, social_name)
                 VALUES (?, ?, ?)''',
                 (user_id, social_link, social_name))
-            
-            database.commit()
+            database.commit()  # Add the new link
             
         return redirect(url_for('get_times', user_id=user_id,
                                 category_id=category_id))
     
     @app.route('/descriptioner/<int:user_id>/<int:category_id>', methods=['POST'])
-    def get_description(user_id, category_id):
+    def get_description(user_id, category_id):  # Update a users description
         description = request.form.get('description')
-        if len(description) <= 50:
+        if len(description) <= 50:  # 50 is max description length
             db.execute('UPDATE User SET description = ? WHERE id = ?',
                        (description, user_id))
             database.commit()
@@ -693,8 +694,8 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                                 category_id=category_id))
 
     @app.route('/get_times/<int:user_id>/<int:category_id>', methods=['GET', 'POST'])
-    def get_times(user_id, category_id):
-        if check_session():
+    def get_times(user_id, category_id):  # Information for get_times page
+        if check_session():  # If the user logged in
             db.execute('SELECT date_joined FROM User WHERE id = ?',
                        (user_id,))
             current_time = datetime.datetime.now()
@@ -708,22 +709,22 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             Month{time_clause(member_since.months)},
             and {member_since.days}
             Day{time_clause(member_since.days)} Ago"""
+            # Above formatting results for how old is account
             
-            results = social_grabber(user_id)
+            results = social_grabber(user_id)  # Get users socials
             data_dictionary = data_dictionary_creation(
-                user_id, category_id, False)
+                user_id, category_id, False)  # Get users time data
             
             db.execute('SELECT name FROM category WHERE id = ?',
                        (category_id,))
-            name = db.fetchall()[0]
+            name = db.fetchall()[0]  # Current category name
             
             db.execute('SELECT name, description FROM user WHERE id = ?',
                        (user_id,))
             stuff = db.fetchall()
             user_name = stuff[0][0]
             user_description = stuff[0][1]
-            
-            sob_dict = sob_adder(user_id)
+            sob_dict = sob_adder(user_id)  # Get user SOBs
             
             return render_template('get_times.html',
                                    user_id=user_id,
@@ -737,11 +738,11 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             abort(404)
    
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
-    def update_times(user_id, category_id):
-        if check_session():
+    def update_times(user_id, category_id):  # Update user times once submitted
+        if check_session():  # If logged in
             if request.method == 'POST':
+                # Get list of times and data dictionary to compare checkpoints
                 checkpoint_times = request.form.getlist('checkpoints[]')
-                
                 data_dictionary = data_dictionary_creation(
                     user_id, category_id, False)
             
@@ -749,28 +750,31 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                 print(data_dictionary)
                 for chapter in data_dictionary:
                     for checkpoint_tuple in data_dictionary[chapter]:
+                        # For each checkpoint if its not a total add to list
                         if checkpoint_tuple[0] != 'Total Total':
                             list_of_checkpoints.append(checkpoint_tuple[0])
-    
+
+                # Compare each checkpoint with times gotten from submission
                 for time, checkpoint in zip(checkpoint_times, list_of_checkpoints):
                     print('time', time, checkpoint)
-                    if time != '':
-                        if valid_time_checker(time):
+                    if time != '':  # If the user submitted something
+                        if valid_time_checker(time):  # If time correct format
                             time = format_time_second_form(time)
                             db.execute('''SELECT id FROM Checkpoint
                                        WHERE name = ?''',
                                        (checkpoint,))
-                            results = db.fetchone()
+                            results = db.fetchone()  
                             
-                            if results:
+                            if results:  # If its a checkpoint run
                                 checkpoint_id = results[0]
+                                # Update database with new time
                                 db.execute('''UPDATE Run SET time = ?
                                            WHERE user_id = ?
                                            AND category_id = ?
                                            AND run_number = ?;''',
                                            (time, user_id,
                                             category_id, checkpoint_id))
-                            else:
+                            else:  # Must be a chapter run
                                 checkpoint = ' '.join(
                                     checkpoint.split(' ')[:-1])
                                 
@@ -780,6 +784,7 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                                 new_results = db.fetchone()[0]
                                 
                                 print(new_results)
+                                # Update database with new time
                                 db.execute('''UPDATE Run SET time = ?
                                            WHERE user_id = ?
                                            AND category_id = ?
@@ -796,15 +801,16 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             abort(404)
    
     @app.route('/profile/<int:user_id>/<int:category_id>', methods=['GET', 'POST'])
-    def profile(user_id, category_id):
+    def profile(user_id, category_id):  # User profile display
         db.execute('SELECT pfp_path FROM User WHERE id = ?',
                    (user_id,))
         pfp = db.fetchone()[0]
-        
         print('pfp', pfp)
-        if not pfp:
-            pfp = 'download.png'
-            
+        
+        if not pfp:  # If user hasn't added a pfp
+            pfp = 'download.png'  # user default
+           
+        # Get date since joined, socials, and time data 
         db.execute('SELECT date_joined FROM User WHERE id = ?',
                    (user_id,))
         current_time = datetime.datetime.now()
@@ -820,18 +826,19 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
         Month{time_clause(member_since.months)},
         and {member_since.days}
         Day{time_clause(member_since.days)} Ago"""
-        
         results = social_grabber(user_id)
         data_dictionary = data_dictionary_creation(user_id, category_id, True)
-        db.execute('SELECT name FROM category WHERE id = ?', (category_id,))
-        name = db.fetchall()[0]
         
-        db.execute('SELECT name, description FROM user WHERE id = ?', (user_id,))
+        db.execute('SELECT name FROM category WHERE id = ?', (category_id,))
+        name = db.fetchall()[0]  # Current category name
+        
+        db.execute('SELECT name, description FROM user WHERE id = ?',
+                   (user_id,))
         stuff = db.fetchall()
         user_name = stuff[0][0]
         user_description = stuff[0][1]
         
-        sob_dict = sob_adder(user_id)
+        sob_dict = sob_adder(user_id)  # user SOBs
         user_data_dictionary = data_dictionary_creation(user_id,
                                                         category_id, False)
         
@@ -840,15 +847,17 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                    AND type = "IL"
                    AND category_id = ?''',
                    (user_id, category_id))
-        sob_compare_user = db.fetchone()[0]
+        sob_compare_user = db.fetchone()[0]  # SOB for current category
         
         print(user_data_dictionary)
         for i in user_data_dictionary['Chapter SOB']:
             i[1] = float(format_time_second_form(i[1]))
             print(i[1])
-
+            
+        # Data for the default comparison graph
         data_dictionary_compare, sob_compare = comparison_data(26, category_id)
-           
+
+        # Section below get the x axis label chapters ordered correctly
         db.execute('''SELECT chapter_id FROM Run
                    WHERE type = "IL"
                    AND user_id = ?
@@ -863,7 +872,6 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                    ORDER BY chapter_order ASC''',
                    tuple(i[0] for i in chapters_query))
         new_chapters = db.fetchall()
-        
         print('cha', new_chapters)
         chapters_list = []
         for i in new_chapters:
