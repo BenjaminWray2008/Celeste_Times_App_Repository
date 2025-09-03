@@ -5,51 +5,43 @@
         <div class="top-half-header">
             <div class="pfp-name-div-profile header-styler">
                 <div class="profile-picture-profile">
-                    <div class="flex-div-row">
-                    <h1 class="profile-name-profile">{{user_name}}</h1>
-                    <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture-profile-real" alt="pfp"
-                        id="profile-picture-display">
+                    <div class="flex-div-row"> <!-- Username and profile picture -->
+                        <h1 class="profile-name-profile">{{user_name}}</h1>
+                        <img src="{{ url_for('static', filename='pfps/' + pfp) }}" class="profile-picture-profile-real"
+                            alt="pfp" id="profile-picture-display">
                     </div>
-                    <div class="pfp-socials">
-                    <div class="pfp-socials-real">
-                    
-                    <p class="profile-description-profile">{{user_description}}</p>
-                    </div>
+                    <div class="pfp-socials"> <!-- User description -->
+                        <div class="pfp-socials-real">
+                            <p class="profile-description-profile">{{user_description}}</p>
+                        </div>
                     </div>
                 </div>
 
                 <div class="profile-picture-profile">
-                     {% if socials %}
-                      <div class="all-socials-profile">
+                    {% if socials %}
+                    <div class="all-socials-profile">
                         <p class="socials-header">Socials:</p>
-                       
                         {%for social in socials%}
-                        <div class="social-links">
+                        <div class="social-links"> <!-- All user socials links -->
                             <div class="social-link-link">
-                            <a class="social-link-profile" href="{{social[0]}}" target="_blank">{{social[1][:14]}}</a>
+                                <a class="social-link-profile" href="{{social[0]}}"
+                                    target="_blank">{{social[1][:14]}}</a>
                             </div>
+
                             <div class="social-link-link-link">
-                            <p class="social-link-profile">{{user_name[:12]}}</p>
+                                <p class="social-link-profile">{{user_name[:12]}}</p>
                             </div>
                         </div>
                         {% endfor %}
-                           </div>
-                        {% else %}
-                       
-                        <p class="socials-header">Seems like {{user_name}} hasn't added any socials D:</p>
-                        
-                         
-                        {% endif %}
-
-                 
+                    </div>
+                    {% else %}
+                    <p class="socials-header">Seems like {{user_name}} hasn't added any socials D:</p>
+                    {% endif %}
                 </div>
-               
             </div>
 
-
-
             <div class="sob-list-div header-styler">
-                <div>
+                <div> <!-- Chapter SOB data -->
                     <p class="sob-stats-header">Chapter SOB:</p>
                     <div class="sob-stats-border">
                         {% for category in sob_dict %}
@@ -65,12 +57,9 @@
                     </div>
                 </div>
 
-
-
-                <div>
+                <div> <!-- Category SOB data -->
                     <p class="sob-stats-header">Checkpoint SOB:</p>
                     <div class="sob-stats-border">
-
                         {% for category in sob_dict %}
                         {% if loop.index == 2 %}
                         <hr>
@@ -95,35 +84,36 @@
             <div class="header-styler-dif bottom-graph-styler">
                 <p class="joined-since-profile">Joined {{member_since}}</p>
                 <div class="compare-to-div">
-            
-                <input class="search-user-bar compare-to-input" type="text" name="" id="compare-to-input" placeholder="Compare Profile to:">
+
+                    <input class="search-user-bar compare-to-input" type="text" name="" id="compare-to-input"
+                        placeholder="Compare Profile to:">
 
 
-                <script>
-                    compare_to_input = document.getElementById('compare-to-input')
-                    compare_to_input.addEventListener('keydown', function (e) {
-                        if (e.key !== 'Enter') return
-                        const query = this.value.trim().toLowerCase();
-                        if (!query) return;
+                    <script>
+                        compare_to_input = document.getElementById('compare-to-input')
+                        compare_to_input.addEventListener('keydown', function (e) {
+                            if (e.key !== 'Enter') return
+                            const query = this.value.trim().toLowerCase();
+                            if (!query) return;
 
-                        console.log(query)
-                        const current_url = window.location.href;
-                        const parts = current_url.split("/").filter(Boolean); 
-                        console.log(parts, 'parts')
-                        const category_id = parts[parts.length - 1]
-                        fetch(`/get_comparison?category=${encodeURIComponent(category_id)}&searched_name=${encodeURIComponent(query)}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            const first_value = Object.values(data)[0]
-                            const user_namer = Object.values(data)[1]
-                            console.log(first_value)
-                            console.log(first_value[1], first_value[0]['Chapter SOB'])
-                            
-                            new_data(first_value[0]['Chapter SOB'], first_value[1], user_namer)
+                            console.log(query)
+                            const current_url = window.location.href;
+                            const parts = current_url.split("/").filter(Boolean);
+                            console.log(parts, 'parts')
+                            const category_id = parts[parts.length - 1]
+                            fetch(`/get_comparison?category=${encodeURIComponent(category_id)}&searched_name=${encodeURIComponent(query)}`)
+                                .then(res => res.json())
+                                .then(data => {
+                                    const first_value = Object.values(data)[0]
+                                    const user_namer = Object.values(data)[1]
+                                    console.log(first_value)
+                                    console.log(first_value[1], first_value[0]['Chapter SOB'])
+
+                                    new_data(first_value[0]['Chapter SOB'], first_value[1], user_namer)
+                                })
                         })
-                    })
 
-                </script>
+                    </script>
 
 
 
@@ -184,44 +174,45 @@
 
         <script>
             function new_data(compare_user_data, sob_compare_user, user_namer) {
-            console.log(user_namer)
-            console.log(compare_user_data)
-            const chapter_list = {{chapters_list | tojson}}
-          
+                console.log(user_namer)
+                console.log(compare_user_data)
+                const chapter_list = {{ chapters_list | tojson
+            }}
+
             const user_data_list = [];
             const compare_user_data_list = [];
-            let user_data = {{user_data_dictionary['Chapter SOB'] | tojson}}
-           
+            let user_data = {{ user_data_dictionary['Chapter SOB'] | tojson}}
+
             for (const item of user_data) {
                 if (user_data_list.length === 0) {
                     user_data_list.push(item[1])
-                    
-                }
-                else{
 
-                user_data_list.push(item[1]+user_data_list[user_data_list.length - 1])
-                
+                }
+                else {
+
+                    user_data_list.push(item[1] + user_data_list[user_data_list.length - 1])
+
                 }
             }
 
             for (const value of compare_user_data) {
                 if (compare_user_data_list.length === 0) {
                     compare_user_data_list.push(value[1])
-                    
-                }
-                else{
 
-                compare_user_data_list.push(value[1]+compare_user_data_list[compare_user_data_list.length - 1])
-                
+                }
+                else {
+
+                    compare_user_data_list.push(value[1] + compare_user_data_list[compare_user_data_list.length - 1])
+
                 }
             }
             console.log(user_data_list, compare_user_data_list)
 
-           
 
 
-            
-           
+
+
+
             let y_axis_listy = Math.max(sob_compare_user, sob_compare_user_variable);
 
             const new_y_axis_listy = Math.ceil(y_axis_listy / 100) * 100;
@@ -231,50 +222,50 @@
             if (chapterChart) {
                 console.log('chapter chart destroyed')
                 chapterChart.destroy();
-                             }
+            }
 
             const ctx = document.getElementById('chapterChart').getContext('2d');
 
 
-        
+
 
             chapterChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-              
-                    labels: chapter_list,   
+
+                    labels: chapter_list,
                     datasets: [
                         {
                             label: '{{user_name}}',
                             data: user_data_list,
                             borderColor: 'black',
                             backgroundColor: 'transparent',
-                    
-                            
+
+
                         },
                         {
                             label: user_namer,
                             data: compare_user_data_list,
                             borderColor: 'orange',
                             backgroundColor: 'transparent',
-                            
+
                         }
                     ]
                 },
                 options: {
                     responsive: true,
-                  
-                    maintainAspectRatio: false,  
+
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
                             labels: {
                                 color: 'black',
                                 font: {
-                                size: 15,
-                                weight: 'bold'
+                                    size: 15,
+                                    weight: 'bold'
                                 }
                             }
-                            },
+                        },
 
                     },
                     scales: {
@@ -291,12 +282,12 @@
                                 }
                             },
                             ticks: {
-                                stepSize: 100,  
+                                stepSize: 100,
                                 font: {
-                                    size:12
+                                    size: 12
                                 }
-                                }
-                            
+                            }
+
                         },
                         x: {
                             title: {
@@ -307,28 +298,28 @@
                                     size: 15,
                                     color: 'black'
                                 }
-                                
+
                             },
                             ticks: {
-                                
+
                                 font: {
-                                    size:12
+                                    size: 12
                                 }
-                                 
-                                }
+
+                            }
                         }
                     }
                 }
             });
 
         };
-        let chapterChart
-        let compare_user_data = {{data_dictionary_compare['Chapter SOB'] | tojson}}
-        const sob_compare_user_variable = {{sob_compare_user}}
-        let user_compare_variable = {{sob_compare}}
+            let chapterChart
+            let compare_user_data = {{ data_dictionary_compare['Chapter SOB'] | tojson}}
+            const sob_compare_user_variable = {{ sob_compare_user }}
+            let user_compare_variable = {{ sob_compare }}
 
-        let user_namerer = '{{compare_name}}'
-        console.log('sefojhshj', sob_compare_user_variable)
-        new_data(compare_user_data, user_compare_variable, user_namerer)
+            let user_namerer = '{{compare_name}}'
+            console.log('sefojhshj', sob_compare_user_variable)
+            new_data(compare_user_data, user_compare_variable, user_namerer)
         </script>
         {% endblock %}

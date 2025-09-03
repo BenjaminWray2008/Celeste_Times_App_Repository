@@ -10,89 +10,75 @@
 </head>
 
 <body>
+
     <div class="whole-site">
-    <main>
-        <div class="entire-header">
-            <div class="top-header">
-                <div class="header-name-box">
-                    <h1 class="header-name">Celeste Splits</h1>
-                    <img class='header-image' src="/static/images/berry.png" alt="berry">
-                </div>
-                    <div class="header-signin-div">
-                  
-                   {% if g.user %}
-                   <div class="signed-in-div">
-                        <div class="signed-in-div-second">
-                        <p class="profile-name" style="max-width: none;">{{g.user[0][1]}}</p>
-                      
-                        <img src="{{ url_for('static', filename='pfps/' + g.user[0][5]) }}" class="profile-picture-header" alt="pfp">
-                        </div>
-                        <a href="/logout" class="logout">Logout</a>
+        <main>
+            <div class="entire-header">
+                <div class="top-header">
+
+                    <div class="header-name-box"> <!-- The site name and image -->
+                        <h1 class="header-name">Celeste Splits</h1>
+                        <img class='header-image' src="/static/images/berry.png" alt="berry">
                     </div>
-                    {% else %}
-                     <a class='header-signin' href="/signin">Sign in!</a>
-                   
-                   {% endif %}
 
+                    <div class="header-signin-div">
+                        {% if g.user %} <!-- If user logged in add their pfp and username -->
+                        <div class="signed-in-div">
+                            <div class="signed-in-div-second">
+                                <p class="profile-name" style="max-width: none;">{{g.user[0][1]}}</p>
+                                <img src="{{ url_for('static', filename='pfps/' + g.user[0][5]) }}"
+                                    class="profile-picture-header" alt="pfp">
+                            </div>
 
-                 
+                            <a href="/logout" class="logout">Logout</a>
                         </div>
-<!-- 
-                        <div class="username-div">
-                            <input class='username' type="text" name="username" placeholder="Enter Username...">
-                        </div>
-                        <div class="password-div">
-                            <input class='password' type="text" name="password" placeholder="Enter Pin...">
-                        </div>
-
-                        <div class="submit-button-main-container">
-                            <button class='submit-button-main' type="submit">Submit!</button>
-                        </div> -->
-
-
-        
-
-
-            </div>
-            <div class="home-page-nav-bar">
-                <div class="leftside-home-page-nav">
-                <a class='sign-up-link' href="/">Home</a>
-                <a class='sign-up-link' href="/signup">Sign Up</a>
-                <a class='sign-up-link' href="/about">About Celeste</a>
-                  {% if g.user %}
+                        {% else %} <!-- Else add signin link -->
+                        <a class='header-signin' href="/signin">Sign in!</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="home-page-nav-bar">
+                    <div class="leftside-home-page-nav">
+                        <a class='sign-up-link' href="/">Home</a>
+                        <a class='sign-up-link' href="/signup">Sign Up</a>
+                        <a class='sign-up-link' href="/about">About Celeste</a>
+                        {% if g.user %}
                         <a class='sign-up-link' href="/profile/{{g.user[0][0]}}/1">Profile</a>
                         <a class='sign-up-link' href="/get_times/{{g.user[0][0]}}/1">Splits</a>
-                  {% endif %}
-                </div>
-                <div class="search-users-box">
-                     <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>
-                    <input type="text" class="username" name="search-username" maxlength=20 placeholder="Search Users...">
-                    </form>
-                </div>
-           
-            </div>
-        </div>
-        {% block content %}
-        {% endblock %}
-    </main>
-    <footer>
-        <div class="footer-div">
-            <div class="footer-about">
-        <p>
-            About Celeste Splits:
-        </p>
-        <p>
-            Site dedicated to taking down Google Spreadsheets!
-        </p>
-        </div>
-        <p>
-            Images by <a href="https://maddymakesgames.com/" target="_blank">Maddy Makes Games</a>, licensed under
-            <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
-        </p>
+                        {% endif %}
+                    </div>
+                    <div class="search-users-box">
+                        <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>
+                            <input type="text" class="username" name="search-username" maxlength=20
+                                placeholder="Search Users...">
+                        </form>
+                    </div>
 
-        </div>
-    </footer>
+                </div>
+            </div>
+            {% block content %}
+            {% endblock %}
+        </main>
+        <footer>
+            <div class="footer-div">
+                <div class="footer-about">
+                    <p>
+                        About Celeste Splits:
+                    </p>
+                    <p>
+                        Site dedicated to taking down Google Spreadsheets!
+                    </p>
+                </div>
+                <p>
+                    Images by <a href="https://maddymakesgames.com/" target="_blank">Maddy Makes Games</a>, licensed
+                    under
+                    <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
+                </p>
+
+            </div>
+        </footer>
     </div>
+
 </body>
 
 </html>
