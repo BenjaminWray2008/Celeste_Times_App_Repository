@@ -2,7 +2,7 @@
 {% block content %}
 <div class="get-times-page">
     <div class="profile-headers">
-        <div class="top-half-header">
+        <div class="top-half-header"> <!-- Left side of profile header -->
             <div class="pfp-name-div-profile header-styler">
                 <div class="profile-picture-profile">
                     <div class="flex-div-row"> <!-- Username and profile picture -->
@@ -75,61 +75,42 @@
 
             </div>
         </div>
-        <div class="second-top-half-header">
+        <div class="second-top-half-header"> <!-- Right side of profile header -->
 
             <div class="header-styler-dif">
-                <canvas id="chapterChart" class="profile-graph"></canvas>
-
+                <canvas id="chapterChart" class="profile-graph"></canvas> <!-- Graph filled with js -->
             </div>
+
             <div class="header-styler-dif bottom-graph-styler">
                 <p class="joined-since-profile">Joined {{member_since}}</p>
                 <div class="compare-to-div">
-
                     <input class="search-user-bar compare-to-input" type="text" name="" id="compare-to-input"
                         placeholder="Compare Profile to:">
 
-
-                    <script>
+                    <script> // Searches for searched user in backend
                         compare_to_input = document.getElementById('compare-to-input')
-                        compare_to_input.addEventListener('keydown', function (e) {
-                            if (e.key !== 'Enter') return
+                        compare_to_input.addEventListener('keydown', function (e) { // If user enters a search
+                            if (e.key !== 'Enter') return // If it was enter they pressed
                             const query = this.value.trim().toLowerCase();
                             if (!query) return;
-
                             console.log(query)
+
                             const current_url = window.location.href;
-                            const parts = current_url.split("/").filter(Boolean);
+                            const parts = current_url.split("/").filter(Boolean); // Get the current category id from url
                             console.log(parts, 'parts')
                             const category_id = parts[parts.length - 1]
-                            fetch(`/get_comparison?category=${encodeURIComponent(category_id)}&searched_name=${encodeURIComponent(query)}`)
+                            fetch(`/get_comparison?category=${encodeURIComponent(category_id)}&searched_name=${encodeURIComponent(query)}`) // Run get_comparison route in UI.py
                                 .then(res => res.json())
                                 .then(data => {
                                     const first_value = Object.values(data)[0]
                                     const user_namer = Object.values(data)[1]
                                     console.log(first_value)
                                     console.log(first_value[1], first_value[0]['Chapter SOB'])
-
                                     new_data(first_value[0]['Chapter SOB'], first_value[1], user_namer)
                                 })
                         })
 
                     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 </div>
             </div>
@@ -137,9 +118,8 @@
 
     </div>
 
-    <div class="get-times-grid">
-
-        <div class="nav-list-categories">
+    <div class="get-times-grid"> <!-- Time display div -->
+        <div class="nav-list-categories"> <!-- Nav of categories -->
             <a href="/">Home</a></li>
             <a href="/profile/{{user_id}}/1">Any%</a>
             <a href="/profile/{{user_id}}/2">ARB</a>
@@ -150,18 +130,16 @@
         </div>
 
         <div class="display-grid">
-            {% for chapter in data_dictionary %}
+            {% for chapter in data_dictionary %} <!-- For every chapter in current category -->
             <div class="display-grid-item">
                 <h2 class="chapter-header">{{chapter}}</h2>
                 <div class="checkpoints">
-                    {% for checkpoint in data_dictionary[chapter] %}
+                    {% for checkpoint in data_dictionary[chapter] %} <!-- For every checkpoint in that chapter -->
                     <div class="checkpoint-box">
                         <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
                         <p class="checkpoint-time">{{checkpoint[1]}}</p>
                     </div>
                     {% endfor %}
-
-
                 </div>
             </div>
             {% if loop.index % 3 == 0 %}
@@ -170,156 +148,134 @@
             {% endfor %}
         </div>
 
-
-
         <script>
             function new_data(compare_user_data, sob_compare_user, user_namer) {
                 console.log(user_namer)
                 console.log(compare_user_data)
-                const chapter_list = {{ chapters_list | tojson
-            }}
 
-            const user_data_list = [];
-            const compare_user_data_list = [];
-            let user_data = {{ user_data_dictionary['Chapter SOB'] | tojson}}
+                // Initialising variables and grapping variables from UI.py
+                const chapter_list = {{ chapters_list | tojson }}
+                const user_data_list = [];
+                const compare_user_data_list = [];
+                let user_data = {{ user_data_dictionary['Chapter SOB'] | tojson}}
 
-            for (const item of user_data) {
-                if (user_data_list.length === 0) {
-                    user_data_list.push(item[1])
-
+                for (const item of user_data) { // Adding chapter times to user times list
+                    if (user_data_list.length === 0) {
+                        user_data_list.push(item[1])
+                    }
+                    else {
+                        user_data_list.push(item[1] + user_data_list[user_data_list.length - 1])
+                    }
                 }
-                else {
 
-                    user_data_list.push(item[1] + user_data_list[user_data_list.length - 1])
-
+                for (const value of compare_user_data) { // Adding chapter times to the comparitive user times
+                    if (compare_user_data_list.length === 0) {
+                        compare_user_data_list.push(value[1])
+                    }
+                    else {
+                        compare_user_data_list.push(value[1] + compare_user_data_list[compare_user_data_list.length - 1])
+                    }
                 }
-            }
-
-            for (const value of compare_user_data) {
-                if (compare_user_data_list.length === 0) {
-                    compare_user_data_list.push(value[1])
-
+                console.log(user_data_list, compare_user_data_list)
+                let y_axis_listy = Math.max(sob_compare_user, sob_compare_user_variable);
+                const new_y_axis_listy = Math.ceil(y_axis_listy / 100) * 100; // Getting max y value
+                console.log('sdfsdf', sob_compare_user, sob_compare_user_variable, new_y_axis_listy) // Rounded up to nearest 100
+                if (chapterChart) {
+                    console.log('chapter chart destroyed')
+                    chapterChart.destroy();
                 }
-                else {
+                const ctx = document.getElementById('chapterChart').getContext('2d');
+                chapterChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
 
-                    compare_user_data_list.push(value[1] + compare_user_data_list[compare_user_data_list.length - 1])
-
-                }
-            }
-            console.log(user_data_list, compare_user_data_list)
-
-
-
-
-
-
-            let y_axis_listy = Math.max(sob_compare_user, sob_compare_user_variable);
-
-            const new_y_axis_listy = Math.ceil(y_axis_listy / 100) * 100;
-
-            console.log('sdfsdf', sob_compare_user, sob_compare_user_variable, new_y_axis_listy)
-
-            if (chapterChart) {
-                console.log('chapter chart destroyed')
-                chapterChart.destroy();
-            }
-
-            const ctx = document.getElementById('chapterChart').getContext('2d');
+                        labels: chapter_list,
+                        datasets: [
+                            {
+                                label: '{{user_name}}',
+                                data: user_data_list,
+                                borderColor: 'black',
+                                backgroundColor: 'transparent',
 
 
+                            },
+                            {
+                                label: user_namer,
+                                data: compare_user_data_list,
+                                borderColor: 'orange',
+                                backgroundColor: 'transparent',
 
-
-            chapterChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-
-                    labels: chapter_list,
-                    datasets: [
-                        {
-                            label: '{{user_name}}',
-                            data: user_data_list,
-                            borderColor: 'black',
-                            backgroundColor: 'transparent',
-
-
-                        },
-                        {
-                            label: user_namer,
-                            data: compare_user_data_list,
-                            borderColor: 'orange',
-                            backgroundColor: 'transparent',
-
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: 'black',
-                                font: {
-                                    size: 15,
-                                    weight: 'bold'
-                                }
                             }
-                        },
-
+                        ]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: new_y_axis_listy,
-                            title: {
-                                display: true,
-                                text: 'Time (seconds)',
-                                font: {
-                                    family: 'Nunito',
-                                    size: 15,
-                                    color: 'black'
+                    options: {
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'black',
+                                    font: {
+                                        size: 15,
+                                        weight: 'bold'
+                                    }
                                 }
                             },
-                            ticks: {
-                                stepSize: 100,
-                                font: {
-                                    size: 12
-                                }
-                            }
 
                         },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Chapter',
-                                font: {
-                                    family: 'Nunito',
-                                    size: 15,
-                                    color: 'black'
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: new_y_axis_listy,
+                                title: {
+                                    display: true,
+                                    text: 'Time (seconds)',
+                                    font: {
+                                        family: 'Nunito',
+                                        size: 15,
+                                        color: 'black'
+                                    }
+                                },
+                                ticks: {
+                                    stepSize: 100,
+                                    font: {
+                                        size: 12
+                                    }
                                 }
 
                             },
-                            ticks: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Chapter',
+                                    font: {
+                                        family: 'Nunito',
+                                        size: 15,
+                                        color: 'black'
+                                    }
 
-                                font: {
-                                    size: 12
+                                },
+                                ticks: {
+
+                                    font: {
+                                        size: 12
+                                    }
+
                                 }
-
                             }
                         }
                     }
-                }
-            });
+                });
 
         };
-            let chapterChart
-            let compare_user_data = {{ data_dictionary_compare['Chapter SOB'] | tojson}}
-            const sob_compare_user_variable = {{ sob_compare_user }}
-            let user_compare_variable = {{ sob_compare }}
-
-            let user_namerer = '{{compare_name}}'
-            console.log('sefojhshj', sob_compare_user_variable)
-            new_data(compare_user_data, user_compare_variable, user_namerer)
+        // More variable initialisation and collection
+        let chapterChart
+        let compare_user_data = {{ data_dictionary_compare['Chapter SOB'] | tojson}}
+        const sob_compare_user_variable = {{ sob_compare_user }}
+        let user_compare_variable = {{ sob_compare }}
+        let user_namerer = '{{compare_name}}'
+        console.log('sefojhshj', sob_compare_user_variable)
+        new_data(compare_user_data, user_compare_variable, user_namerer)
         </script>
         {% endblock %}

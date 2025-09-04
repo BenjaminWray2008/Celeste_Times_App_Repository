@@ -36,18 +36,22 @@
                         <a class='header-signin' href="/signin">Sign in!</a>
                         {% endif %}
                     </div>
+
                 </div>
+
                 <div class="home-page-nav-bar">
-                    <div class="leftside-home-page-nav">
+
+                    <div class="leftside-home-page-nav"> <!-- Nav bar -->
                         <a class='sign-up-link' href="/">Home</a>
                         <a class='sign-up-link' href="/signup">Sign Up</a>
                         <a class='sign-up-link' href="/about">About Celeste</a>
-                        {% if g.user %}
+                        {% if g.user %} <!-- If logged in add profile and splits page -->
                         <a class='sign-up-link' href="/profile/{{g.user[0][0]}}/1">Profile</a>
                         <a class='sign-up-link' href="/get_times/{{g.user[0][0]}}/1">Splits</a>
                         {% endif %}
                     </div>
-                    <div class="search-users-box">
+
+                    <div class="search-users-box"> <!-- Search bar -->
                         <form class="input-boxes-form" action="{{url_for('search')}}" method='POST'>
                             <input type="text" class="username" name="search-username" maxlength=20
                                 placeholder="Search Users...">
@@ -74,11 +78,8 @@
                     under
                     <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
                 </p>
-
             </div>
         </footer>
     </div>
-
 </body>
-
 </html>

@@ -9,6 +9,8 @@
 
 /* #region Globals: */
 
+/* #region full page stuff */
+
 body{
   background-color: #bce0ee;
   height: 100%;
@@ -28,6 +30,13 @@ main{
   min-height: 100vh;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+/* #endregion */
+
+/* #region footer stuff */
 
 footer{
   width:100%;
@@ -53,26 +62,18 @@ footer p{
   justify-content: center;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-.flex-div-row{
-  display:flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
+/* #endregion */
 
 /* #endregion */
 
 /* #region Stuff Below for sign up page */
 
+/* #region full signup page styles*/
+
 .sign-up-page{
   padding:2.5vw;
   display: flex;
   justify-content: center;
-
 }
 
 .total-sign-up{
@@ -81,29 +82,16 @@ footer p{
   border-radius: 0.75vw;
   width: fit-content;
   background-color: rgb(243, 232, 245);
-
 }
 
 .details-div{
   display: flex;
   flex-direction: column;
- 
 }
 
-.username-signup, .password-signup{
-  border: 2px #47c2f3 solid;
-  padding:0.3vw;
-  border-radius: 5px;
+/* #endregion */
 
-
-  color:black;
-  background-color: rgb(243, 232, 245);
-}
-
-.username-signup:hover, .password-signup:hover{
-  border:2px solid #10b2f1;
-}
-
+/* #region Signup header and footer*/
 .signup-labels{
   font-size: 1.4vw;
   padding-bottom: 0.25vw;
@@ -122,7 +110,6 @@ footer p{
   font-family: 'Nunito';
   font-size: 1.4vw;
   float:right;
-  
 }
 
 .submit-signup:hover{
@@ -135,7 +122,6 @@ footer p{
   text-align: center;
   font-weight: bold;
 }
-
 
 .signin-div{
 
@@ -159,18 +145,118 @@ footer p{
 
 /* #endregion */
 
+/* #region Input styles*/
+.username-signup, .password-signup{
+  border: 2px #47c2f3 solid;
+  padding:0.3vw;
+  border-radius: 5px;
+  color:black;
+  background-color: rgb(243, 232, 245);
+}
+
+.username-signup:hover, .password-signup:hover{
+  border:2px solid #10b2f1;
+}
+/* #endregion */
+
+/* #endregion */
+
 /* #region Stuff below is for about page */
+
 .about-page{
   display: flex;
   justify-content: space-between;
   height: 30vw;
-
 }
+
 /* #endregion */
 
 /* #region Stuff Below is for the header section */
 
-.entire-header{}
+/* #region Grid/Flex sections */
+
+.top-header{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
+  box-shadow: inset 0px 0 1px .5px rgba(0, 0, 0, 0.2); 
+  padding-left:1vw;
+  padding-bottom: 0.3vw;
+  padding-top:0.3vw;
+  place-items: center;
+}
+
+/* #endregion */
+
+/* #region Header image and name */
+
+.profile-picture-header{
+  width:3.5vw;
+  height: 3.5vw;
+  object-fit: cover;
+  border-radius:50%;
+  border:2px white solid;
+}
+
+.header-name{
+  font-family: 'Press Start 2P';
+  font-size: 1.8vw;
+}
+
+.header-name-box{
+  display: flex;
+  flex-direction: row;
+}
+
+.header-image{
+  width:10%;
+  height:100%;
+  padding-left: 1vw;
+}
+
+/* #endregion */
+
+/* #region Header nav bar */
+
+.home-page-nav-bar{
+  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  background: linear-gradient(to bottom, #b574eb 0%, #b162cc 100%);
+  overflow: hidden;
+  margin: 0;
+  place-items: center;
+}
+
+.leftside-home-page-nav{
+  display: flex;
+}
+
+.leftside-home-page-nav a{
+  width:15vw;
+}
+
+.home-page-nav-bar a:hover {
+  background-color: #ba56e8;
+  height:100%;
+  align-items: center;
+}
+
+.home-page-nav-bar a {
+  color: black;
+  text-align: center;
+  padding: 0.8vw 0.8vw;
+  text-decoration: none;
+  white-space: 'nowrap';
+  font-size: 1.2vw;
+}
+
+/* #endregion */
+
+/* #region Header inputs and signin */
 
 .signed-in-div{
   display:flex;
@@ -178,7 +264,6 @@ footer p{
   align-items: center;
   width:fit-content;
   padding-right:2vw;
-
 }
 
 .logout{
@@ -198,17 +283,8 @@ footer p{
   align-items: center;
 }
 
-.profile-picture-header{
-  width:3.5vw;
-  height: 3.5vw;
-  object-fit: cover;
-  border-radius:50%;
-  border:2px white solid;
-}
-
 .header-signin{
   padding:0.3vw 4vw 0.3vw 4vw;
-  
   border-radius: 5px;
   margin-right:2vw;
   text-align: center;
@@ -229,31 +305,14 @@ footer p{
   background-color: rgb(233, 213, 237);
 }
 
-
-.top-header{
-  
-  display:flex;
-  flex-direction: row;
-  justify-content: space-between;
-  background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
-  box-shadow: inset 0px 0 1px .5px rgba(0, 0, 0, 0.2); 
-  padding-left:1vw;
-  padding-bottom: 0.3vw;
-  padding-top:0.3vw;
-  place-items: center;
-}
-
 .input-boxes-form{
   display:flex;
   flex-direction: row;  
 }
 
-
-
 .submit-button-main:hover{
   background-color: #ba56e8;
 }
-
 
 .username{
   width:15vw;
@@ -269,88 +328,14 @@ footer p{
   color:black;
 }
 
-
-
 .username{
   float:right;
-}
-footer{
-  bottom:100%;
-}
-
-.header-name{
-  font-family: 'Press Start 2P';
-  font-size: 1.8vw;
-}
-.header-name-box{
-  display: flex;
-  flex-direction: row;
-}
-.header-image{
-  width:10%;
-  height:100%;
-
-  padding-left: 1vw;
-}
-
-
-.home-page-nav-bar{
-
-  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: center;
-  background: linear-gradient(to bottom, #b574eb 0%, #b162cc 100%);
-  overflow: hidden;
-  margin: 0;
-  place-items: center;
-}
-
-
-.leftside-home-page-nav{
-  display: flex;
-
-}
-
-.leftside-home-page-nav a{
-  width:15vw;
-}
-
-.username{
   justify-content: right;
 }
 
 .search-users-box {
-  
   padding-right: 2vw;
 }
-
-
-
-.home-page-nav-bar a:hover {
-  background-color: #ba56e8;
-  height:100%;
-  align-items: center;
-}
-
-
-
-.home-page-nav-bar a {
-
-  
- 
-  color: black;
-  text-align: center;
-  padding: 0.8vw 0.8vw;
-  text-decoration: none;
-  
-  white-space: 'nowrap';
-  font-size: 1.2vw;
- 
-}
-
-
 
 .username, .password, .submit-button-main, .sign-up-link{
   font-family:'Nunito';
@@ -358,16 +343,23 @@ footer{
 
 /* #endregion */
 
+/* #endregion */
+
 /* #region Stuff Below is for the home page */
 
-.home-page-flex{
+/* #region Grid/Flex sections */
 
+.home-page-flex{
   display:flex;
   justify-content: space-between;
   gap:7vw;
   padding-left: 5vw;
   padding-right: 5vw;
 }
+
+/* #endregion */
+
+/* #region Intro text */
 
 .welcome-header{
   margin-top:3vw;
@@ -386,10 +378,8 @@ footer{
 }
 
 .welcome-info, .welcome-privacy, .total-runs, .total-runners{
-  
   text-align: center;
   font-family: 'Signika';
-  
 }
 
 .welcome-privacy{
@@ -397,28 +387,27 @@ footer{
 }
 
 .welcome-info, .total-runs{
- 
   font-size: 1.6vw;
 }
 
 .home-page-flex-line {
-
   width:100%;
   grid-column: 1 / -1; /* Done by Chatgpt */
-
-
   border:none;
   border-radius: 0.75vw;
   margin-top:2vw;
   margin-bottom:2vw;
   padding: 3px;
   background-color: #e347e5;
-
 }
 
 .site-stats{
   text-align: center;
 }
+
+/* #endregion */
+
+/* #region Leaderboard values */
 
 .sum-of-best-values{
   display: grid;
@@ -432,8 +421,7 @@ footer{
 }
 
 .profile-picture-leaderboard{
-
-   width:3.5vw;
+  width:3.5vw;
   height: 3.5vw;
   object-fit: cover;
   border-radius:50%;
@@ -451,7 +439,6 @@ footer{
 }
 
 .leaderboard .sum-of-best-values:last-child{
-
   padding-bottom: 5px;
 }
 .sum-of-best-rank{
@@ -469,13 +456,9 @@ footer{
 .leaderboard{
   display: grid;
   grid-template-columns: 1fr;
-  
-  
   max-height: 20vw;
   overflow-y:auto;
-
   box-shadow: inset 0px 5px 5px -5px rgba(0,0,0,0.4); /* Done by ChatGPT */
-
 }
 
 .highlight{
@@ -483,7 +466,6 @@ footer{
 }
 
 .sum-of-best-table{
-
   place-items: center;
 }
 
@@ -492,12 +474,15 @@ footer{
   align-items: center;
   justify-content:center;
   gap:3vw;
-  
   padding-left: 1vw;
   padding-right:1vw;
   padding-top:1.5vw;
   padding-bottom: 1.5vw;
 }
+
+/* #endregion */
+
+/* #region Leaderboard other things */
 
 .select-sort{
   width:50%;
@@ -508,25 +493,20 @@ footer{
   -moz-appearance: none;
   font-size: 1.3vw;
   font-family: 'Signika';
-
   padding:0.3vw;
-
   border-radius: 0.75vw;
-
-
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 7l5 6 5-6' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
-
-
-
-
-  background-repeat: no-repeat;
-  background-position: right 2vw center;
-  background-size: 1vw;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 7l5 6 5-6' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E"); /* Done by ChatGPT */
+  background-repeat: no-repeat; /* Also done by ChatGPT */
+  background-position: right 2vw center; /* ChatGPT */
+  background-size: 1vw; /* ChatGPT */
 }
 
+.no-results{
+  text-align: center;
+  font-family: 'Signika';
+}
 
 .search-user-bar{
-  
   padding:0.3vw;
   border-radius: 5px;
   border:none;
@@ -541,37 +521,27 @@ footer{
 
 .select-sort-option{
   text-align: center;
-
 }
-
-
 
 .select-sort:focus {
   outline: none;
-
 }
 
 option.select-sort:hover{
   background-color:red;
 }
 
-
 .category-name-sum-of-best{
   text-align: left;
-
-
   margin:0;  
   font-family: 'Signika';
   font-size: 1.3vw;
-  
 }
 
 .leaderboard-width-changer{
   width: 100%;
   background:#8bc6cd;
   border:1px black solid;
-
-
 }
 
 .category-list-leaderboard button.active{ 
@@ -585,16 +555,11 @@ option.select-sort:hover{
 .category-list-leaderboard{
   display: flex;
   align-items: center;
-  
- 
- 
 }
 
 .category-list-leaderboard button {
   padding:1vw;
-  
   width: 100%;
-
   background-color:#e347e5;
   border:none;
   font-size: 1vw;
@@ -605,114 +570,24 @@ option.select-sort:hover{
   width:100%;
 }
 
-
-
-.sum-of-best-leaderboard-centerer{
- 
-
-}
-
+/* #endregion */
 
 /* #endregion */
 
 /* #region Section Below for all styles related to time display */
 
+/* #region Grid/Flex Sections */
 
-
-
-
-
-.no-results{
-  text-align: center;
-  font-family: 'Signika';
-}
-
-.nav-list-categories a {
-}
-
-
-
-
-
-.checkpoint-box {
-  display: grid;
-  gap: 0.2vw;
-  width: 100%;
-  grid-template-columns: 1fr 1fr;
-  border: 1.5px rgb(255, 255, 255);
-  place-items: center;
-  padding-right: 5px;
-  padding-left: 5px;
-
-
-
-
-}
-
-
-
-
-
-.checkpoint-time {
-  width: 100%;
-  font-family: 'Poppins';
-  margin: 0;
-  font-size: 1vw;
-}
-
-
-
-
-
-
-.checkpoints .checkpoint-box:not(:last-child){
-  border-bottom: 2.5px solid #e347e5;
-  padding-bottom: 5px;
-
-
-}
-
-
-.checkpoints {
-  display: grid;
-  grid-template-columns: 1fr;
-  border-radius: 5px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border: 2.5px solid #e347e5;
-  row-gap: 5px;
-  max-height: 35vh;
-  overflow-y: auto;
-
-
-
-
+.row-marker {
+  grid-column: 1 / -1; /*  Made by ChatGPT */
+  padding: 5px;
+  background-color: #e347e5;
 }
 
 .display-grid-item {
   border-collapse: collapse; /*Made by ChatGPT*/
- 
-
   width: 100%;
- 
 }
-
-
-.row-marker {
-
-
-  grid-column: 1 / -1; /*  Made by ChatGPT */
-
-
-
-
-  padding: 5px;
-  background-color: #e347e5;
-
-
-}
-
-
 
 .display-grid {
   display: grid;
@@ -728,26 +603,6 @@ option.select-sort:hover{
   align-items: start center;
   width: 100%;
   background:#d3b9f7;
-
-}
-
-.submit-get-times{
-  background-color: #ff75a0;
-  border: 2px solid black;
-  width:30vw;
-  height:5vw;
-  padding:0;
-  margin-top: 1.5vw;
-  margin-bottom: 1.5vw;
-  border-radius: 0.75vw;
-  font-size: 1vw;
-  font-weight: bold;
-  font-family: 'Nunito';
-  
-}
-
-.submit-get-times:hover{
-  background-color: #ff75d3;
 }
 
 .display-grid-form{
@@ -756,31 +611,9 @@ option.select-sort:hover{
   place-items: center;
 }
 
-.submit-button-center{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+/* #endregion */
 
-
-.checkpoint-name {
-  width: 100%;
-  text-align: center left;
-  margin: 0;
-  font-family: 'Poppins';
-  font-size:1vw;
-}
-
-
-
-.chapter-header{
-  text-align: center;
-  font-family: 'Nunito';
-  font-size:1.2vw;
-  
-}
-
-
+/* #region Category nav bar */
 
 .nav-list-categories{
   /* Borders below done by ChatGPT */
@@ -794,7 +627,6 @@ option.select-sort:hover{
   overflow: hidden;
   margin: 0;
   place-items: center;
-
   border-top-left-radius: 1vw;
   border-top-right-radius: 1vw;  
   /* Box shadow below done by ChatGPT */
@@ -811,11 +643,6 @@ option.select-sort:hover{
   font-size: 1.1vw;
   font-family: 'Nunito';
   color:black;
-
-}
-
-.nav-list-categories a:active{
-  
 }
 
 .nav-list-categories a:hover{
@@ -825,12 +652,119 @@ option.select-sort:hover{
   text-align: center;
 }
 
+/* #endregion */
+
+/* #region Time data text */
+
+.checkpoint-box {
+  display: grid;
+  gap: 0.2vw;
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
+  border: 1.5px rgb(255, 255, 255);
+  place-items: center;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.checkpoint-time {
+  width: 100%;
+  font-family: 'Poppins';
+  margin: 0;
+  font-size: 1vw;
+}
+
+.checkpoints .checkpoint-box:not(:last-child){
+  border-bottom: 2.5px solid #e347e5;
+  padding-bottom: 5px;
+}
+
+.checkpoints {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-radius: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 2.5px solid #e347e5;
+  row-gap: 5px;
+  max-height: 35vh;
+  overflow-y: auto;
+}
+
+.checkpoint-name {
+  width: 100%;
+  text-align: center left;
+  margin: 0;
+  font-family: 'Poppins';
+  font-size:1vw;
+}
+
+.chapter-header{
+  text-align: center;
+  font-family: 'Nunito';
+  font-size:1.2vw;
+}
+
+/* #endregion */
+
+/* #region other stuff */
+
+.submit-get-times{
+  background-color: #ff75a0;
+  border: 2px solid black;
+  width:30vw;
+  height:5vw;
+  padding:0;
+  margin-top: 1.5vw;
+  margin-bottom: 1.5vw;
+  border-radius: 0.75vw;
+  font-size: 1vw;
+  font-weight: bold;
+  font-family: 'Nunito';
+}
+
+.submit-get-times:hover{
+  background-color: #ff75d3;
+}
+
+.submit-button-center{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* #endregion */
+
+/* #endregion */
+
+/* #region Get times header */
+
+/* #region Grid/Flex sections */
+
+/* #endregion */
+
+/* #region */
+
+/* #endregion */
+
+/* #region */
+
+/* #endregion */
+
+/* #region */
+
+/* #endregion */
+
+/* #region */
+
+/* #endregion */
+
+
+
 .top-half-header{
   display: flex;
   flex-direction: column;
-  
   margin-top:1.5vw;
-  
   gap:1.5vw;
 }
 
@@ -839,8 +773,6 @@ option.select-sort:hover{
   justify-content: space-between;
   margin-top: 1.5vw;
 }
-
-
 
 .second-top-half-header{
   height: 100%;
@@ -865,18 +797,15 @@ option.select-sort:hover{
   border-radius: 0.75vw;
   overflow: hidden; 
   overflow-y: auto;
-  
 }
 
 .header-styler-dif{
-  
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #d3b9f7;
   border: 1px rgb(105, 93, 107) solid;
   align-items: center;
-  
   border-radius: 0.75vw;
   overflow: hidden; 
   overflow-y: auto;
@@ -895,10 +824,9 @@ option.select-sort:hover{
 }
 
 .get-times-grid{
-    
     border-radius: 1vw;
     margin-top:1.5vw;
- 
+
 }
 
 
@@ -1134,7 +1062,6 @@ option.select-sort:hover{
   justify-content: left;
   
 }
-
 /* #endregion */
 
 /* #region Profile page changes to css: */
@@ -1153,6 +1080,13 @@ option.select-sort:hover{
   font-family:'Nunito';
 
 
+}
+
+.flex-div-row{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .pfp-socials{

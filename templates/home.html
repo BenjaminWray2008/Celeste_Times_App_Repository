@@ -2,28 +2,25 @@
 {% block content %}
 
 <div class="home-page-flex">
-  <div>
+  <div> <!-- Home page text -->
     <h1 class="welcome-header">Welcome to Celeste Splits!</h1>
     <p class='track-here-header'>Track your Best Times Here</p>
-
     <p class="welcome-info">Create an account<br>Upload your Splits <br>Climb the Leaderboard </p>
     <p class="welcome-privacy">All data stored is secure and cannot be changed by others.</p>
-      <div class="home-page-flex-line"></div>
+    <div class="home-page-flex-line"></div>
     <div class="site-stats">
       <p class="site-stats-header">Site Wide Stats:</p>
-        <p class="total-runs">Total Category Entries: {{counter2[0][0]}} <br>Runner Accounts: {{counter[0][0]}}</p> 
+      <p class="total-runs">Total Category Entries: {{counter2[0][0]}} <br>Runner Accounts: {{counter[0][0]}}</p>
     </div>
   </div>
 
   <div class="category-list-leaderboard-centerer">
-
     <div class="sum-of-best-table-centerer">
 
-      <div id="leaderboardname" class="leaderboardname">Sum of Best Leaderboard</div>
-
+      <div id="leaderboardname" class="leaderboardname">Sum of Best Leaderboard</div> <!-- Div that is filled with the leaderboard name with js -->
 
       <div class="leaderboard-width-changer">
-        <div id="categorySelect" class="category-list-leaderboard">
+        <div id="categorySelect" class="category-list-leaderboard"> <!-- Category nav -->
           <button data-category="1" class="active">Any%</button>
           <button data-category="2">ARB</button>
           <button data-category="3">100%</button>
@@ -31,27 +28,31 @@
           <button data-category="5">Bny%</button>
           <button data-category="6">Cny%</button>
         </div>
+
         <div class="leaderboard-header">
 
           <p id="categoryName" class="category-name-sum-of-best"></p>
 
-          <select name="SelectSort" id="SelectSort" class="select-sort">
+          <select name="SelectSort" id="SelectSort" class="select-sort"> <!-- Drop down for sorting options -->
             <option class='select-sort-option' disabled selected hidden>Sort By:</option>
             <option class='select-sort-option' data-sort='time' value="time">Fastest Time</option>
             <option class='select-sort-option' data-sort='name' value="alpha">Alpha</option>
           </select>
-          <div class="search-userr-bar-div">
-          <input type="text" id="searchUserInput" placeholder="Search user..." class="search-user-bar" />
+
+          <div class="search-userr-bar-div"> <!-- That's not a typo -->
+            <input type="text" id="searchUserInput" placeholder="Search user..." class="search-user-bar" />
           </div>
-        </div>
-        <div id='leaderboard' class="leaderboard">
 
         </div>
+        <div id='leaderboard' class="leaderboard"> <!-- Div that is filled with the leaderboard data with js -->
+
+        </div>
+
       </div>
     </div>
   </div>
-  <script>
 
+  <script>
     let category = 1;
     let sortBy = 'time';
     document.getElementById('SelectSort').addEventListener('change', function () {
@@ -95,8 +96,8 @@
             document.getElementById('categoryName').textContent = `${first_value.name}`
             console.log(data)
             leaderboardDiv.innerHTML = data.slice(1).map((entry, i) => {
-            let pfp = `/static/pfps/${entry.pfp}`;
-            return `
+              let pfp = `/static/pfps/${entry.pfp}`;
+              return `
              
           <div class='sum-of-best-values' data-username="${entry.username.toLowerCase()}">
           
@@ -112,38 +113,38 @@
     
           </div>
         `;
-          }).join('');
+            }).join('');
           }
         });
     };
     document.getElementById('searchUserInput').addEventListener('keydown', function (e) {
-      
+
       if (e.key !== 'Enter') return
       const query = this.value.trim().toLowerCase();
-    
+
       if (!query) return;
 
       const entries = document.querySelectorAll('.sum-of-best-values');
 
-      
-      
+
+
       document.querySelectorAll('.highlight').forEach(item => item.classList.remove('highlight'))
       console.log('remove class')
-      
- 
-      
- 
+
+
+
+
       for (const entry of entries) {
 
         const username = entry.dataset.username;
         console.log(entry, query, username)
         if (username.includes(query)) {
-      
-        
+
+
           entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
           entry.classList.add('highlight');
-          
-    
+
+
           break;
         }
       }
