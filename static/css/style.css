@@ -9,7 +9,7 @@
 
 /* #region Globals: */
 
-/* #region full page stuff */
+/* #region Global styles */
 
 body{
   background-color: #bce0ee;
@@ -36,7 +36,7 @@ main{
 
 /* #endregion */
 
-/* #region footer stuff */
+/* #region footer styles */
 
 footer{
   width:100%;
@@ -66,7 +66,7 @@ footer p{
 
 /* #endregion */
 
-/* #region Stuff Below for sign up page */
+/* #region Sign up page styles */
 
 /* #region full signup page styles*/
 
@@ -92,6 +92,7 @@ footer p{
 /* #endregion */
 
 /* #region Signup header and footer*/
+
 .signup-labels{
   font-size: 1.4vw;
   padding-bottom: 0.25vw;
@@ -124,12 +125,10 @@ footer p{
 }
 
 .signin-div{
-
   display: flex;
   flex-direction: row;
   gap:0.3vw;
   align-items: center;
-
 }
 
 .signup-button-signin{
@@ -146,6 +145,7 @@ footer p{
 /* #endregion */
 
 /* #region Input styles*/
+
 .username-signup, .password-signup{
   border: 2px #47c2f3 solid;
   padding:0.3vw;
@@ -157,11 +157,12 @@ footer p{
 .username-signup:hover, .password-signup:hover{
   border:2px solid #10b2f1;
 }
-/* #endregion */
 
 /* #endregion */
 
-/* #region Stuff below is for about page */
+/* #endregion */
+
+/* #region About page styles */
 
 .about-page{
   display: flex;
@@ -171,7 +172,7 @@ footer p{
 
 /* #endregion */
 
-/* #region Stuff Below is for the header section */
+/* #region Header styles */
 
 /* #region Grid/Flex sections */
 
@@ -180,7 +181,7 @@ footer p{
   flex-direction: row;
   justify-content: space-between;
   background: linear-gradient(to bottom, #c084fc 0%, #c678d2 100%);
-  box-shadow: inset 0px 0 1px .5px rgba(0, 0, 0, 0.2); 
+  box-shadow: inset 0px 0 1px .5px rgba(0, 0, 0, 0.2); /* Done by ChatGPT */
   padding-left:1vw;
   padding-bottom: 0.3vw;
   padding-top:0.3vw;
@@ -220,7 +221,7 @@ footer p{
 /* #region Header nav bar */
 
 .home-page-nav-bar{
-  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.4); /* Done by ChatGPT */
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -256,7 +257,7 @@ footer p{
 
 /* #endregion */
 
-/* #region Header inputs and signin */
+/* #region Header inputs and changes when signed in */
 
 .signed-in-div{
   display:flex;
@@ -345,7 +346,7 @@ footer p{
 
 /* #endregion */
 
-/* #region Stuff Below is for the home page */
+/* #region Home page styles */
 
 /* #region Grid/Flex sections */
 
@@ -574,7 +575,7 @@ option.select-sort:hover{
 
 /* #endregion */
 
-/* #region Section Below for all styles related to time display */
+/* #region Time display styles */
 
 /* #region Grid/Flex Sections */
 
@@ -737,29 +738,9 @@ option.select-sort:hover{
 
 /* #endregion */
 
-/* #region Get times header */
+/* #region get_times page header styles */
 
 /* #region Grid/Flex sections */
-
-/* #endregion */
-
-/* #region */
-
-/* #endregion */
-
-/* #region */
-
-/* #endregion */
-
-/* #region */
-
-/* #endregion */
-
-/* #region */
-
-/* #endregion */
-
-
 
 .top-half-header{
   display: flex;
@@ -783,8 +764,44 @@ option.select-sort:hover{
   width: 100%;
   gap:1.5vw;
   justify-content: space-between;
-  
 } 
+
+.profile-headers{
+  display: flex;
+  gap:1.5vw;
+}
+
+/* #endregion */
+
+/* #region margins/paddings */
+
+.get-times-page{
+  padding: 0 5vw 0 5vw;
+}
+
+.get-times-grid{
+    border-radius: 1vw;
+    margin-top:1.5vw;
+}
+
+.sob-stats-category{
+  width: 5.8vw;
+  text-align: left;
+}
+
+.sob-stats-time{
+  width:3vw;
+  text-align: center;
+}
+
+.sob-stats-ranking{
+  width: 5vw;
+  text-align: center;
+}
+
+/* #endregion */
+
+/* #region flex for individual components*/
 
 .header-styler{
   height:14.5vw;
@@ -804,48 +821,11 @@ option.select-sort:hover{
   align-items: center;
   justify-content: center;
   background-color: #d3b9f7;
-  border: 1px rgb(105, 93, 107) solid;
+  border: 1px rgb(105, 93, 107) solid; /* Done by ChatGPT */
   align-items: center;
   border-radius: 0.75vw;
   overflow: hidden; 
   overflow-y: auto;
-  
-}
-
-.profile-headers{
-  display: flex;
-  gap:1.5vw;
-
-}
-
-.get-times-page{
-  padding: 0 5vw 0 5vw;
-  
-}
-
-.get-times-grid{
-    border-radius: 1vw;
-    margin-top:1.5vw;
-
-}
-
-
-
-.profile-name {
-  font-family: 'Poppings';
-  font-size: 2vw;
-  padding-bottom: 0.75vw;
-  font-family:'Nunito';
-  margin:0;
-  max-width: 13vw;
-  overflow-x: auto;
-  
-  
-
-
-  width:fit-content;
-  color: black;
-  padding:0;
 }
 
 .profile-name-div{
@@ -854,44 +834,6 @@ option.select-sort:hover{
   text-align: center;
   flex-direction: column;
   justify-content: center;
-}
-
-.profile-picture{
-  width:6.5vw;
-  height: 6.5vw;
-  object-fit: cover;
-  border-radius:50%;
-  border:2px white solid;
-  
-  
-  
-}
-
-
-
-.profile-picture-input{
-  display:none;
-}
-
-
-.profile-picture-submit, .profile-picture-cancel{
-  background-color: #ff75a0;
-  border:1px black solid;
-  font-family: 'Nunito';
-  width:4vw;
-  font-size: 1vw;
-  text-align: center;
-
-}
-
-
-
-.profile-picture-changes-buttons{
-  display: none;
-  padding-top: 0.5vw;
-  gap:0.5vw;
-  border-radius: 0.2vw;
-  
 }
 
 .profile-picture-form{
@@ -911,6 +853,38 @@ option.select-sort:hover{
   display: flex;
 }
 
+/* #endregion */
+
+/* #region pfp related*/
+
+.profile-picture{
+  width:6.5vw;
+  height: 6.5vw;
+  object-fit: cover;
+  border-radius:50%;
+  border:2px white solid;  
+}
+
+.profile-picture-input{
+  display:none;
+}
+
+.profile-picture-submit, .profile-picture-cancel{
+  background-color: #ff75a0;
+  border:1px black solid;
+  font-family: 'Nunito';
+  width:4vw;
+  font-size: 1vw;
+  text-align: center;
+}
+
+.profile-picture-changes-buttons{
+  display: none;
+  padding-top: 0.5vw;
+  gap:0.5vw;
+  border-radius: 0.2vw;
+}
+
 .browse-label{
   font-family: 'Nunito';
   margin-bottom:0.5vw;
@@ -925,6 +899,23 @@ option.select-sort:hover{
   background-color: #ff75d3;
 }
 
+/* #endregion */
+
+/* #region description*/
+
+.profile-name {
+  font-family: 'Poppings';
+  font-size: 2vw;
+  padding-bottom: 0.75vw;
+  font-family:'Nunito';
+  margin:0;
+  max-width: 13vw;
+  overflow-x: auto;
+  width:fit-content;
+  color: black;
+  padding:0;
+}
+
 .profile-description{
   width:12vw;
   height:4.5vw;
@@ -934,8 +925,6 @@ option.select-sort:hover{
   border:none;
   padding:0.5vw;
   overflow-y: auto;
-
-
 }
 
 .text-area-form:active{
@@ -954,9 +943,7 @@ option.select-sort:hover{
   padding:1vw 0 1vw 0;
   background-color:#ff75a0;
   border-bottom: 2px black solid;
-  
 }
-
 
 .profile-description-submit:hover{
   background-color: #ff75d3;
@@ -969,23 +956,21 @@ option.select-sort:hover{
   flex-direction: column;
   border:2px black solid;
   border-bottom:none;
- 
 }
+
+/* #endregion */
+
+/* #region SOB table*/
 
 .sob-stats-both{
   display: flex;
-  
   gap:3vw;
-  
 }
-
 
 .sob-stats-category, .sob-stats-time, .sob-stats-ranking{
   font-family: 'Nunito';
   font-size:1vw;
-
   margin:0;
-
 }
 
 .sob-stats-border:first-child{
@@ -993,27 +978,9 @@ option.select-sort:hover{
   background-color: red;
 }
 
-.sob-stats-category{
-  width: 5.8vw;
-  text-align: left;
-  
-}
-
-.sob-stats-time{
-  width:3vw;
-  text-align: center;
-}
-
-.sob-stats-ranking{
-  width: 5vw;
-  text-align: center;
-}
-
-
 .sob-list-div{
   display: flex;
   justify-content: space-between;
-  
 }
 
 .sob-stats-header{
@@ -1025,6 +992,10 @@ option.select-sort:hover{
   font-weight: bold;
 }
 
+/* #endregion */
+
+/* #region socials*/
+
 .joined-since{
   border-bottom:2px black solid;
   padding-bottom: 1.5vw;
@@ -1032,7 +1003,6 @@ option.select-sort:hover{
   font-family: 'Nunito';
   text-align: center;
   font-weight: bold;
-  
 }
 
 .social-button:hover{
@@ -1053,34 +1023,18 @@ option.select-sort:hover{
   background-color: #ff75a0;
 }
 
-.all-socials{
- 
-}
-
 .init-social-form{
   display: flex;
   justify-content: left;
-  
 }
+
 /* #endregion */
 
-/* #region Profile page changes to css: */
+/* #endregion */
 
-.profile-name-profile{
-  text-align: center;
-  font-family: 'Poppings';
-  font-size: 1.2vw;
-  max-width: 10vw;
+/* #region Profile page header styles */
 
-  overflow-x: hidden;
-  margin:0;
-
-  margin-right:1vw;
-  margin-bottom:1vw;
-  font-family:'Nunito';
-
-
-}
+/* #region grid/flex sections*/
 
 .flex-div-row{
   display:flex;
@@ -1092,32 +1046,54 @@ option.select-sort:hover{
 .pfp-socials{
   display: flex;
   flex:1;
- 
-  
 }
 
 .pfp-socials-real{
-
   display: flex;
   align-items: end;
+}
 
+.profile-name-div-profile{
+  display: flex;
+  margin:0;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pfp-name-div-profile{
+  display: flex;
+  flex-direction: row;
+  gap:1.5vw;
+  justify-content: space-between;
+  padding-top:1vw;
+  padding-bottom:1vw;
+}
+
+/* #endregion */
+
+/* #region text/pfp*/
+
+.profile-name-profile{
+  text-align: center;
+  font-family: 'Poppings';
+  font-size: 1.2vw;
+  max-width: 10vw;
+  overflow-x: hidden;
+  margin:0;
+  margin-right:1vw;
+  margin-bottom:1vw;
+  font-family:'Nunito';
 }
 
 .profile-picture-profile{
   display:flex;
   flex-direction: column;
-  
   border-radius: 0.75vw;
   padding:0.5vw;
   align-items: center;
   gap: 1vw;
   border:2.5px solid #e347e5;
-
-
-
-
-
-
 }
 
 .profile-picture-profile-real{
@@ -1129,13 +1105,10 @@ option.select-sort:hover{
 }
 
 .profile-description-profile {
-  
   background: #ffffff;
   border: 2px solid #333;
   border-radius: 0.75vw;
   font-size: 0.9vw;
-  
-
   font-family: 'Nunito';
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   overflow-wrap: break-word;
@@ -1145,8 +1118,21 @@ option.select-sort:hover{
   margin-bottom:0vw;
 }
 
+.joined-since-profile{
+  width:fit-content;
+  border-bottom:2px black solid;
+  padding:0 1.5vw 1vw 1.5vw;
+  margin-left: 1.5vw;
+  font-size: 0.8vw;
+  font-family: 'Nunito';
+  text-align: center;
+}
+
+/* #endregion */
+
+/* #region socials */
+
 .social-links{
-  
   display: flex;
   flex-direction: row;
   margin:0.2vw;
@@ -1170,29 +1156,19 @@ option.select-sort:hover{
 
 .social-link-link-link{
   display: flex;
-  
   align-items: center;
-
   padding:0.2vw;
   text-align: center;
   vertical-align: center;
   padding-left:0.3vw;
-
 }
 
 .all-socials-profile{
-
-
   display: flex;
   flex-direction: column;
   align-items: center;
   margin:0;
   padding:0.5vw;
-
-
-
-  
- 
 }
 
 .socials-header{
@@ -1204,35 +1180,15 @@ option.select-sort:hover{
 
 .social-link-profile{
   text-align: center;
-  
   font-size: 0.8vw;
   margin:0;
   font-family:'Nunito'; 
   padding:0;
- 
- 
 }
 
-.profile-name-div-profile{
+/* #endregion */
 
-  display: flex;
-  margin:0;
-  text-align: center;
-  flex-direction: column;
-  justify-content: center;
- 
-}
-
-.pfp-name-div-profile{
-  display: flex;
-  flex-direction: row;
-  gap:1.5vw;
- 
-  justify-content: space-between;
-  padding-top:1vw;
-  padding-bottom:1vw;
-  
-}
+/* #region graph stuff*/
 
 .profile-graph{
   max-width: 100%;
@@ -1241,26 +1197,11 @@ option.select-sort:hover{
   background-color: white; 
   padding: 10px;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Done by ChatGPT */
   width: 95%; 
   height:100%;
   font-family: 'Nunito';
   font-size: 10vw;
-}
-
-.graph-styler{
-  
-}
-
-.joined-since-profile{
-  width:fit-content;
-  border-bottom:2px black solid;
-  padding:0 1.5vw 1vw 1.5vw;
-  margin-left: 1.5vw;
-  font-size: 0.8vw;
-  font-family: 'Nunito';
-  text-align: center;
-  
 }
 
 .bottom-graph-styler{
@@ -1268,16 +1209,14 @@ option.select-sort:hover{
   gap:5vw;
 }
 
-
-
 .compare-to-div{
   margin-right:1.5vw;
-
-  
 }
 
 .compare-to-input{
   border:2px black solid;
 }
+
+/* #endregion */
 
 /* #endregion */
