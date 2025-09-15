@@ -43,7 +43,9 @@
 
                     <div class="leftside-home-page-nav"> <!-- Nav bar -->
                         <a class='sign-up-link' href="/">Home</a>
+                        {% if not g.user %}
                         <a class='sign-up-link' href="/signup">Sign Up</a>
+                        {% endif %}
                         <a class='sign-up-link' href="/about">About Celeste</a>
                         {% if g.user %} <!-- If logged in add profile and splits page -->
                         <a class='sign-up-link' href="/profile/{{g.user[0][0]}}/1">Profile</a>
@@ -69,15 +71,19 @@
                     <p>
                         About Celeste Splits:
                     </p>
-                    <p>
+                    <p class="siteabout">
                         Site dedicated to taking down Google Spreadsheets!
                     </p>
                 </div>
+                <p>Please provide feedback <a href="https://docs.google.com/forms/d/e/1FAIpQLScbd85uKv9Tij9ODZMotNkG7D1iW3oHVArqmUzMAkvyPrPuAg/viewform?usp=dialog">here</a></p>
+                <div>
                 <p>
                     Images by <a href="https://maddymakesgames.com/" target="_blank">Maddy Makes Games</a>, licensed
                     under
                     <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
                 </p>
+                <p>Contact us at 22241@burnside.school.nz</p>
+                </div>
             </div>
         </footer>
     </div>

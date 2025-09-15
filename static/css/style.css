@@ -62,6 +62,11 @@ footer p{
   justify-content: center;
 }
 
+.siteabout{
+  padding-top: 0;
+  margin-top: 0;
+}
+
 /* #endregion */
 
 /* #endregion */
@@ -165,9 +170,31 @@ footer p{
 /* #region About page styles */
 
 .about-page{
+  width:100%;
   display: flex;
   justify-content: space-between;
-  height: 30vw;
+  flex-direction: column;
+}
+
+.about-game{
+  display: flex;
+  padding: 0 2vw 0 2vw;
+}
+
+.topabout{
+  width:70%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-header{
+  
+
+}
+
+.aboutfirst, .aboutsecond{
+
 }
 
 /* #endregion */

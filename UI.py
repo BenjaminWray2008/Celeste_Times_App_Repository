@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, url_for, request, session, jsonify, abort, request, g
+from flask import (Flask, render_template, redirect,
+                   url_for, request, session, jsonify, abort, g)
 import sqlite3
 from werkzeug.utils import secure_filename
 from hashlib import sha256
@@ -437,19 +438,20 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
     @app.errorhandler(404)
     def stoptryingtohack(i):  # 404 page runner
         return render_template('404.html')
-   
+
     @app.before_request
     def check_login():  # Gets global user data before running other pages
         user_id = session.get('user_id')
+        print('userrrrrrrrrrrrrrrrrrrrrrrrrr', user_id)
         g.user = None
-        
+
         if user_id:
             db.execute('SELECT * FROM User WHERE id = ?', (user_id,))
             results = db.fetchall()
-            
+
             g.user = results
         print(g.user, 'userglobal')
-   
+
     @app.route('/get_comparison')  # Generate data dictionary for searched user
     def send_comparison_data():
         category_id = request.args.get('category')
@@ -493,11 +495,11 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
        
         return render_template('home.html', title='Home',
                                counter=counter, counter2=counter2)
-    
+
     @app.route('/about')  # Page for about Celeste speedrunning
     def about():
         return render_template('about.html')
-    
+
     @app.route('/get_leaderboard')  # Generate leaderboard for home page
     def get_leaderboard():
         category = request.args.get('category', 'any%')
@@ -536,62 +538,69 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             # Each contains user name and their sum time.
         print(leaderboard)
         return jsonify(leaderboard)  # Return the created leaderboard to the js
-        
+
     @app.route('/signup')  # Page for signing up a user
     def signup():
-        return render_template('signup.html')
-    
+        if not session.get('user_id'):
+            return render_template('signup.html')
+        else:
+            return redirect(url_for('home'))
+
     @app.route('/signin')  # Page for logging in a user
     def signin():
-        return render_template('signin.html')
-    
+        if not session.get('user_id'):
+            return render_template('signin.html')
+        else:
+            return redirect(url_for('home'))
+
     @app.route('/logout')  # Route for logging out a user
     def logout():
         session.clear()
         return redirect(url_for('home'))
-    
+
     @app.route('/new_user', methods=['POST'])  # Check if new user valid
     def new_user():
         username = request.form.get('username')  # Get the items from the form
         password = request.form.get('password')
-        if len(password) < 4 or len(password) > 20:  # password conditions
+        if len(password) < 4 or len(password) > 15:  # password conditions
+            abort(404)
+        if len(username) < 4 or len(username) > 15:  # username conditions
             abort(404)
         db.execute('SELECT id FROM user WHERE name = ?', (username,))
         if db.fetchall():  # if username exists already
-            abort(404)
-        
+            return redirect(url_for('signup'))
+
         # Hashing the users password for security
         h = sha256()
         h.update(password.encode())
         hash = h.hexdigest()
-        db.execute('SELECT id FROM user WHERE hash = ?', (hash,))
-        if db.fetchall():
-            abort(404)
-        
+
         db.execute('''INSERT INTO User (
             name, hash, description, date_joined, pfp_path)
             VALUES (?, ?, ?, ?, ?)''',
             (username, hash, 'Tell us about Yourself!',
              datetime.datetime.now(), 'download.jpg'))
         database.commit()  # Entering new user into database
-        
+
         db.execute('SELECT id FROM User WHERE name == ?', (username,))
         results = db.fetchone()
         id = results[0]
-      
+
         new_user_data(id)  # function to add all empty time entries for user
         session.clear()
         return redirect(url_for('signin'))
-    
+
     @app.route('/search', methods=['POST'])  # Form for sending search data
     def search():
         searcher = None
         username = request.form.get('username')  # Get items from form
         password = request.form.get('password')
         search_username = request.form.get('search-username')
-        
+
         print(username, search_username, password)
-        
+
+
+
         # Checking combinations to see who to search for / login as
         if username and not search_username:
             searcher = username
@@ -601,7 +610,7 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
         elif username and search_username:
             searcher = username
             print('hii')
-            
+
         print(searcher)
         db.execute('SELECT id, hash FROM User WHERE name = ?;', (searcher,))
         results = db.fetchone()
@@ -613,16 +622,19 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             user_id, hash = results
             if hash == hashed:  # If hashes match same password was entered
                 session['user_id'] = user_id
-            
+
                 return redirect(url_for('get_times',  # Send to edit times page
                                         user_id=user_id, category_id=1))
-        
+
             return redirect(url_for('profile',  # Send to profile, wrong login
                                     user_id=user_id, category_id=1))
-        
+
         print('No user found.')
+        if not search_username and username:
+            return redirect(url_for('signin'))
+
         return redirect(url_for('home'))  # No user found - send to homepage
-    
+
     @app.route('/pfp/<int:user_id>/<int:category_id>', methods=['POST']) 
     def new_pfp(user_id, category_id):  # Add new pfp for user
         file = request.files['pfp']  # Get the added file
@@ -655,12 +667,12 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                        WHERE user_id = ?
                        AND social_name = ?''',
                        (user_id, old_social_name))
-            
+
         database.commit()
-        
+
         return redirect(url_for('get_times', user_id=user_id,
                                 category_id=category_id))
-    
+
     @app.route('/add_socials/<int:user_id>/<int:category_id>', methods=['POST'])
     def add_socials(user_id, category_id):  # Created new social link
         social_link = request.form.get('init_social')
@@ -678,7 +690,7 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             
         return redirect(url_for('get_times', user_id=user_id,
                                 category_id=category_id))
-    
+
     @app.route('/descriptioner/<int:user_id>/<int:category_id>', methods=['POST'])
     def get_description(user_id, category_id):  # Update a users description
         description = request.form.get('description')
@@ -736,7 +748,7 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
                                    socials=results, member_since=member_since)
         else:
             abort(404)
-   
+
     @app.route('/update_times/<int:user_id>/<int:category_id>', methods=['POST'])
     def update_times(user_id, category_id):  # Update user times once submitted
         if check_session():  # If logged in
