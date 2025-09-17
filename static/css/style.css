@@ -169,32 +169,64 @@ footer p{
 
 /* #region About page styles */
 
+.image-separater{
+ display: flex;
+ gap:2vw;
+}
+
 .about-page{
+  padding-top:2vw;
+  padding-left:2vw;
   width:100%;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
+  gap:1vw;
+  margin-right:0;
+  padding-right: 0;
 }
 
 .about-game{
   display: flex;
-  padding: 0 2vw 0 2vw;
+  padding: 0 2vw 0 0;
+  gap:2vw;
+}
+
+.pstyler{
+  font-family: 'Nunito';
+}
+
+.about-image{
+  padding-top:2vw;
+  width:100%;
+  height: 50%;
+  padding-right: 2vw;
 }
 
 .topabout{
-  width:70%;
+  width:100%;
   align-items: center;
   display: flex;
   flex-direction: column;
 }
 
-.about-header{
-  
-
+.about-page-styler{
+  align-items: center;
+  background-color: #d3b9f7;
+  border: 1px rgb(105, 93, 107) solid;
+  padding:1vw 1vw 1vw 1vw;
+  border-radius: 0.75vw;
 }
 
-.aboutfirst, .aboutsecond{
+.listabout{
+  width:100%;
+}
 
+.about-header{
+  font-family: 'Poppins';
+}
+
+.errorpage-layout{
+  text-align: center;
 }
 
 /* #endregion */
@@ -312,6 +344,7 @@ footer p{
 }
 
 .header-signin{
+  text-wrap: nowrap;
   padding:0.3vw 4vw 0.3vw 4vw;
   border-radius: 5px;
   margin-right:2vw;
@@ -440,7 +473,7 @@ footer p{
 .sum-of-best-values{
   display: grid;
   align-items: center;
-  grid-template-columns: 0.7fr 2fr 1.5fr 1.5fr;
+  grid-template-columns: 0.4fr 1.7fr 1fr 1fr;
   text-align: left;
   vertical-align: center;
   align-items: center;
@@ -700,6 +733,12 @@ option.select-sort:hover{
   font-family: 'Poppins';
   margin: 0;
   font-size: 1vw;
+  border-radius: 0.5vw;
+  border:1px black solid;
+}
+
+.checkpoint-time-profile{
+  border:none;
 }
 
 .checkpoints .checkpoint-box:not(:last-child){
@@ -1241,7 +1280,7 @@ option.select-sort:hover{
 }
 
 .compare-to-input{
-  border:2px black solid;
+  border:1px black solid;
 }
 
 /* #endregion */

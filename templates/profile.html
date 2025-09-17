@@ -12,7 +12,9 @@
                     </div>
                     <div class="pfp-socials"> <!-- User description -->
                         <div class="pfp-socials-real">
+                            {% if user_description != '' %}
                             <p class="profile-description-profile">{{user_description}}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -137,7 +139,7 @@
                     {% for checkpoint in data_dictionary[chapter] %} <!-- For every checkpoint in that chapter -->
                     <div class="checkpoint-box">
                         <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
-                        <p class="checkpoint-time">{{checkpoint[1]}}</p>
+                        <p class="checkpoint-time checkpoint-time-profile">{{checkpoint[1]}}</p>
                     </div>
                     {% endfor %}
                 </div>

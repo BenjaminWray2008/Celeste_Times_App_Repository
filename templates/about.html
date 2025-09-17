@@ -1,36 +1,46 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="about-page">
-    <div class="topabout">
-        <h1 class="about-header">Celeste Speedrunning:</h1>
-        
-        <div class="about-game">
-            <div class="aboutfirst">
-                <p>Celeste, being a 2D movement based platformer is a perfect speedrunning game.
-                    The three main game mechanics: Dashing, jumping, and climbing, can be combined in various ways to
-                    progress
-                    through levels incredibly fast</p>
-            </div>
-            
-            <div class="aboutsecond">
-                <p>This site, Celeste Splits, provides a way of measuring a players fastest time in various checkpoints
-                    over various
-                    categories. These are called splits.</p>
+<div class="image-separater">
+    <div class="about-page">
+        <div class="topabout">
+            <h1 class="about-header">Celeste Speedrunning:</h1>
+
+            <div class="about-game about-page-styler">
+                <div class="aboutfirst">
+                    <p class='pstyler'>Celeste, being a 2D movement based platformer is a perfect speedrunning game.
+                        The three main game mechanics: Dashing, jumping, and climbing, can be combined in various ways
+                        to
+                        progress
+                        through levels incredibly fast</p>
+
+                    <p class='pstyler'>This site, Celeste Splits, provides a way of measuring a players fastest time in
+                        various checkpoints
+                        over various
+                        categories. These are called splits.</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div>
-        <p>Categories that can be tracked in this site include:</p>
-        <ul>
-            <li>Any%</li>
-            <p>Beat the main game (mount the summit) as fast as possible. </p>
-            <li>ARB</li>
-            <p>Get all collectibles (berries) as fast as possible.</p>
-            <li>100%</li>
-            <p>Beat the full game: A, B, and C sides along with all berries and farewell as fast as possible.</p>
-        </ul>
-        <img src="static\images\download (1).png" alt="">
-    </div>
+        <div class="listabout about-page-styler">
+            <p class='pstyler'>Categories that can be tracked in this site include:</p>
+            <ul>
+                <li class='pstyler'>Any%</li>
+                <p class='pstyler'>Beat the main game (mount the summit) as fast as possible. </p>
+                <li class='pstyler'>ARB</li>
+                <p class='pstyler'>Get all collectibles (berries) as fast as possible.</p>
+                <li class='pstyler'>100%</li>
+                <p class='pstyler'>Beat the full game: A, B, and C sides along with all berries and farewell as fast as
+                    possible.</p>
+                <li class="pstyler">True Ending</li>
+                <p class="pstyler">Beat Farewell</p>
+                <li class="pstyler">Bny%</li>
+                <p class="pstyler">Beat all the B sides as fast as possible</p>
+                <li class="pstyler">Cny%</li>
+                <p class="pstyler">Beat all the C sides as fast as possible</p>
+            </ul>
 
+        </div>
+
+    </div>
+    <img class="about-image" src="static\images\download (1).png" alt="">
 </div>
 {% endblock %}

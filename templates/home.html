@@ -74,7 +74,7 @@
     function fetchData(category = 1, sortBy = 'time') {
 
       console.log(category, sortBy, 'stuff')
-      fetch(`/get_leaderboard?category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sortBy)}&categoryName=${encodeURIComponent(category)}`)
+      fetch(`/get_leaderboard?category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sortBy)}`)
         .then(res => res.json())
         .then(data => {
 
