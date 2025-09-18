@@ -44,6 +44,7 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
             category_id = db.fetchone()[0]
 
             # Get the leaderboard of SOB checkpoint times for current category
+            # This is helpful because can compare to find current users placing
             sob_leaderboard = ranker('ORDER by sum_of_bests ASC', category_id,
                                      'AND r1.type = "checkpoint"')
 
@@ -451,7 +452,7 @@ with sqlite3.connect("times.db", check_same_thread=False) as database:
     @app.before_request
     def check_login():  # Gets global user data before running other pages
         user_id = session.get('user_id')  # current logged in user
-        print('userrrrrrrrrrrrrrrrrrrrrrrrrr', user_id)
+        print('user', user_id)
         g.user = None
 
         if user_id:  # if a user is logged in
