@@ -1,26 +1,36 @@
-{% extends 'layout.html' %}
-{% block content %}
+{% extends 'layout.html' %} {% block content %}
 
 <div class="home-page-flex">
-  <div> <!-- Home page text -->
+  <div>
+    <!-- Home page text -->
     <h1 class="welcome-header">Welcome to Celeste Splits!</h1>
-    <p class='track-here-header'>Track your Best Times Here</p>
-    <p class="welcome-info">Create an account<br>Upload your Splits <br>Climb the Leaderboard </p>
-    <p class="welcome-privacy">All data stored is secure and cannot be changed by others.</p>
+    <p class="track-here-header">Track your Best Times Here</p>
+    <p class="welcome-info">
+      Create an account<br />Upload your Splits <br />Climb the Leaderboard
+    </p>
+    <p class="welcome-privacy">
+      All data stored is secure and cannot be changed by others.
+    </p>
     <div class="home-page-flex-line"></div>
     <div class="site-stats">
       <p class="site-stats-header">Site Wide Stats:</p>
-      <p class="total-runs">Total Category Entries: {{counter2[0][0]}} <br>Runner Accounts: {{counter[0][0]}}</p>
+      <p class="total-runs">
+        Total Category Entries: {{counter2[0][0]}} <br />Runner Accounts:
+        {{counter[0][0]}}
+      </p>
     </div>
   </div>
 
   <div class="category-list-leaderboard-centerer">
     <div class="sum-of-best-table-centerer">
-
-      <div id="leaderboardname" class="leaderboardname">Sum of Best Leaderboard</div> <!-- Div that is filled with the leaderboard name with js -->
+      <div id="leaderboardname" class="leaderboardname">
+        Sum of Best Leaderboard
+      </div>
+      <!-- Div that is filled with the leaderboard name with js -->
 
       <div class="leaderboard-width-changer">
-        <div id="categorySelect" class="category-list-leaderboard"> <!-- Category nav -->
+        <div id="categorySelect" class="category-list-leaderboard">
+          <!-- Category nav -->
           <button data-category="1" class="active">Any%</button>
           <button data-category="2">ARB</button>
           <button data-category="3">100%</button>
@@ -30,74 +40,89 @@
         </div>
 
         <div class="leaderboard-header">
-
           <p id="categoryName" class="category-name-sum-of-best"></p>
 
-          <select name="SelectSort" id="SelectSort" class="select-sort"> <!-- Drop down for sorting options -->
-            <option class='select-sort-option' disabled selected hidden>Sort By:</option>
-            <option class='select-sort-option' data-sort='time' value="time">Fastest Time</option>
-            <option class='select-sort-option' data-sort='name' value="alpha">Alphabetical</option>
+          <select name="SelectSort" id="SelectSort" class="select-sort">
+            <!-- Drop down for sorting options -->
+            <option class="select-sort-option" disabled selected hidden>
+              Sort By:
+            </option>
+            <option class="select-sort-option" data-sort="time" value="time">
+              Fastest Time
+            </option>
+            <option class="select-sort-option" data-sort="name" value="alpha">
+              Alphabetical
+            </option>
           </select>
 
-          <div class="search-userr-bar-div"> <!-- That's not a typo -->
-            <input type="text" id="searchUserInput" placeholder="Search user..." class="search-user-bar" />
+          <div class="search-userr-bar-div">
+            <!-- That's not a typo -->
+            <input
+              type="text"
+              id="searchUserInput"
+              placeholder="Search user..."
+              class="search-user-bar"
+            />
           </div>
-
         </div>
-        <div id='leaderboard' class="leaderboard"> <!-- Div that is filled with the leaderboard data with js -->
-
+        <div id="leaderboard" class="leaderboard">
+          <!-- Div that is filled with the leaderboard data with js -->
         </div>
-
       </div>
     </div>
   </div>
 
   <script>
     let category = 1;
-    let sortBy = 'time';
-    document.getElementById('SelectSort').addEventListener('change', function () {
-      sortBy = document.getElementById('SelectSort').value;
-      console.log("Sort by:", sortBy);
-      fetchData(category, sortBy);
-    });
+    let sortBy = "time";
+    document
+      .getElementById("SelectSort")
+      .addEventListener("change", function () {
+        sortBy = document.getElementById("SelectSort").value;
+        fetchData(category, sortBy);
+      });
 
-    document.getElementById('categorySelect').addEventListener('click', function (e) {
-      if (!e.target.matches('button')) return;
-      document.querySelectorAll('#categorySelect button').forEach(btn => btn.classList.remove('active'));
-      e.target.classList.add('active');
-      category = e.target.dataset.category;
-      console.log("Category:", category);
-      fetchData(category, sortBy);
-    });
+    document
+      .getElementById("categorySelect")
+      .addEventListener("click", function (e) {
+        if (!e.target.matches("button")) return;
+        document
+          .querySelectorAll("#categorySelect button")
+          .forEach((btn) => btn.classList.remove("active"));
+        e.target.classList.add("active");
+        category = e.target.dataset.category;
+        fetchData(category, sortBy);
+      });
 
-
-    function fetchData(category = 1, sortBy = 'time') {
-
-      console.log(category, sortBy, 'stuff')
-      fetch(`/get_leaderboard?category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sortBy)}`)
-        .then(res => res.json())
-        .then(data => {
-
-
-          const first_value = Object.values(data)[0]
-          console.log(first_value)
-          const leaderboardDiv = document.getElementById('leaderboard'); // Select the leaderboard div
-          const leaderboardnameDiv = document.getElementById('leaderboardname')
-          const selectsort = document.getElementById('SelectSort')
-          leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>'
-          if (data.length === 1) { // If no results
-            document.getElementById('categoryName').textContent = `${first_value.name}`
-            leaderboardDiv.innerHTML = '<p class="no-results">No results found for this category.</p>'
-
-
-          }
-          else { // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
-            leaderboardnameDiv.innerHTML = '<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>'
-            document.getElementById('categoryName').textContent = `${first_value.name}`
-            console.log(data)
-            leaderboardDiv.innerHTML = data.slice(1).map((entry, i) => {
-              let pfp = `/static/pfps/${entry.pfp}`;
-              return `
+    function fetchData(category = 1, sortBy = "time") {
+      fetch(
+        `/get_leaderboard?category=${encodeURIComponent(category)}&sort=${encodeURIComponent(sortBy)}`,
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          const first_value = Object.values(data)[0];
+          const leaderboardDiv = document.getElementById("leaderboard"); // Select the leaderboard div
+          const leaderboardnameDiv = document.getElementById("leaderboardname");
+          const selectsort = document.getElementById("SelectSort");
+          leaderboardnameDiv.innerHTML =
+            "<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>";
+          if (data.length === 1) {
+            // If no results
+            document.getElementById("categoryName").textContent =
+              `${first_value.name}`;
+            leaderboardDiv.innerHTML =
+              '<p class="no-results">No results found for this category.</p>';
+          } else {
+            // If results then map the leaderboard div with values of the username, the sum of best, and a ranking
+            leaderboardnameDiv.innerHTML =
+              "<h3 class=sum-of-best-header>Sum of Best Leaderboard</h3>";
+            document.getElementById("categoryName").textContent =
+              `${first_value.name}`;
+            leaderboardDiv.innerHTML = data
+              .slice(1)
+              .map((entry, i) => {
+                let pfp = `/static/pfps/${entry.pfp}`;
+                return `
              
           <div class='sum-of-best-values' data-username="${entry.username.toLowerCase()}">
           
@@ -105,7 +130,7 @@
           <p class='sum-of-best-rank'>${i + 1}.</p>
           <div class='leaderboard-row-center'>
           <img src="${pfp}" class="profile-picture-leaderboard" alt="pfp">
-          <a href="/profile/${(entry.profile)[0]}/${(entry.profile)[1]}" class='sum-of-best-username'>${entry.username}:</a>
+          <a href="/profile/${entry.profile[0]}/${entry.profile[1]}" class='sum-of-best-username'>${entry.username}:</a>
             </div>
           <p class='sum-of-best-time'>${entry.sum_of_bests}</p>
           <p class='best-subtract'>${entry.best}</p>
@@ -113,54 +138,43 @@
     
           </div>
         `;
-            }).join('');
+              })
+              .join("");
           }
         });
-    };
-    document.getElementById('searchUserInput').addEventListener('keydown', function (e) {
+    }
+    document
+      .getElementById("searchUserInput")
+      .addEventListener("keydown", function (e) {
+        if (e.key !== "Enter") return;
+        const query = this.value.trim().toLowerCase();
 
-      if (e.key !== 'Enter') return
-      const query = this.value.trim().toLowerCase();
+        if (!query) return;
 
-      if (!query) return;
+        const entries = document.querySelectorAll(".sum-of-best-values");
 
-      const entries = document.querySelectorAll('.sum-of-best-values');
+        document
+          .querySelectorAll(".highlight")
+          .forEach((item) => item.classList.remove("highlight"));
 
+        for (const entry of entries) {
+          const username = entry.dataset.username;
+          if (username.includes(query)) {
+            entry.scrollIntoView({ behavior: "smooth", block: "center" });
+            entry.classList.add("highlight");
 
-
-      document.querySelectorAll('.highlight').forEach(item => item.classList.remove('highlight'))
-      console.log('remove class')
-
-
-
-
-      for (const entry of entries) {
-
-        const username = entry.dataset.username;
-        console.log(entry, query, username)
-        if (username.includes(query)) {
-
-
-          entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          entry.classList.add('highlight');
-
-
-          break;
+            break;
+          }
         }
-      }
+      });
 
-    });
-
-
-
-
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const defaultButton = document.querySelector('#categorySelect button.active');
+    window.addEventListener("DOMContentLoaded", () => {
+      const defaultButton = document.querySelector(
+        "#categorySelect button.active",
+      );
       defaultButton.click();
     }); // On initial load, run the function. This will default to the first category
   </script>
-
 </div>
 
 {% endblock %}

@@ -1,31 +1,45 @@
-{% extends 'layout.html' %}
-{% block content %}
+{% extends 'layout.html' %} {% block content %}
 <!-- Another self explanatory page -->
 <div class="sign-up-page">
-    <div class="total-sign-up">
-        <h1 class="sign-up-header">Sign up to Celeste Splits</h1>
-        <hr class="home-page-flex-line signup-page-flex-line">
-        <form action="{{url_for('new_user')}}" method='POST'>
-            <div class="details-div">
-                <label for="username" class="signup-labels">Enter Username:</label>
-                <input type="text" name="username" required maxlength=15 minlength=4 class="username-signup">
-                <br>
-                <label for="password" class="signup-labels">Enter Password:</label>
-                <input type="password" name="password" required maxlength=15 minlength=4 class="password-signup">
-                <br>
+  <div class="total-sign-up">
+    <h1 class="sign-up-header">Sign up to Celeste Splits</h1>
+    <hr class="home-page-flex-line signup-page-flex-line" />
+    <form action="{{url_for('new_user')}}" method="POST">
+      <div class="details-div">
+        <label for="username" class="signup-labels">Enter Username:</label>
+        <input
+          type="text"
+          name="username"
+          required
+          maxlength="15"
+          minlength="4"
+          class="username-signup"
+        />
+        <br />
+        <label for="password" class="signup-labels">Enter Password:</label>
+        <input
+          type="password"
+          name="password"
+          required
+          maxlength="15"
+          minlength="4"
+          class="password-signup"
+        />
+        <br />
 
-                <div class="signup-button-signin">
-                    <div class="signin-div">
-                        <p class="signin-labels">Have an account?</p>
-                        <a href="/signin" class="signin-labels">Sign in!</a>
-
-                    </div>
-                    <div>
-                        <button type="submit" class="submit-signup signup-labels">Submit!</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+        <div class="signup-button-signin">
+          <div class="signin-div">
+            <p class="signin-labels">Have an account?</p>
+            <a href="/signin" class="signin-labels">Sign in!</a>
+          </div>
+          <div>
+            <button type="submit" class="submit-signup signup-labels">
+              Submit!
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

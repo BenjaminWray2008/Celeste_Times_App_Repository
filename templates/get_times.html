@@ -1,81 +1,158 @@
-{% extends 'layout.html' %}
-{% block content %}
+{% extends 'layout.html' %} {% block content %}
 <div class="get-times-page">
   <div class="profile-headers-get-times">
     <div class="top-half-header-get-times">
       <div class="pfp-name-div header-styler">
-        <div class="profile-picture-form-content "> <!-- Div contains all profile picture related objects -->
-          <form action="{{ url_for('new_pfp', user_id = user_id, category_id = category_id) }}" method="POST"
-            class="profile-picture-form" enctype="multipart/form-data">
+        <div class="profile-picture-form-content">
+          <!-- Div contains all profile picture related objects -->
+          <form
+            action="{{ url_for('new_pfp', user_id = user_id, category_id = category_id) }}"
+            method="POST"
+            class="profile-picture-form"
+            enctype="multipart/form-data"
+          >
+            <label for="profile-picture-input" class="browse-label"
+              >Import...</label
+            >
 
-            <label for="profile-picture-input" class="browse-label">Import...</label>
+            <input
+              class="profile-picture-input"
+              type="file"
+              name="pfp"
+              accept="image/*"
+              id="profile-picture-input"
+              required
+            />
 
-            <input class="profile-picture-input" type="file" name="pfp" accept="image/*" id="profile-picture-input"
-              required>
-
-            <img src="{{ url_for('static', filename='pfps/' + g.user[0][5]) }}" class="profile-picture" alt="pfp"
-              id="profile-picture-display">
+            <img
+              src="{{ url_for('static', filename='pfps/' + g.user[0][5]) }}"
+              class="profile-picture"
+              alt="pfp"
+              id="profile-picture-display"
+            />
 
             <div class="profile-picture-changes-buttons" id="changes-buttons">
-              <button class="profile-picture-submit" type="submit" id="submit-button">Apply!</button>
-              <button class="profile-picture-cancel" id="profile-picture-discard">Cancel!</button>
+              <button
+                class="profile-picture-submit"
+                type="submit"
+                id="submit-button"
+              >
+                Apply!
+              </button>
+              <button
+                class="profile-picture-cancel"
+                id="profile-picture-discard"
+              >
+                Cancel!
+              </button>
             </div>
-
           </form>
-
         </div>
 
-        <div class="profile-name-div"> <!-- Div contains all description related objects -->
+        <div class="profile-name-div">
+          <!-- Div contains all description related objects -->
           <h1 class="profile-name">{{user_name}}</h1>
 
-          <form class="text-area-form" action="{{url_for('get_description', user_id = user_id, category_id = category_id)}}" method="POST">
-
-            <textarea wrap="hard" class="profile-description" name="description" id="description"
-              maxlength="50">{{user_description}}</textarea>
-            <button class="profile-description-submit" type="submit">Submit Description</button>
-
+          <form
+            class="text-area-form"
+            action="{{url_for('get_description', user_id = user_id, category_id = category_id)}}"
+            method="POST"
+          >
+            <textarea
+              wrap="hard"
+              class="profile-description"
+              name="description"
+              id="description"
+              maxlength="50"
+            >
+{{user_description}}</textarea
+            >
+            <button class="profile-description-submit" type="submit">
+              Submit Description
+            </button>
           </form>
         </div>
       </div>
 
       <div class="header-styler">
-        <div> <!-- Div contains all social links and buttons -->
+        <div>
+          <!-- Div contains all social links and buttons -->
           <p class="joined-since">Joined {{member_since}}</p>
-          <div class="all-socials"> 
+          <div class="all-socials">
             {%for social in socials%}
             <form
               action="{{url_for('edit_socials', user_id = user_id, category_id = category_id, old_social_name = social[1])}}"
-              method="POST" class="init-social-form">
-              <input type="text" name="social_name" value="{{social[1]}}" class="social-link" required>
-              <input type="text" name="social_link" value="{{social[0]}}" class="social-link" required>
-              <button type="submit" name="action" value="edit" class="social-button">Confirm Edits</button>
-              <button type="submit" name="action" value="delete" class="social-button"
-                onclick="return confirm('Are you sure you want to delete this social?');">Delete</button>
+              method="POST"
+              class="init-social-form"
+            >
+              <input
+                type="text"
+                name="social_name"
+                value="{{social[1]}}"
+                class="social-link"
+                required
+              />
+              <input
+                type="text"
+                name="social_link"
+                value="{{social[0]}}"
+                class="social-link"
+                required
+              />
+              <button
+                type="submit"
+                name="action"
+                value="edit"
+                class="social-button"
+              >
+                Confirm Edits
+              </button>
+              <button
+                type="submit"
+                name="action"
+                value="delete"
+                class="social-button"
+                onclick="return confirm('Are you sure you want to delete this social?');"
+              >
+                Delete
+              </button>
             </form>
             {% endfor %}
-
           </div>
 
           {% if socials|length < 4 %}
-          <form action="{{url_for('add_socials', user_id = user_id, category_id = category_id)}}"
-            class="init-social-form" method="POST">
-
-            <input type="text" name="init_name" placeholder="Social Name" class="social-link" required>
-            <input type="text" name="init_social" placeholder="Paste Social Link" class="social-link" required>
+          <form
+            action="{{url_for('add_socials', user_id = user_id, category_id = category_id)}}"
+            class="init-social-form"
+            method="POST"
+          >
+            <input
+              type="text"
+              name="init_name"
+              placeholder="Social Name"
+              class="social-link"
+              required
+            />
+            <input
+              type="text"
+              name="init_social"
+              placeholder="Paste Social Link"
+              class="social-link"
+              required
+            />
             <button type="submit" class="social-button">Submit</button>
-
           </form>
           {% endif %}
         </div>
       </div>
 
-      <div class="sob-list-div header-styler"> <!-- Div contains all sob data display -->
+      <div class="sob-list-div header-styler">
+        <!-- Div contains all sob data display -->
         <div>
           <p class="sob-stats-header">Checkpoint SOBs:</p>
 
-          {% for category in sob_dict %}
-          {% if loop.index == 2 %}
-          <hr>
+          {% for category in sob_dict %} {% if loop.index == 2 %}
+          <hr />
           {% endif %}
           <div class="sob-stats-both">
             <p class="sob-stats-category">{{category}}:</p>
@@ -83,14 +160,14 @@
             <p class="sob-stats-ranking">{{sob_dict[category][0][1]}}</p>
           </div>
           {% endfor %}
-
         </div>
       </div>
     </div>
   </div>
 
   <div class="get-times-grid">
-    <div class="nav-list-categories"> <!-- Div contains all links in category nav -->
+    <div class="nav-list-categories">
+      <!-- Div contains all links in category nav -->
       <a href="/">Home</a>
       <a href="/get_times/{{user_id}}/1">Any%</a>
       <a href="/get_times/{{user_id}}/2">ARB</a>
@@ -100,65 +177,73 @@
       <a href="/get_times/{{user_id}}/6">Cny%</a>
     </div>
 
-    <form action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}" method="POST"
-      class="display-grid-form">
+    <form
+      action="{{url_for('update_times', user_id=user_id, category_id=category_id)}}"
+      method="POST"
+      class="display-grid-form"
+    >
       <div class="display-grid">
-        {% for chapter in data_dictionary %} <!-- For every chapter in the category -->
+        {% for chapter in data_dictionary %}
+        <!-- For every chapter in the category -->
         <div class="display-grid-item">
           <h2 class="chapter-header">{{chapter}}</h2>
           <div class="checkpoints">
-            {% for checkpoint in data_dictionary[chapter] %} <!-- For every checkpoint in that chapter -->
-            <div class="checkpoint-box"> <!-- Display checkpoint name, its current time, and an input to change that current time -->
-              <p class="checkpoint-name">{{' '.join(checkpoint[0].split(' ')[:-1])}}</p>
-              <input class='checkpoint-time' type="text" name="checkpoints[]" placeholder="{{checkpoint[1]}}">
+            {% for checkpoint in data_dictionary[chapter] %}
+            <!-- For every checkpoint in that chapter -->
+            <div class="checkpoint-box">
+              <!-- Display checkpoint name, its current time, and an input to change that current time -->
+              <p class="checkpoint-name">
+                {{' '.join(checkpoint[0].split(' ')[:-1])}}
+              </p>
+              <input
+                class="checkpoint-time"
+                type="text"
+                name="checkpoints[]"
+                placeholder="{{checkpoint[1]}}"
+              />
             </div>
             {% endfor %}
           </div>
         </div>
         {% if loop.index % 3 == 0 %}
         <div class="row-marker"></div>
-        {% endif %}
-        {% endfor %}
+        {% endif %} {% endfor %}
       </div>
       <div>
         <!-- Submit button -->
-        <button class='submit-get-times' type="submit" name="submit_button">Submit Splits</button>
+        <button class="submit-get-times" type="submit" name="submit_button">
+          Submit Splits
+        </button>
       </div>
     </form>
   </div>
 </div>
 
 <script>
-  file_input = document.getElementById('profile-picture-input')
-  file_display = document.getElementById('profile-picture-display')
-  changes_buttons = document.getElementById('changes-buttons')
-  original_file = file_display.src
+  file_input = document.getElementById("profile-picture-input");
+  file_display = document.getElementById("profile-picture-display");
+  changes_buttons = document.getElementById("changes-buttons");
+  original_file = file_display.src;
 
-  file_input.addEventListener('change', function () {
+  file_input.addEventListener("change", function () {
     const file = file_input.files[0];
     if (file) {
-
       const reader = new FileReader();
       reader.onload = function (e) {
-
         file_display.src = e.target.result;
-        changes_buttons.style.display = 'flex'
-
+        changes_buttons.style.display = "flex";
       };
       reader.readAsDataURL(file);
-
     }
   });
 
-  profile_picture_discard = document.getElementById('profile-picture-discard')
+  profile_picture_discard = document.getElementById("profile-picture-discard");
 
-  profile_picture_discard.addEventListener('click', function () {
-    file_display.src = original_file
-    file_input.value = '';
-    changes_buttons.style.display = 'none'
-
-  })
-
+  profile_picture_discard.addEventListener("click", function () {
+    file_display.src = original_file;
+    file_input.value = "";
+    changes_buttons.style.display = "none";
+  });
 </script>
 
 {% endblock %}

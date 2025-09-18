@@ -60,7 +60,7 @@ def sob_adder(user_id):  # Add SOB for each category
         # This is helpful because can compare to find current users placing
         sob_leaderboard = ranker('ORDER by sum_of_bests ASC', category_id,
                                  'AND r1.type = "checkpoint"')
-        print(sob_leaderboard)
+
         for time in sob_leaderboard:
             # If the current entry on leaderboard is same as user's entry
             if (time[2] == sob) and (user_id == time[0]):
@@ -150,8 +150,6 @@ def format_time_readable_form(time):  # Formatting the time
             hours = int(minutes)//60  # Amount of hours
             minutes = int(minutes) - (hours*60)  # Resulting minutes
 
-        print('timess', hours, minutes, seconds, ms)
-
         if len(str(minutes)) == 1:
             minutes = f'0{minutes}'
 
@@ -197,7 +195,6 @@ def valid_time_checker(time):  # Checking if entered time is valid format
     has_colon = False  # Variable for counting amount of colons in time
     for char in time:
         if str(char) not in '0123456789.:':
-            print('invalid chars')
             return False
 
         if char == ':':
@@ -205,15 +202,12 @@ def valid_time_checker(time):  # Checking if entered time is valid format
 
         if ':' in time:
             if char == '.' and not has_colon:
-                print('period before colon')
                 return False  # if there is a period before colon
 
     if time.count('.') > 1 or time.count('.') < 1:
-        print('more or less than 1 period')
         return False
 
     if time.count(':') > 1:
-        print('more than 1 colon')
         return False
 
     try:
@@ -227,13 +221,10 @@ def valid_time_checker(time):  # Checking if entered time is valid format
             pass
 
         else:
-            print('more than 3 ms or none')
             return False  # invalid amount of milliseconds
 
-        print('did this')
         if ':' in time:
             time_segments = re.split('[.:]', time)
-            print('splited')
             minutes = time_segments[0]
 
             if (len(str(minutes)) < 3 and
@@ -242,7 +233,6 @@ def valid_time_checker(time):  # Checking if entered time is valid format
                 pass
 
             else:
-                print('more than 2 minutes or none')
                 return False  # invalid amount of minutes
 
             seconds = time_segments[1]
@@ -252,7 +242,6 @@ def valid_time_checker(time):  # Checking if entered time is valid format
                 pass
 
             else:
-                print('more than 2 seconds or none')
                 return False  # invalid amount of seconds
         else:
             if (len(str(before_period)) < 3 and
@@ -261,7 +250,6 @@ def valid_time_checker(time):  # Checking if entered time is valid format
                 pass
 
             else:
-                print('seconds with no minutes more than 2 or none')
                 return False
 
         return True
@@ -338,7 +326,6 @@ def data_dictionary_creation(user_id, category_id, variable):
 
     data_dictionary['Chapter SOB'] = []
     placeholders = ', '.join('?' for i in chapters_query)
-    print(placeholders, 'placeholders')
     # Get names of chapters in the category
     new_chapters = query(f'''
                          SELECT name FROM Chapter WHERE id IN (
@@ -404,7 +391,6 @@ def data_dictionary_creation(user_id, category_id, variable):
                                                 format_time_normal_form(
                                                     final_time))))
 
-    print(data_dictionary)
     return data_dictionary
 
 
@@ -480,14 +466,12 @@ def methoderror(i):  # 405 page runner
 @app.before_request
 def check_login():  # Gets global user data before running other pages
     user_id = session.get('user_id')  # current logged in user
-    print('user', user_id)
     g.user = None
 
     if user_id:  # if a user is logged in
         results = query('SELECT * FROM User WHERE id = ?',
                         'fetchall', (user_id,))
         g.user = results  # logged in user data
-    print(g.user, 'userglobal')
 
 
 @app.route('/get_comparison')  # Generate data dictionary for searched user
@@ -580,17 +564,14 @@ def get_leaderboard():
     rows = ranker(order_clause, category, 'AND r1.type = "checkpoint"')
     leaderboard = []
     leaderboard.append({'name': name[0]})
-    print(rows)
     for index, row in enumerate(rows):  # Check how far from best entry
         if index == 0:
             best_time = row[3]
         # Current time
         time = format_time_readable_form(format_time_normal_form(row[3]))
-        print(best_time, row[3])
         # Difference of current time from best time
         best = abs(float(row[3])-float(best_time))
         best = format_time_readable_form(format_time_normal_form(best))
-        print('best', best)
 
         # Negative or positive difference
         if (float(row[3])-float(best_time)) < 0:
@@ -679,7 +660,6 @@ def search():
     username = request.form.get('username')  # Get items from form
     password = request.form.get('password')
     search_username = request.form.get('search-username')
-    print(username, search_username, password)
     # Checking combinations to see who to search for / login as
     if username and not search_username:
         searcher = username
@@ -688,11 +668,9 @@ def search():
         password = ''
     elif username and search_username:
         searcher = username
-        print('hii')
 
     results = query('SELECT id, hash FROM User WHERE name = ?;',
                     'fetchone', (searcher,))
-    print('hiiiii', results)
     if results:  # If the user exists
         h = sha256()
         h.update(password.encode())
@@ -709,8 +687,6 @@ def search():
 
         return redirect(url_for('profile',  # Send to profile if searched user
                                 user_id=user_id, category_id=1))
-
-    print('No user found.')
 
     if search_username:
         # No user found - reload homepage if it was a search
@@ -751,7 +727,6 @@ def edit_socials(user_id, category_id, old_social_name):  # Edit socials
         social_link = request.form.get('social_link')
         social_name = request.form.get('social_name')
         button_type = request.form.get('action')
-        print(old_social_name)
         if button_type == 'edit':  # If they changed an original link
             # Update database with new social name and link
             query('''
@@ -808,7 +783,7 @@ def get_description(user_id, category_id):  # Update a users description
             query('UPDATE User SET description = ? WHERE id = ?',
                   'commit', (description, user_id))
         else:
-            print('>50')
+            pass
 
         return redirect(url_for('get_times', user_id=user_id,
                                 category_id=category_id))
@@ -879,7 +854,6 @@ def update_times(user_id, category_id):  # Update user times once submitted
                 user_id, category_id, False)
 
             list_of_checkpoints = []
-            print(data_dictionary)
             for chapter in data_dictionary:
                 for checkpoint_tuple in data_dictionary[chapter]:
                     # For each checkpoint if its not a total add to list
@@ -888,7 +862,6 @@ def update_times(user_id, category_id):  # Update user times once submitted
 
             # Compare each checkpoint with times gotten from submission
             for time, checkpoint in zip(checkpoint_times, list_of_checkpoints):
-                print('time', time, checkpoint)
                 if time != '':  # If the user submitted something
                     if valid_time_checker(time):  # If time correct format
                         time = format_time_second_form(time)
@@ -916,7 +889,6 @@ def update_times(user_id, category_id):  # Update user times once submitted
                                                 WHERE name = ?;''',
                                                 'fetchone', (checkpoint,))[0]
 
-                            print(new_results)
                             # Update database with new time
                             query('''
                                   UPDATE Run SET time = ?
@@ -997,10 +969,8 @@ def profile(user_id, category_id):  # User profile display
                              (user_id, category_id))[0]
     # SOB for current category
 
-    print(user_data_dictionary)
     for i in user_data_dictionary['Chapter SOB']:
         i[1] = float(format_time_second_form(i[1]))
-        print(i[1])
 
     # Data for default comparison graph (id 26 is person with fastest time)
     data_dictionary_compare, sob_compare = comparison_data(26, category_id)
@@ -1013,7 +983,6 @@ def profile(user_id, category_id):  # User profile display
                            AND category_id = ?;''', 'fetchall',
                            (user_id, category_id))
     # get all chapters in category
-    print(chapters_query, 'chapters')
 
     placeholders = ', '.join('?' for i in chapters_query)
     new_chapters = query(f'''
@@ -1023,13 +992,10 @@ def profile(user_id, category_id):  # User profile display
                          tuple(i[0] for i in chapters_query))
     # order those categories correctly
 
-    print('cha', new_chapters)
     chapters_list = []
     for i in new_chapters:
         chapters_list.append(i[0])
 
-    print(user_data_dictionary)
-    print(chapters_list)
     return render_template('profile.html', user_id=user_id,
                            category_id=category_id,
                            data_dictionary=data_dictionary,
@@ -1048,4 +1014,4 @@ def profile(user_id, category_id):  # User profile display
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

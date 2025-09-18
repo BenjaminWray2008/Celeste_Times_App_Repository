@@ -155,9 +155,11 @@ footer p{
 
 .username-signup, .password-signup{
   border: 2px #47c2f3 solid;
-  padding:0.3vw;
+  padding:0.4vw;
   border-radius: 5px;
   color:black;
+  font-size:1vw;
+  font-family:'Nunito';
   background-color: rgb(243, 232, 245);
 }
 
@@ -568,6 +570,7 @@ footer p{
 .no-results{
   text-align: center;
   font-family: 'Signika';
+  font-size:1.3vw;
 }
 
 .search-user-bar{
