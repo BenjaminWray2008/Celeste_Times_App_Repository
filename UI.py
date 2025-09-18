@@ -11,9 +11,7 @@ import os
 
 # Globals
 
-# List of categories
-listy = ['hi', 'Any%', 'ARB', '100%', 'True Ending', 'Bny%', 'Cny%']
-another_listy = [0.001, 1, 60, 3600]
+time_segment_multiplier = [0.001, 1, 60, 3600]  # Time second multipliers
 app = Flask(__name__)
 app.secret_key = 'password'
 
@@ -178,7 +176,7 @@ def format_time_second_form(time):  # Turn time into a ss.msmsms value
         # Digits store second values in a weird base in time values
         # E.g. If 56, 5 means 50 seconds.
         # Below calculates the amount of seconds each digit represents
-        new_time = float(time_segment)*float(another_listy[index])
+        new_time = float(time_segment)*float(time_segment_multiplier[index])
         total_individual_time += new_time
         total += total_individual_time
 
@@ -613,12 +611,15 @@ def logout():
 
 @app.route('/new_user', methods=['POST'])  # Check if new user valid
 def new_user():
+    MAX_DETAIL_LENGTH = 15
+    MIN_DETAIL_LENGTH = 4
+    
     if request.method == 'POST':  # If trying to access through URL
         username = request.form.get('username')  # Get items from the form
         password = request.form.get('password')
-        if len(password) < 4 or len(password) > 15:  # password conditions
+        if len(password) < MIN_DETAIL_LENGTH or len(password) > MAX_DETAIL_LENGTH:  # password conditions
             abort(404)
-        if len(username) < 4 or len(username) > 15:  # username conditions
+        if len(username) < MIN_DETAIL_LENGTH or len(username) > MAX_DETAIL_LENGTH:  # username conditions
             abort(404)
         user_exist = query('SELECT id FROM user WHERE name = ?',
                            'fetchall', (username,))
@@ -825,11 +826,11 @@ def get_times(user_id, category_id):  # Information for get_times page
                      'fetchall', (category_id,))[0]
         # Current category name
 
-        stuff = query('SELECT name, description FROM user WHERE id = ?',
+        user_info = query('SELECT name, description FROM user WHERE id = ?',
                       'fetchall', (user_id,))
 
-        user_name = stuff[0][0]
-        user_description = stuff[0][1]
+        user_name = user_info[0][0]
+        user_description = user_info[0][1]
         sob_dict = sob_adder(user_id)  # Get user SOBs
 
         return render_template('get_times.html',
@@ -951,10 +952,10 @@ def profile(user_id, category_id):  # User profile display
     name = query('SELECT name FROM category WHERE id = ?',
                  'fetchall', (category_id,))[0]
 
-    stuff = query('SELECT name, description FROM user WHERE id = ?',
+    user_info = query('SELECT name, description FROM user WHERE id = ?',
                   'fetchall', (user_id,))
-    user_name = stuff[0][0]
-    user_description = stuff[0][1]
+    user_name = user_info[0][0]
+    user_description = user_info[0][1]
 
     sob_dict = sob_adder(user_id)  # user SOBs
     # User time data
